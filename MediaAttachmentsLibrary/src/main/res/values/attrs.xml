@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SketchDrawingView">
+        <attr name="activeColor" format="reference" />
+        <attr name="disabledColor" format="reference"/>
+        <attr name="hintText" format="reference"/>
+        <attr name="penLineWidth" format="dimension"/>
+        <attr name="eraserLineWidth" format="dimension"/>
+    </declare-styleable>
+</resources>
