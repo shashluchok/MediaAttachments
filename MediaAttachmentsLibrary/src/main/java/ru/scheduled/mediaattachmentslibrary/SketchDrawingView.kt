@@ -59,9 +59,7 @@ class SketchDrawingView : ConstraintLayout {
             a.recycle();
         }
 
-
     }
-
 
     fun setEdittingToolbarVisibility(isVisible: Boolean) {
         media_sketch_bottom_toolbar.visibility = if (isVisible) View.VISIBLE else View.GONE
@@ -120,6 +118,7 @@ class SketchDrawingView : ConstraintLayout {
         enableDrawBack(false)
         enableDrawForward(false)
         start_drawing_tv.text = context.resources.getString(hintText)
+        onEraserEnabled(isEnabled = false)
         sketch_view.setOnFirstTouchEventAction {
             start_drawing_tv.apply {
                 animate().alpha(0f).setDuration(300)
