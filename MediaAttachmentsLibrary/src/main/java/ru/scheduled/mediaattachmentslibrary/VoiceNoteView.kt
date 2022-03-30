@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
@@ -29,16 +30,9 @@ import kotlin.math.abs
 @SuppressLint("ClickableViewAccessibility")
 class VoiceNoteView : ConstraintLayout {
 
-    private var activeColor:Int = R.color.black
-    private var disabledColor:Int = R.color.gray
-    private var recognizedSpeechColor:Int = R.color.black
-    private var font:Int = R.font.roboto_regular
-
-
     private var currentTotalTime = -1L
     private var currentTouchX = 0f
-    private var onSeekBarActionDown: (() -> Unit)? = null
-    private var onSeekBarActionUp: (() -> Unit)? = null
+    private var onSeekBarPointerOn:((isPointerOn:Boolean ) -> Unit)? = null
     private var onComplete: (() -> Unit)? = null
     private var onPlayClick: (() -> Unit)? = null
     private var onRecognizeSpeechClick: (() -> Unit)? = null
@@ -62,54 +56,10 @@ class VoiceNoteView : ConstraintLayout {
     )
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
-        activeColor = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "activeColor",
-                R.color.black
-        )
-        disabledColor = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "disabledColor",
-                R.color.gray
-        )
-        recognizedSpeechColor = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "disabledColor",
-                R.color.black
-        )
-
-        font = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "font",
-                R.font.roboto_regular
-        )
-
-        /*val a = context.theme.obtainStyledAttributes(
-                attrs, R.styleable.SketchDrawingView, 0, 0)
-        try {
-            sketch_view.setLineWidth(
-                    a.getDimensionPixelSize(R.styleable.SketchDrawingView_penLineWidth,4)
-            )
-            sketch_view.setEraserWidth(
-                    a.getDimensionPixelSize(R.styleable.SketchDrawingView_eraserLineWidth,120)
-            )
-        } finally {
-            a.recycle();
-        }*/
     }
 
-    fun setMediaPlayer(player: MediaPlayer) {
-        if (mediaPlayer == null)
-            mediaPlayer = player
-
-    }
-
-    fun setOnSeekBarActionDownCallback(onSeekBarActionDownCallback: (() -> Unit)) {
-        onSeekBarActionDown = onSeekBarActionDownCallback
-    }
-
-    fun setOnSeekBarActionUpCallback(onSeekBarActionUpCallback: (() -> Unit)) {
-        onSeekBarActionUp = onSeekBarActionUpCallback
+    fun setOnSeekBarPointerOnCallback(onSeekBarPointerOnCallback: ((isPointerOn:Boolean ) -> Unit)){
+        onSeekBarPointerOn = onSeekBarPointerOnCallback
     }
 
     fun setOnCompleteCallback(onCompleteCallback: () -> Unit) {
@@ -155,7 +105,20 @@ class VoiceNoteView : ConstraintLayout {
 
     }
 
-    fun initVisualizer(amplitudesList: MutableList<Int>, file: File, isCurrentVisualizer: Boolean) {
+
+    fun initVisualizer(
+            player: MediaPlayer,
+            amplitudes: List<Int>?,
+            file: File,
+            isCurrentVisualizer: Boolean
+    ) {
+        val amplitudesList = mutableListOf<Int>().also { list->
+            amplitudes?.let{
+                list.addAll(it)
+            }
+        }
+        if (mediaPlayer == null)
+            mediaPlayer = player
         isVisualising = isCurrentVisualizer
         if (!isVisualising) media_play_iv.setImageResource(R.drawable.media_note_voice_play)
         audioFile = file
@@ -308,10 +271,12 @@ class VoiceNoteView : ConstraintLayout {
                         if (currentTotalTime != 0L && currentTime.toLong() >= currentTotalTime) {
                             setOnPlayingState(STOPPED)
                         } else {
+                            Log.v("ZhoppaVis", "currentTime = $currentTime currentTotalTime = $currentTotalTime")
                             showProgressPercentage(percentage)
                         }
                     }
                 }
+                delay(1)
             }
 
         }
@@ -319,11 +284,6 @@ class VoiceNoteView : ConstraintLayout {
 
     init {
         View.inflate(context, R.layout.layout_visualizer_view, this)
-        media_on_play_visualizer.setColors(activeColor,disabledColor)
-
-        recognized_speech_tv.typeface = resources.getFont(font)
-
-        recognized_speech_tv.setTextColor(resources.getColor(recognizedSpeechColor))
         media_play_iv.tag = STOPPED
         media_on_play_visualizer.visualize(mutableListOf())
 
@@ -355,7 +315,7 @@ class VoiceNoteView : ConstraintLayout {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         media_play_iv.setImageResource(R.drawable.media_note_voice_pause)
-                        onSeekBarActionDown?.invoke()
+                        onSeekBarPointerOn?.invoke(true)
                         mediaPlayer?.pause()
                         media_on_play_visualizer.pause()
                         val location = IntArray(2)
@@ -372,7 +332,7 @@ class VoiceNoteView : ConstraintLayout {
                         if (currentTouchX < 0) currentTouchX = 0f
                         var playFromPositionPercent: Float = currentTouchX / (view.width)
                         if (playFromPositionPercent >= 1) playFromPositionPercent = 1f
-                        onSeekBarActionUp?.invoke()
+                        onSeekBarPointerOn?.invoke(false)
                         mediaPlayer?.seekTo((currentTotalTime * playFromPositionPercent).toInt())
                         mediaPlayer?.start()
                         observePlayer()
@@ -399,7 +359,7 @@ class VoiceNoteView : ConstraintLayout {
 }
 
 
- class Visualizer : View {
+private class Visualizer : View {
     private var mPath: Path? = null
     private var mX: Float = 0f
     private var mY: Float = 0f
@@ -449,7 +409,7 @@ class VoiceNoteView : ConstraintLayout {
         playingPaint = Paint().apply {
             isAntiAlias = true
             isDither = true
-            color = resources.getColor(R.color.black)
+            color = resources.getColor(R.color.defaultActive)
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
             strokeWidth = dpToPx(2)
@@ -457,18 +417,13 @@ class VoiceNoteView : ConstraintLayout {
         mPaint = Paint().apply {
             isAntiAlias = true
             isDither = true
-            color = resources.getColor(R.color.gray)
+            color = resources.getColor(R.color.defaultNotActive)
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
             strokeWidth = dpToPx(2)
         }
 
 
-    }
-
-    fun setColors(active: Int, disabled:Int){
-        playingPaint?.color = resources.getColor(active)
-        mPaint?.color = resources.getColor(disabled)
     }
 
 
@@ -515,6 +470,7 @@ class VoiceNoteView : ConstraintLayout {
         vectors?.let{ vectorsList->
             vectorsIndiciesCount = (vectorsList.lastIndex * percentage).toInt()
         }
+        Log.v("ZhoppaVis", "perc = $percentage")
         invalidate()
     }
 
@@ -527,7 +483,7 @@ class VoiceNoteView : ConstraintLayout {
         invalidate()
     }
 
-    fun visualize(amplitudesList: MutableList<Int>, mCurrentPercentage: Float = 0f) {
+    fun visualize(amplitudesList: List<Int>, mCurrentPercentage: Float = 0f) {
         try {
             viewTreeObserver.addOnGlobalLayoutListener(
                     object :

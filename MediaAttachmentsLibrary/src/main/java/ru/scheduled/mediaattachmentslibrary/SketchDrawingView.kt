@@ -19,8 +19,8 @@ import kotlin.math.abs
 
 class SketchDrawingView : ConstraintLayout {
 
-    private var activeColor:Int = R.color.black
-    private var disabledColor:Int = R.color.gray
+    private var activeColor:Int = R.color.defaultActive
+    private var disabledColor:Int = R.color.defaultNotActive
     private var hintText:Int = R.string.empty
     private var isEraserEnabled = false
 
@@ -34,12 +34,12 @@ class SketchDrawingView : ConstraintLayout {
         activeColor = attrs.getAttributeResourceValue(
                 "http://schemas.android.com/apk/res-auto",
                 "activeColor",
-                R.color.black
+                R.color.defaultActive
         )
         disabledColor = attrs.getAttributeResourceValue(
                 "http://schemas.android.com/apk/res-auto",
                 "disabledColor",
-                R.color.gray
+                R.color.defaultNotActive
         )
 
         hintText = attrs.getAttributeResourceValue(
