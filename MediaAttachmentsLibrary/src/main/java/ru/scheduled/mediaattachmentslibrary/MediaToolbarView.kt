@@ -1,6 +1,7 @@
 package ru.scheduled.mediaattachmentslibrary
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 
+@SuppressLint("ClickableViewAccessibility")
 class MediaToolbarView : ConstraintLayout {
 
     private val voiceRecorder: VoiceRecorder = VoiceRecorder(context)
@@ -158,7 +160,7 @@ class MediaToolbarView : ConstraintLayout {
         note_editing_title_tv.text = text
     }
 
-    private inline var View.isVisible: Boolean
+    private var View.isVisible: Boolean
         get() = visibility == View.VISIBLE
         set(value) {
             visibility = if (value) View.VISIBLE else View.GONE
@@ -208,7 +210,6 @@ class MediaToolbarView : ConstraintLayout {
         }
 
         notes_voice_iv.setOnTouchListener { v, event ->
-
 
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
