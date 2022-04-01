@@ -219,17 +219,19 @@ class MediaToolbarView : ConstraintLayout {
                         onStartRecording?.invoke()
                         stopped = false
 
-                        val vibe =
-                                context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                        if(checkVibrationPermission()){
+                            val vibe =
+                                    context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                            vibe?.vibrate(
-                                    VibrationEffect.createOneShot(
-                                            100,
-                                            VibrationEffect.DEFAULT_AMPLITUDE
-                                    )
-                            )
-                        } else vibe?.vibrate(100);
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                vibe?.vibrate(
+                                        VibrationEffect.createOneShot(
+                                                100,
+                                                VibrationEffect.DEFAULT_AMPLITUDE
+                                        )
+                                )
+                            } else vibe?.vibrate(100);
+                        }
                         setEdittingViewsVisibility(areVisible = false)
                         setNotesToolbarViewsVisibility(areVisible = false)
                         setVoiceRecordingViewsVisibility(areVisible = true)
@@ -511,6 +513,25 @@ class MediaToolbarView : ConstraintLayout {
                         arrayOf(android.Manifest.permission.RECORD_AUDIO),
                         184567
                 )
+                false
+            }
+
+        } else {
+            true
+        }
+
+    }
+
+    private fun checkVibrationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.VIBRATE
+                    ) ==
+                    PackageManager.PERMISSION_GRANTED
+            ) {
+                true
+            } else {
                 false
             }
 
