@@ -8,7 +8,6 @@
     android:background="@color/black"
     >
 
-
     <com.theartofdev.edmodo.cropper.CropImageView
         android:id="@+id/editable_photo_preview_civ"
         android:layout_width="0dp"
@@ -27,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/editable_photo_nav_bar">
 
         <androidx.cardview.widget.CardView

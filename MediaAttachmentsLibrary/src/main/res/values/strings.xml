@@ -2,5 +2,8 @@
     <string name="empty"></string>
     <string name="editing">Редактирование</string>
     <string name="defaultHint">Введите текст...</string>
-    <string name="defaultSwipeToCancel">Влево — отмена</string>
+    <string name="defaultSwipeLeftToCancel">Влево — отмена</string>
+    <string name="defaultSwipeBottomToCancel">Вниз — отмена</string>
+    <string name="defaultSwipeTopToCancel">Вверх — отмена</string>
+    <string name="defaultSwipeRightToCancel">Вправо — отмена</string>
 </resources>

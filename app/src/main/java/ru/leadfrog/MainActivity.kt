@@ -1,5 +1,6 @@
 package ru.leadfrog
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.media.MediaPlayer
@@ -12,7 +13,6 @@ import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
-    private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 
@@ -37,21 +37,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
     }
 
     override fun onResume() {
         super.onResume()
-        mediaPlayer?.start()
     }
 
     override fun onStop() {
         super.onStop()
-        mediaPlayer?.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer?.release()
-        mediaPlayer = null
+
     }
 }

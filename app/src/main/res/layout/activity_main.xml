@@ -6,14 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
-        android:id="@+id/voiceNoteView"
+    <ru.scheduled.mediaattachmentslibrary.CameraCaptureView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <ru.scheduled.mediaattachmentslibrary.MediaToolbarView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="match_parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

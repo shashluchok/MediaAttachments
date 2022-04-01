@@ -469,7 +469,6 @@ private class Visualizer : View {
         vectors?.let{ vectorsList->
             vectorsIndiciesCount = (vectorsList.lastIndex * percentage).toInt()
         }
-        Log.v("ZhoppaVis", "perc = $percentage")
         invalidate()
     }
 

@@ -57,7 +57,6 @@ class ImageEditorView : ConstraintLayout {
 
     private fun initPhotoPreviewListeners() {
 
-
         editable_photo_preview_civ.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
