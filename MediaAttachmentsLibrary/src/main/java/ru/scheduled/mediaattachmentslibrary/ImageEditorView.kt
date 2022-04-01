@@ -31,7 +31,7 @@ class ImageEditorView : ConstraintLayout {
     private var currentRotation = 0
     private var fullSizeImageRect = Rect()
 
-    private var onComplete: ((Bitmap)->Unit)? = null
+    private var onComplete: ((Bitmap,String)->Unit)? = null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
             context,
@@ -45,7 +45,7 @@ class ImageEditorView : ConstraintLayout {
         editable_photo_preview_civ.setImageBitmap(bitmap)
     }
 
-    fun setOnCompleteCallback(callback:(Bitmap)->Unit){
+    fun setOnCompleteCallback(callback:(edittedImage:Bitmap, textNote:String)->Unit){
         onComplete = callback
     }
 
@@ -80,11 +80,10 @@ class ImageEditorView : ConstraintLayout {
 
         editable_photo_accept.setOnClickListener {
             if (isImageCropping) {
-
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage)
+                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"")
             } else {
                 editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage)
+                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"" )
             }
         }
 
