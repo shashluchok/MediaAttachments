@@ -88,11 +88,11 @@ class MediaToolbarView : ConstraintLayout {
         onCompleteRecording = callback
     }
 
-    fun setOnSendCallback(callback: (String) -> Unit) {
+    fun setOnSendTextCallback(callback: (String) -> Unit) {
         onSend = callback
     }
 
-    fun setOnCancelEdittingCallback(callback: () -> Unit) {
+    fun setOnCancelEditingTextCallback(callback: () -> Unit) {
         onCancelEditting = callback
     }
 
@@ -558,7 +558,7 @@ class MediaToolbarView : ConstraintLayout {
     }
 }
 
-private class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
+ class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
             context!!,
             attrs,

@@ -7,4 +7,5 @@
     <color name="defaultTextLight">#9A99A2</color>
     <color name="defaultDivider">#A3BDBDBD</color>
     <color name="defaultBg">#EFEFF4</color>
+    <color name="black">#000000</color>
 </resources>

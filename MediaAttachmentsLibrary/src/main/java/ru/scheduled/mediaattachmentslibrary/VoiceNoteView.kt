@@ -72,7 +72,6 @@ class VoiceNoteView : ConstraintLayout {
 
     fun setOnRecognizeSpeechClickCallback(callback: () -> Unit) {
         onRecognizeSpeechClick = callback
-
     }
 
     fun cancel() {
