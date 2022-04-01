@@ -6,10 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<ru.scheduled.mediaattachmentslibrary.VoiceNoteView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
+        android:id="@+id/voiceNoteView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    />
+    <ru.scheduled.mediaattachmentslibrary.MediaToolbarView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
