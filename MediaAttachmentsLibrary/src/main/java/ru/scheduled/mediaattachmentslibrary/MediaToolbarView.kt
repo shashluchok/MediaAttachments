@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.leadfrog.isVisible
 import java.io.File
 import java.util.*
 
@@ -158,6 +157,12 @@ class MediaToolbarView : ConstraintLayout {
     fun setEdditingTitleText(text: String) {
         note_editing_title_tv.text = text
     }
+
+    private inline var View.isVisible: Boolean
+        get() = visibility == View.VISIBLE
+        set(value) {
+            visibility = if (value) View.VISIBLE else View.GONE
+        }
 
 
     init {
