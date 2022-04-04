@@ -10,6 +10,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import kotlinx.android.synthetic.main.activity_main.*
+import ru.scheduled.mediaattachmentslibrary.CameraCaptureView
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,7 +39,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+       camera_view.setOnVideoSavedCallback {
 
+       }
+        camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)
     }
 
     override fun onResume() {

@@ -6,28 +6,22 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Rect
+import android.database.Cursor
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.camera_capture_view.view.*
 import kotlinx.coroutines.*
 import java.io.File
@@ -61,49 +55,101 @@ class CameraCaptureView: ConstraintLayout {
 
     //callbacks
 //    private var onGalleryClicked : (()->Unit)? = null
-    private var onVideoSaved : ((Uri)->Unit)? = null
-    private var onImageSaved : ((photoFilePath:String)->Unit)? = null
+    private var onVideoSaved: ((Uri) -> Unit)? = null
+    private var onImageSaved: ((uri: Uri) -> Unit)? = null
+
+    private var saveDestination: SaveLocation = SaveLocation.INTERNAL_STORAGE
+
+    enum class SaveLocation {
+        GALLERY, INTERNAL_STORAGE
+    }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
+            context,
+            attrs,
+            defStyle
     )
+
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 
     init {
         View.inflate(context, R.layout.camera_capture_view, this)
 
+        setLastGalleryImage()
         setUpOrientationChangeListener()
         setUpCamera()
     }
 
-    fun setOnVideoSavedCallback(callback: (Uri) -> Unit){
+    fun setSaveLocation(location: SaveLocation) {
+        saveDestination = location
+    }
+
+    fun setOnVideoSavedCallback(callback: (Uri) -> Unit) {
+        (isVideoCaptureEnabled) = true
         onVideoSaved = callback
     }
 
-    fun setUpOnGalletyClickedCallback(callback: ()->Unit){
+    fun setOnGalleryClickedCallback(callback: () -> Unit) {
         previous_photo_container.setOnClickListener {
-            callback.invoke()
+            if (previous_photo_iv.visibility == View.VISIBLE) {
+                callback.invoke()
+            }
         }
     }
 
-    fun setOnCloseClickedCallback(callback: ()->Unit){
+    fun setOnCloseClickedCallback(callback: () -> Unit) {
         close_container.setOnClickListener {
             callback.invoke()
         }
     }
 
-    fun setLastCameraImage(imageUri: Uri){
-        Glide.with(this).load(imageUri)
-            .transition(DrawableTransitionOptions.withCrossFade(175))
-            .into(previous_photo_iv)
+
+    private fun setLastGalleryImage() {
+        var lastImageUri = ""
+        var imageCursor: Cursor? = null
+        try {
+            val columns =
+                    arrayOf(MediaStore.Images.Media.DATA)
+            val orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC"
+            imageCursor = context.contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    columns,
+                    null,
+                    null,
+                    orderBy
+            )
+            if (imageCursor != null) {
+                if (imageCursor?.moveToNext() ?: false) {
+                    lastImageUri =
+                            imageCursor!!.getString(
+                                    imageCursor!!.getColumnIndex(
+                                            MediaStore.Images.Media.DATA
+                                    )
+                            )
+
+                }
+            }
+
+            if (!lastImageUri.isNullOrEmpty()) {
+                previous_photo_no_photo_iv.visibility = View.GONE
+                previous_photo_iv.visibility = View.VISIBLE
+                Glide.with(this).load(lastImageUri)
+                        .transition(DrawableTransitionOptions.withCrossFade(175))
+                        .into(previous_photo_iv)
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        } finally {
+            if (imageCursor != null && !imageCursor!!.isClosed) {
+                imageCursor!!.close();
+            }
+        }
     }
 
     private fun setUpCamera() {
-        CoroutineScope(Dispatchers.Default).launch{
+        CoroutineScope(Dispatchers.Default).launch {
             delay(500)
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 initListeners()
                 setPhotoVideoCaptureButtonLayoutListener()
                 if (checkCameraPermissionGranted()) {
@@ -280,45 +326,104 @@ class CameraCaptureView: ConstraintLayout {
 
         val metadata = ImageCapture.Metadata()
 
+        val bitmap = preview_view2.bitmap
+        photo_preview_iv.visibility = View.VISIBLE
+        Glide.with(context).load(bitmap).into(photo_preview_iv)
+        preview_view2.visibility = View.GONE
+
         if (!isBackCameraOn) {
             metadata.isReversedHorizontal = true
         }
+        val outputOptions: ImageCapture.OutputFileOptions
 
-        val mydir = context.getDir(MEDIA_NOTES_INTERNAL_DIRECTORY, Context.MODE_PRIVATE)
+        if (saveDestination == SaveLocation.GALLERY) {
 
-        if (!mydir.exists()) {
-            mydir.mkdirs()
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+
+                val contentValues = ContentValues().apply {
+                    val name = SimpleDateFormat(
+                            "HHmmssddMMyyyy",
+                            Locale.US
+                    ).format(System.currentTimeMillis()) + ".jpg"
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "Images/LeadFrog")
+                }
+                outputOptions = ImageCapture.OutputFileOptions.Builder(
+                        context.contentResolver,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        contentValues
+                ).setMetadata(metadata).build()
+
+
+            } else {
+                val values = ContentValues()
+                values.put(
+                        MediaStore.Images.Media.TITLE, SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
+                        System.currentTimeMillis()
+                )
+                )
+                values.put(
+                        MediaStore.Images.Media.DISPLAY_NAME, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                ).format(System.currentTimeMillis())
+                )
+                values.put(
+                        MediaStore.Images.Media.DESCRIPTION, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                ).format(System.currentTimeMillis())
+                )
+                values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
+
+                outputOptions = ImageCapture.OutputFileOptions.Builder(
+                        context.contentResolver,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        values
+                ).setMetadata(
+                        metadata
+                ).build()
+            }
+
+        } else {
+            val mydir = context.getDir(MEDIA_NOTES_INTERNAL_DIRECTORY, Context.MODE_PRIVATE)
+
+            if (!mydir.exists()) {
+                mydir.mkdirs()
+            }
+
+            val photoFile = File(
+                    mydir,
+                    SimpleDateFormat(
+                            "HHmmssddMMyyyy",
+                            Locale.US
+                    ).format(System.currentTimeMillis()) + ".jpg")
+
+            outputOptions = ImageCapture.OutputFileOptions.Builder(
+                    photoFile
+            ).setMetadata(
+                    metadata
+            ).build()
+
+
         }
-
-        val photoFile = File(
-            mydir,
-            SimpleDateFormat(
-                "HHmmssddMMyyyy",
-                Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg")
-
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(
-            photoFile
-        ).setMetadata(
-            metadata
-        ).build()
-
-
-
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    exc.printStackTrace()
+        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                enableUserInteraction()
+                loaderVisible(false)
+                outputFileResults.savedUri?.let{
+                    onImageSaved?.invoke(it)
                 }
+            }
 
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    enableUserInteraction()
-                    onImageSaved?.invoke(photoFile.path.toString())
-//                    moveToImageCropFragment(photoFile.path.toString())
-                }
-            })
+            override fun onError(exception: ImageCaptureException) {
+                enableUserInteraction()
+                exception.printStackTrace()
+            }
+
+        })
 
     }
 
@@ -444,17 +549,17 @@ class CameraCaptureView: ConstraintLayout {
             cameraProvider = cameraProviderFuture.get()
             if (cameraProvider != null) {
                 val preview = Preview.Builder()
-                    .build()
-                    .also {
-                        it.setSurfaceProvider(preview_view2.surfaceProvider)
-                    }
+                        .build()
+                        .also {
+                            it.setSurfaceProvider(preview_view2.surfaceProvider)
+                        }
 
 
                 videoCapture = VideoCapture.Builder().build()
 
                 imageCapture = ImageCapture.Builder()
-                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                    .build()
+                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .build()
 
                 val cameraSelector = cameraSelector
 
@@ -463,22 +568,21 @@ class CameraCaptureView: ConstraintLayout {
                 }
                 cameraProvider!!.unbindAll()
 
-                if(isVideoCaptureEnabled) {
+                if (isVideoCaptureEnabled) {
                     try {
                         cam = cameraProvider!!.bindToLifecycle(
-                            context as AppCompatActivity, cameraSelector, preview, imageCapture, videoCapture
+                                context as AppCompatActivity, cameraSelector, preview, imageCapture, videoCapture
                         )
 
 
                     } catch (exc: Exception) {
                         cam = cameraProvider!!.bindToLifecycle(
-                            context as AppCompatActivity, cameraSelector, preview, imageCapture
+                                context as AppCompatActivity, cameraSelector, preview, imageCapture
                         )
                     }
-                }
-                else {
+                } else {
                     cam = cameraProvider!!.bindToLifecycle(
-                        context as AppCompatActivity, cameraSelector, preview, imageCapture, videoCapture
+                            context as AppCompatActivity, cameraSelector, preview, imageCapture
                     )
                 }
             }
@@ -525,65 +629,90 @@ class CameraCaptureView: ConstraintLayout {
 
     @SuppressLint("RestrictedApi")
     private fun startRecording() {
-
+        if (videoCapture == null) return
         val metadata = VideoCapture.Metadata()
 
-
         val outputOptions: VideoCapture.OutputFileOptions
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
-            val contentValues = ContentValues().apply {
-                val name = SimpleDateFormat(
-                    "HHmmssddMMyyyy",
-                    Locale.US
-                ).format(System.currentTimeMillis()) + ".mp4"
-                put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-                put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Movies/LeadFrog")
+        if (saveDestination == SaveLocation.GALLERY) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+
+                val contentValues = ContentValues().apply {
+                    val name = SimpleDateFormat(
+                            "HHmmssddMMyyyy",
+                            Locale.US
+                    ).format(System.currentTimeMillis()) + ".mp4"
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "Movies/LeadFrog")
+                }
+                outputOptions = VideoCapture.OutputFileOptions.Builder(
+                        context.contentResolver,
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        contentValues
+                ).setMetadata(metadata).build()
+
+
+            } else {
+                val values = ContentValues()
+                values.put(
+                        MediaStore.Video.Media.TITLE, SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
+                        System.currentTimeMillis()
+                )
+                )
+                values.put(
+                        MediaStore.Video.Media.DISPLAY_NAME, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                ).format(System.currentTimeMillis())
+                )
+                values.put(
+                        MediaStore.Video.Media.DESCRIPTION, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                ).format(System.currentTimeMillis())
+                )
+                values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
+                values.put(MediaStore.Video.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
+
+                outputOptions = VideoCapture.OutputFileOptions.Builder(
+                        context.contentResolver,
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        values
+                ).setMetadata(
+                        metadata
+                ).build()
             }
-            outputOptions = VideoCapture.OutputFileOptions.Builder(
-                context.contentResolver,
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            ).setMetadata(metadata).build()
-
 
         } else {
-            val values = ContentValues()
-            values.put(
-                MediaStore.Images.Media.TITLE, SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
-                    System.currentTimeMillis()
-                )
-            )
-            values.put(
-                MediaStore.Images.Media.DISPLAY_NAME, SimpleDateFormat(
-                    "HHmmssddMMyyyy",
-                    Locale.US
-                ).format(System.currentTimeMillis())
-            )
-            values.put(
-                MediaStore.Images.Media.DESCRIPTION, SimpleDateFormat(
-                    "HHmmssddMMyyyy",
-                    Locale.US
-                ).format(System.currentTimeMillis())
-            )
-            values.put(MediaStore.Images.Media.MIME_TYPE, "video/mp4")
-            values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
+            val mydir = context.getDir(MEDIA_NOTES_INTERNAL_DIRECTORY, Context.MODE_PRIVATE)
+
+            if (!mydir.exists()) {
+                mydir.mkdirs()
+            }
+
+            val videoFile = File(
+                    mydir,
+                    SimpleDateFormat(
+                            "HHmmssddMMyyyy",
+                            Locale.US
+                    ).format(System.currentTimeMillis()) + ".mp4")
 
             outputOptions = VideoCapture.OutputFileOptions.Builder(
-                context.contentResolver,
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                values
+                    videoFile
             ).setMetadata(
-                metadata
+                    metadata
             ).build()
         }
 
         videoCapture?.startRecording(outputOptions, ContextCompat.getMainExecutor(context), object : VideoCapture.OnVideoSavedCallback {
             override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
+                enableUserInteraction()
+                cause?.printStackTrace()
             }
 
             override fun onVideoSaved(outputFileResults: VideoCapture.OutputFileResults) {
+                enableUserInteraction()
                 currentSavedVideoUri = outputFileResults.savedUri
             }
         })
