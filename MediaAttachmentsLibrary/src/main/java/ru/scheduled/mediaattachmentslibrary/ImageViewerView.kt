@@ -53,9 +53,142 @@ class ImageViewerView : ConstraintLayout {
 
     fun setOnTryToLeaveCallback(callback:()->Unit){
         onToolBarBackClicked = callback
+        media_image_viewer_back_iv.visibility = View.VISIBLE
+        media_image_viewer_view_pager.setOnTouchListener { view, ev ->
+            if (mainLayout != null && viewToAnimate != null) {
+                if (isMotionEventInRect(ev, mainLayout!!)) {
+
+
+                    when (ev.action and MotionEvent.ACTION_MASK) {
+                        MotionEvent.ACTION_DOWN -> {
+                            startY = ev.rawY
+                            startX = ev.rawX
+                            return@setOnTouchListener false
+                        }
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                            if (isAnimating) {
+
+                                val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
+                                animator.addUpdateListener { animation ->
+                                    val percent = (animation.animatedValue as Int)
+
+                                    val currentTint = "#${getTransparentPercentage(percent)}000000"
+                                    val color = Color.parseColor(currentTint)
+                                    mainLayout!!.setBackgroundColor(color)
+                                    fadeOtherViews?.invoke(percent / 100.toFloat())
+                                }
+                                animator.duration = 300
+                                animator.start()
+
+                                viewToAnimate!!.animate()
+                                        .y(initialPagerY)
+                                        .setDuration(300)
+                                        .start()
+
+
+
+                            }
+                            isAnimating = false
+                            touchIsSet = false
+                            return@setOnTouchListener false
+                        }
+
+                        MotionEvent.ACTION_MOVE -> {
+                            if (!touchIsSet) {
+                                if (abs(startX - ev.rawX) < 50f &&
+                                        ev.rawY - startY > 50f) {
+                                    isAnimating = true
+                                    touchIsSet = true
+                                }
+                                if (abs(startX - ev.rawX) > 50f &&
+                                        abs(ev.rawY - startY) < 50f) {
+                                    touchIsSet = true
+                                }
+                            }
+
+                            if (isAnimating) {
+                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 300) {
+                                    viewToAnimate!!.animate()
+                                            .y(initialPagerY + (ev.rawY - startY) / 2)
+                                            .setDuration(0)
+                                            .start()
+
+                                    lastPercent = 100 - ((ev.rawY - startY) / 300 * 100)
+                                    fadeOtherViews?.invoke((lastPercent / 100.toFloat()))
+                                    val currentTint = "#${getTransparentPercentage(lastPercent.toInt())}000000"
+
+                                    val color = Color.parseColor(currentTint)
+                                    mainLayout!!.setBackgroundColor(color)
+                                }
+                                if ((ev.rawY - startY) > 300) {
+                                    isAnimating = false
+                                    val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
+                                    animator.addUpdateListener { animation ->
+                                        val percent = (animation.animatedValue as Int)
+
+                                        val currentTint = "#${getTransparentPercentage(percent)}000000"
+                                        val color = Color.parseColor(currentTint)
+                                        mainLayout!!.setBackgroundColor(color)
+                                        fadeOtherViews?.invoke(percent / 100.toFloat())
+                                    }
+                                    animator.duration = 300
+                                    animator.start()
+
+                                    viewToAnimate!!.animate()
+                                            .y(initialPagerY)
+                                            .setDuration(300)
+                                            .start()
+                                    onToolBarBackClicked?.invoke()
+                                }
+                                return@setOnTouchListener true
+                            }
+                            else return@setOnTouchListener false
+                        }
+                        else->{
+                            return@setOnTouchListener false
+                        }
+
+                    }
+                }
+                else{
+                    if (isAnimating) {
+
+                        val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
+                        animator.addUpdateListener { animation ->
+                            val percent = (animation.animatedValue as Int)
+
+                            val currentTint = "#${getTransparentPercentage(percent)}000000"
+                            val color = Color.parseColor(currentTint)
+                            mainLayout!!.setBackgroundColor(color)
+                            fadeOtherViews?.invoke(percent/100.toFloat())
+                        }
+                        animator.duration = 300
+                        animator.start()
+
+                        viewToAnimate!!.animate()
+                                .y(initialPagerY)
+                                .setDuration(300)
+                                .start()
+
+
+
+                    }
+                    isAnimating = false
+                    touchIsSet = false
+                    return@setOnTouchListener false
+
+                }
+
+            }
+            else             return@setOnTouchListener false
+
+        }
+
+
     }
 
     fun setOnDeleteClickedCallback(callback:(imageUri:String, imageIndex:Int)->Unit){
+        media_image_viewer_delete_iv.visibility = View.VISIBLE
         onDeleteClicked = callback
     }
 
@@ -357,137 +490,7 @@ class ImageViewerView : ConstraintLayout {
         }
 
         media_image_viewer_delete_iv.setOnClickListener {
-            onDeleteClicked?.invoke(listOfImageUris[currentIndex],currentIndex)
-        }
-
-        media_image_viewer_view_pager.setOnTouchListener { view, ev ->
-            if (mainLayout != null && viewToAnimate != null) {
-                if (isMotionEventInRect(ev, mainLayout!!)) {
-
-
-                    when (ev.action and MotionEvent.ACTION_MASK) {
-                        MotionEvent.ACTION_DOWN -> {
-                            startY = ev.rawY
-                            startX = ev.rawX
-                            return@setOnTouchListener false
-                        }
-                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                            if (isAnimating) {
-
-                                val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
-                                animator.addUpdateListener { animation ->
-                                    val percent = (animation.animatedValue as Int)
-
-                                    val currentTint = "#${getTransparentPercentage(percent)}000000"
-                                    val color = Color.parseColor(currentTint)
-                                    mainLayout!!.setBackgroundColor(color)
-                                    fadeOtherViews?.invoke(percent / 100.toFloat())
-                                }
-                                animator.duration = 300
-                                animator.start()
-
-                                viewToAnimate!!.animate()
-                                        .y(initialPagerY)
-                                        .setDuration(300)
-                                        .start()
-
-
-
-                            }
-                            isAnimating = false
-                            touchIsSet = false
-                            return@setOnTouchListener false
-                        }
-
-                        MotionEvent.ACTION_MOVE -> {
-                            if (!touchIsSet) {
-                                if (abs(startX - ev.rawX) < 50f &&
-                                        ev.rawY - startY > 50f) {
-                                    isAnimating = true
-                                    touchIsSet = true
-                                }
-                                if (abs(startX - ev.rawX) > 50f &&
-                                        abs(ev.rawY - startY) < 50f) {
-                                    touchIsSet = true
-                                }
-                            }
-
-                            if (isAnimating) {
-                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 300) {
-                                    viewToAnimate!!.animate()
-                                            .y(initialPagerY + (ev.rawY - startY) / 2)
-                                            .setDuration(0)
-                                            .start()
-
-                                    lastPercent = 100 - ((ev.rawY - startY) / 300 * 100)
-                                    fadeOtherViews?.invoke((lastPercent / 100.toFloat()))
-                                    val currentTint = "#${getTransparentPercentage(lastPercent.toInt())}000000"
-
-                                    val color = Color.parseColor(currentTint)
-                                    mainLayout!!.setBackgroundColor(color)
-                                }
-                                if ((ev.rawY - startY) > 300) {
-                                    isAnimating = false
-                                    val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
-                                    animator.addUpdateListener { animation ->
-                                        val percent = (animation.animatedValue as Int)
-
-                                        val currentTint = "#${getTransparentPercentage(percent)}000000"
-                                        val color = Color.parseColor(currentTint)
-                                        mainLayout!!.setBackgroundColor(color)
-                                        fadeOtherViews?.invoke(percent / 100.toFloat())
-                                    }
-                                    animator.duration = 300
-                                    animator.start()
-
-                                    viewToAnimate!!.animate()
-                                            .y(initialPagerY)
-                                            .setDuration(300)
-                                            .start()
-                                    onToolBarBackClicked?.invoke()
-                                }
-                                return@setOnTouchListener true
-                            }
-                            else return@setOnTouchListener false
-                        }
-                        else->{
-                            return@setOnTouchListener false
-                        }
-
-                    }
-                }
-                else{
-                    if (isAnimating) {
-
-                        val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
-                        animator.addUpdateListener { animation ->
-                            val percent = (animation.animatedValue as Int)
-
-                            val currentTint = "#${getTransparentPercentage(percent)}000000"
-                            val color = Color.parseColor(currentTint)
-                            mainLayout!!.setBackgroundColor(color)
-                            fadeOtherViews?.invoke(percent/100.toFloat())
-                        }
-                        animator.duration = 300
-                        animator.start()
-
-                        viewToAnimate!!.animate()
-                                .y(initialPagerY)
-                                .setDuration(300)
-                                .start()
-
-
-
-                    }
-                    isAnimating = false
-                    touchIsSet = false
-                    return@setOnTouchListener false
-
-                }
-
-            }
-            else             return@setOnTouchListener false
-
+            onDeleteClicked?.invoke(listOfImageUris[currentIndex], currentIndex)
         }
 
     }
