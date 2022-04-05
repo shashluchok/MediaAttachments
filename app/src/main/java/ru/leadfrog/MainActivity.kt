@@ -39,10 +39,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-       camera_view.setOnVideoSavedCallback {
+       /*camera_view.setOnVideoSavedCallback {
 
        }
-        camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)
+        camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)*/
     }
 
     override fun onResume() {
