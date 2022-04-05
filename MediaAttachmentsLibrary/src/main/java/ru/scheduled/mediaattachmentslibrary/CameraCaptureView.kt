@@ -179,21 +179,20 @@ class CameraCaptureView: ConstraintLayout {
     private fun initListeners() {
 
         flashlight_container.setOnClickListener {
-            if (cam != null) {
-                if (cam!!.cameraInfo.hasFlashUnit()) {
-                    if (!isFlashLightOn) {
-                        cam!!.cameraControl.enableTorch(true)
-                        isFlashLightOn = true
-                        flashlight_icon.setImageResource(R.drawable.flashlight_on)
-                    } else {
-                        cam!!.cameraControl.enableTorch(false)
-                        isFlashLightOn = false
-                        flashlight_icon.setImageResource(R.drawable.flashlight_off)
-                    }
-
+            if (cam != null && cam!!.cameraInfo.hasFlashUnit()) {
+                if (!isFlashLightOn) {
+                    isFlashLightOn = true
+                    flashlight_icon.setImageResource(R.drawable.flashlight_on)
+                } else {
+                    isFlashLightOn = false
+                    flashlight_icon.setImageResource(R.drawable.flashlight_off)
                 }
+                imageCapture?.flashMode = if (isFlashLightOn) {
+                    ImageCapture.FLASH_MODE_ON
+                } else ImageCapture.FLASH_MODE_OFF
             }
         }
+
 
         change_camera_iv.setOnClickListener {
             if (checkCameraPermissionGranted()) {
