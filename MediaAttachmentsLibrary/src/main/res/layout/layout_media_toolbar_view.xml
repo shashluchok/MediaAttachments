@@ -17,6 +17,8 @@
         android:clickable="true"
         android:focusable="true"
         android:minHeight="56dp"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -24,8 +26,19 @@
 
         <View
             android:id="@+id/view27"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="12dp"
+            android:background="@color/defaultActive"
+            app:layout_constraintBottom_toBottomOf="@+id/note_editing_note_content_tv"
+            app:layout_constraintStart_toEndOf="@+id/noteEdittingPencilIv"
+            app:layout_constraintTop_toTopOf="@+id/note_editing_title_tv" />
+
+        <View
+            android:id="@+id/editting_divider"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="@color/defaultDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,26 +50,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:paddingEnd="12dp"
-            android:src="@drawable/sketch_pen"
+            android:src="@drawable/edit"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/note_editing_title_tv"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/note_editing_note_content_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/note_editing_title_tv" />
 
         <TextView
             android:id="@+id/note_editing_title_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/roboto_bold"
             android:text="@string/editing"
             android:textColor="@color/defaultActive"
             android:textSize="@dimen/default_14sp"
             android:visibility="gone"
+            android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toTopOf="@+id/note_editing_note_content_tv"
             app:layout_constraintEnd_toStartOf="@+id/note_editing_close_editing_mode_iv"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/noteEdittingPencilIv"
+            app:layout_constraintStart_toEndOf="@+id/view27"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -70,7 +85,7 @@
             android:textColor="@color/defaultText"
             android:textSize="@dimen/default_14sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/cardView"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_notes_add_text_note_et"
             app:layout_constraintEnd_toEndOf="@+id/note_editing_title_tv"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/note_editing_title_tv"
@@ -78,75 +93,57 @@
 
         <ImageView
             android:id="@+id/note_editing_close_editing_mode_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/close_new"
             android:tint="@color/defaultTextLight"
             android:visibility="gone"
+            android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/note_editing_note_content_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/note_editing_title_tv" />
+            app:layout_constraintTop_toTopOf="@+id/note_editing_title_tv" />
+
+        <!--NotesDef-->
 
         <ImageView
             android:id="@+id/notes_toolbar_camera_iv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginStart="12dp"
-            android:paddingEnd="7dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/cardView"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/notes_toolbar_text_iv"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/notes_toolbar_sketch_iv"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/notes_toolbar_camera" />
 
         <ImageView
             android:id="@+id/notes_toolbar_sketch_iv"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:paddingStart="7dp"
+            android:paddingStart="12dp"
             android:paddingEnd="14dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
-            app:layout_constraintEnd_toStartOf="@+id/notes_toolbar_text_iv"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/notes_toolbar_camera_iv"
-            app:layout_constraintTop_toTopOf="@+id/cardView"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/notes_toolbar_sketch" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginBottom="12dp"
+        <ImageView
+            android:id="@+id/notes_toolbar_text_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
             android:visibility="visible"
-            app:cardBackgroundColor="@color/defaultBg"
-            app:cardCornerRadius="17dp"
-            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/notes_toolbar_voice_iv"
-            app:layout_constraintStart_toEndOf="@+id/notes_toolbar_sketch_iv">
-
-
-            <ru.scheduled.mediaattachmentslibrary.CustomEditText
-                android:id="@+id/bottom_notes_add_text_note_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content "
-                android:background="@null"
-                android:fontFamily="@font/roboto_regular"
-                android:hint="@string/defaultHint"
-                android:maxLines="9"
-                android:paddingStart="14dp"
-                android:paddingTop="7dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="7dp"
-                android:scrollHorizontally="false"
-                android:textColor="@color/defaultText"
-                android:textSize="@dimen/default_15sp" />
-        </androidx.cardview.widget.CardView>
-
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/notes_toolbar_camera_iv"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/text" />
 
         <ImageView
             android:id="@+id/notes_toolbar_voice_iv"
@@ -157,20 +154,42 @@
             android:paddingEnd="12dp"
             android:paddingBottom="15dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/cardView"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_notes_add_text_note_et"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/cardView"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/notes_toolbar_voice" />
+
+        <ru.scheduled.mediaattachmentslibrary.CustomEditText
+            android:id="@+id/bottom_notes_add_text_note_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content "
+            android:background="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/roboto_regular"
+            android:hint="@string/defaultHint"
+            android:maxLines="9"
+            android:paddingStart="12dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:scrollHorizontally="false"
+            android:textColor="@color/defaultText"
+            android:textSize="@dimen/default_15sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/notes_toolbar_voice_iv"
+            app:layout_constraintStart_toStartOf="@+id/voice_recording_voice_record_on_iv" />
 
         <ImageView
             android:id="@+id/bottom_notes_add_text_note_send_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="15dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
+            android:clickable="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/notes_toolbar_voice_iv"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/send" />
 
@@ -266,6 +285,7 @@
         android:paddingStart="12dp"
         android:paddingTop="14dp"
         android:paddingEnd="12dp"
+        android:visibility="visible"
         android:paddingBottom="15dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"

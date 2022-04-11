@@ -101,6 +101,7 @@ class MediaToolbarView : ConstraintLayout {
         note_editing_title_tv.isVisible = areVisible
         note_editing_note_content_tv.isVisible = areVisible
         note_editing_close_editing_mode_iv.isVisible = areVisible
+        editting_divider.isVisible = areVisible
     }
 
     private fun setVoiceRecordingViewsVisibility(areVisible: Boolean) {
@@ -110,15 +111,9 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     private fun setNotesToolbarViewsVisibility(areVisible: Boolean) {
-        cardView.isVisible = areVisible
-        if (areVisible) {
-            notes_toolbar_camera_iv.isVisible = onOpenCamera != null
-            notes_toolbar_sketch_iv.isVisible = onOpenSketch != null
-        } else {
             notes_toolbar_camera_iv.isVisible = areVisible
-            notes_toolbar_sketch_iv.isVisible = areVisible
-        }
-
+        notes_toolbar_text_iv.isVisible = areVisible
+        notes_toolbar_sketch_iv.isVisible = areVisible
     }
 
 
@@ -203,6 +198,10 @@ class MediaToolbarView : ConstraintLayout {
             setUpTextNoteCreationToolbarVisibility(isVisible = false)
         }
 
+        notes_toolbar_text_iv.setOnClickListener {
+            setUpTextNoteCreationToolbarVisibility(isVisible = true)
+        }
+
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
             if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) {
                 setUpTextNoteCreationToolbarVisibility(isVisible = isFocused)
@@ -219,7 +218,7 @@ class MediaToolbarView : ConstraintLayout {
                         onStartRecording?.invoke()
                         stopped = false
 
-                        if(checkVibrationPermission()){
+                        if (checkVibrationPermission()) {
                             val vibe =
                                     context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
@@ -453,17 +452,22 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     private fun setUpTextNoteCreationToolbarVisibility(isVisible: Boolean) {
-        if (!isVisible) {
-            notes_toolbar_camera_iv.isVisible = onOpenCamera != null
-            notes_toolbar_sketch_iv.isVisible = onOpenSketch != null
-        } else {
-            notes_toolbar_camera_iv.isVisible = !isVisible
-            notes_toolbar_sketch_iv.isVisible = !isVisible
-        }
-
-        bottom_notes_add_text_note_send_iv.isVisible = isVisible
+        notes_toolbar_text_iv.isVisible = !isVisible
+        notes_toolbar_camera_iv.isVisible = !isVisible
+        notes_toolbar_sketch_iv.isVisible = !isVisible
         notes_voice_iv.isVisible = !isVisible
-
+        notes_toolbar_voice_background_iv.isVisible = !isVisible
+        bottom_notes_add_text_note_send_iv.isVisible = isVisible
+        bottom_notes_add_text_note_et.isVisible = isVisible
+        if(isVisible){
+            bottom_notes_add_text_note_et.apply {
+                requestFocus()
+                this.text?.clear()
+            }
+            val keyboard =
+                    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+            keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        }
     }
 
     private fun hideKeyboard() {
