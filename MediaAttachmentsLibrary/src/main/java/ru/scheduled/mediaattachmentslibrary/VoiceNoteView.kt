@@ -43,6 +43,8 @@ class VoiceNoteView : ConstraintLayout {
     private var isVisualising: Boolean = false
     private var onLongClick: (() -> Unit)? = null
 
+    var areClicksEnabled = true
+
     companion object {
         const val PLAYING = "playing"
         const val PAUSED = "paused"
@@ -307,12 +309,13 @@ class VoiceNoteView : ConstraintLayout {
         }
 
         media_speech_recognize.setOnClickListener {
+            if(!areClicksEnabled) return@setOnClickListener
             setRecognizedSpeechTextVisibility(media_speech_recognize.tag != "opened")
             onRecognizeSpeechClick?.invoke()
         }
 
         media_play_iv.setOnClickListener {
-            if (mediaPlayer == null || audioFile == null) return@setOnClickListener
+            if (mediaPlayer == null || audioFile == null || !areClicksEnabled) return@setOnClickListener
             onPlayClick?.invoke()
             val newState = when (media_play_iv.tag) {
                 PLAYING -> {
@@ -329,7 +332,7 @@ class VoiceNoteView : ConstraintLayout {
         }
 
         media_on_play_visualizer_frame.setOnTouchListener { view, event ->
-            if (mediaPlayer == null || audioFile == null) return@setOnTouchListener false
+            if (mediaPlayer == null || audioFile == null || !areClicksEnabled) return@setOnTouchListener false
             if (media_play_iv.tag != STOPPED) {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
