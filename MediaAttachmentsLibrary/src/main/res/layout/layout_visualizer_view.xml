@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     app:cardElevation="0dp"
+    android:id="@+id/visualizer_cv"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_media_note_voice_cl"

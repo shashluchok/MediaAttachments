@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ru.scheduled.mediaattachmentslibrary.MediaToolbarView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"

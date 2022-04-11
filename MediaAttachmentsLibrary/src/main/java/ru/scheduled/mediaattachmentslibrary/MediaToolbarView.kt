@@ -183,6 +183,7 @@ class MediaToolbarView : ConstraintLayout {
             setEdittingViewsVisibility(areVisible = false)
             bottom_notes_add_text_note_et?.text?.clear()
             bottom_notes_add_text_note_et.clearFocus()
+            setUpTextNoteCreationToolbarVisibility(isVisible = false)
             hideKeyboard()
         }
 

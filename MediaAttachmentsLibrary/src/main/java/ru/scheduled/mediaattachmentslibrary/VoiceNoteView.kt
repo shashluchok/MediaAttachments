@@ -41,7 +41,7 @@ class VoiceNoteView : ConstraintLayout {
     private var audioFile: File? = null
 
     private var isVisualising: Boolean = false
-
+    private var onLongClick: (() -> Unit)? = null
 
     companion object {
         const val PLAYING = "playing"
@@ -60,6 +60,14 @@ class VoiceNoteView : ConstraintLayout {
 
     fun setOnSeekBarPointerOnCallback(onSeekBarPointerOnCallback: ((isPointerOn:Boolean ) -> Unit)){
         onSeekBarPointerOn = onSeekBarPointerOnCallback
+    }
+
+    fun areClicksEnabled(enabled:Boolean){
+
+    }
+
+    fun setOnLongClickCallback(onLongClickCallback: () -> Unit){
+        onLongClick = onLongClickCallback
     }
 
     fun setOnCompleteCallback(onCompleteCallback: () -> Unit) {
@@ -103,7 +111,6 @@ class VoiceNoteView : ConstraintLayout {
         }
 
     }
-
 
     fun initVisualizer(
             player: MediaPlayer,
@@ -285,6 +292,19 @@ class VoiceNoteView : ConstraintLayout {
         View.inflate(context, R.layout.layout_visualizer_view, this)
         media_play_iv.tag = STOPPED
         media_on_play_visualizer.visualize(mutableListOf())
+
+        visualizer_cv.setOnLongClickListener {
+            onLongClick?.invoke()
+            true
+        }
+        media_play_iv.setOnLongClickListener {
+            onLongClick?.invoke()
+            true
+        }
+        media_speech_recognize.setOnLongClickListener {
+            onLongClick?.invoke()
+            true
+        }
 
         media_speech_recognize.setOnClickListener {
             setRecognizedSpeechTextVisibility(media_speech_recognize.tag != "opened")
