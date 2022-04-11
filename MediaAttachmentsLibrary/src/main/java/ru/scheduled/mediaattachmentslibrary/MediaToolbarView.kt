@@ -111,19 +111,18 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     private fun setNotesToolbarViewsVisibility(areVisible: Boolean) {
-            notes_toolbar_camera_iv.isVisible = areVisible
+        notes_toolbar_camera_iv.isVisible = areVisible
         notes_toolbar_text_iv.isVisible = areVisible
         notes_toolbar_sketch_iv.isVisible = areVisible
     }
 
 
     fun setText(text: String) {
+        setUpTextNoteCreationToolbarVisibility(isVisible = true)
         setEdittingViewsVisibility(areVisible = true)
         note_editing_note_content_tv.text = text
         bottom_notes_add_text_note_et.apply {
-            requestFocus()
-            this.text?.clear()
-            setText(text)
+            this.setText(text)
             setSelection(length())
         }
         val keyboard =

@@ -6,6 +6,8 @@ import android.graphics.Rect
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -43,6 +45,10 @@ class MainActivity : AppCompatActivity() {
 
        }
         camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)*/
+Handler(Looper.getMainLooper()).postDelayed({
+    camera_view.setText("213213")
+
+},2000)
     }
 
     override fun onResume() {

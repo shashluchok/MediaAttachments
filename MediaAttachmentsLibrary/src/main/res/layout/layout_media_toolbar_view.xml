@@ -25,20 +25,20 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <View
-            android:id="@+id/view27"
+            android:id="@+id/editting_divider"
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginStart="12dp"
+            android:visibility="gone"
             android:background="@color/defaultActive"
             app:layout_constraintBottom_toBottomOf="@+id/note_editing_note_content_tv"
             app:layout_constraintStart_toEndOf="@+id/noteEdittingPencilIv"
             app:layout_constraintTop_toTopOf="@+id/note_editing_title_tv" />
 
         <View
-            android:id="@+id/editting_divider"
+            android:id="@+id/view27"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:visibility="gone"
             android:background="@color/defaultDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
             app:layout_constraintBottom_toTopOf="@+id/note_editing_note_content_tv"
             app:layout_constraintEnd_toStartOf="@+id/note_editing_close_editing_mode_iv"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/view27"
+            app:layout_constraintStart_toEndOf="@+id/editting_divider"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -79,7 +79,6 @@
             android:id="@+id/note_editing_note_content_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
             android:fontFamily="@font/roboto_regular"
             android:singleLine="true"
             android:textColor="@color/defaultText"
@@ -162,7 +161,7 @@
         <ru.scheduled.mediaattachmentslibrary.CustomEditText
             android:id="@+id/bottom_notes_add_text_note_et"
             android:layout_width="0dp"
-            android:layout_height="wrap_content "
+            android:layout_height="wrap_content"
             android:background="@null"
             android:clickable="true"
             android:focusable="true"
@@ -170,8 +169,8 @@
             android:hint="@string/defaultHint"
             android:maxLines="9"
             android:paddingStart="12dp"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
             android:scrollHorizontally="false"
             android:textColor="@color/defaultText"
             android:textSize="@dimen/default_15sp"
@@ -183,13 +182,13 @@
         <ImageView
             android:id="@+id/bottom_notes_add_text_note_send_iv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_height="0dp"
             android:paddingStart="12dp"
+            android:paddingTop="18dp"
             android:paddingEnd="12dp"
-            android:clickable="true"
+            android:paddingBottom="18dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_notes_add_text_note_et"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/send" />
 
