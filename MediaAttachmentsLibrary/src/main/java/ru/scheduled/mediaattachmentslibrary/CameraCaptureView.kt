@@ -333,8 +333,8 @@ class CameraCaptureView: ConstraintLayout {
         photo_preview_iv.visibility = View.VISIBLE
         Glide.with(context).load(bitmap).into(photo_preview_iv)
         preview_view2.visibility = View.GONE
-
-        if (!isBackCameraOn) {
+        var photoFile:File? = null
+            if (!isBackCameraOn) {
             metadata.isReversedHorizontal = true
         }
         val outputOptions: ImageCapture.OutputFileOptions
@@ -397,7 +397,7 @@ class CameraCaptureView: ConstraintLayout {
                 mydir.mkdirs()
             }
 
-            val photoFile = File(
+            photoFile = File(
                     mydir,
                     SimpleDateFormat(
                             "HHmmssddMMyyyy",
@@ -416,8 +416,13 @@ class CameraCaptureView: ConstraintLayout {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 enableUserInteraction()
                 loaderVisible(false)
-                outputFileResults.savedUri?.let{
-                    onImageSaved?.invoke(it)
+                if(photoFile!=null){
+                    onImageSaved?.invoke(Uri.fromFile(photoFile))
+                }
+                else {
+                    outputFileResults.savedUri?.let {
+                        onImageSaved?.invoke(it)
+                    }
                 }
             }
 
