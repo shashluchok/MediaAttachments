@@ -47,10 +47,8 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/roboto_regular"
-                android:hint="@string/defaultHint"
-                android:paddingStart="14dp"
+                android:hint="@string/defaultSignHint"
                 android:paddingTop="7dp"
-                android:paddingEnd="14dp"
                 android:paddingBottom="7dp"
                 android:textColor="@color/defaultText"
                 android:textColorHint="@color/defaultTextLight"
@@ -97,14 +95,13 @@
         <ImageView
             android:id="@+id/editable_photo_accept"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="55dp"
-            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/confirm_round">
-
+            app:srcCompat="@drawable/send">
 
         </ImageView>
 
@@ -112,9 +109,9 @@
         <ImageView
             android:id="@+id/editable_photo_close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="55dp"
-            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -123,25 +120,27 @@
         <ImageView
             android:id="@+id/editable_photo_rotate_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/editable_photo_accept"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editable_photo_crop_photo"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/rotate_photo" />
 
         <ImageView
             android:id="@+id/editable_photo_crop_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="18dp"
-            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/editable_photo_rotate_photo"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editable_photo_close"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/editable_photo_crop_photo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

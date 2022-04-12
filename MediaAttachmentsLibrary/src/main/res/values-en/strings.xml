@@ -7,4 +7,5 @@
     <string name="defaultSwipeBottomToCancel">Bottom — cancel</string>
     <string name="defaultSwipeTopToCancel">Top — cancel</string>
     <string name="defaultSwipeRightToCancel">Right — cancel</string>
+    <string name="defaultSignHint">Add caption...</string>
 </resources>

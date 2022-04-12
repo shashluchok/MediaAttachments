@@ -80,6 +80,10 @@ class CameraCaptureView: ConstraintLayout {
         setUpCamera()
     }
 
+    fun setOnPhotoSavedCallback(callback: (uri: Uri) -> Unit){
+        onImageSaved = callback
+    }
+
     fun setSaveLocation(location: SaveLocation) {
         saveDestination = location
     }

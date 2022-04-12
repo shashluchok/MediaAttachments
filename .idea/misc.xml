@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/drawable/edits_remove.xml" value="0.44" />
+        <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/camera_capture_view.xml" value="0.4361111111111111" />
+        <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/image_editor_view.xml" value="0.4361111111111111" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/layout_media_toolbar_default.xml" value="0.44375" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/layout_media_toolbar_note_edit.xml" value="0.33" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/layout_media_toolbar_view.xml" value="0.4203703703703704" />

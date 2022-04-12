@@ -15,12 +15,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
             android:src="@drawable/close_ico"
             app:tint="@color/white" />
 
@@ -36,12 +36,12 @@
 
         <ImageView
             android:id="@+id/flashlight_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="17dp"
-            android:layout_marginBottom="12dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
             android:src="@drawable/flashlight_off"
             app:tint="@color/white" />
 
