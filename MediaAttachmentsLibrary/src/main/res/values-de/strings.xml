@@ -2,6 +2,7 @@
     <string name="empty"></string>
     <string name="editing">Bearbeitung</string>
     <string name="defaultHint">Text eingeben...</string>
+    <string name="defaultCancel">Abbrechen</string>
     <string name="defaultSwipeLeftToCancel">Links - abbrechen</string>
     <string name="defaultSwipeBottomToCancel">Runter — abbrechen</string>
     <string name="defaultSwipeTopToCancel">Auf — abbrechen</string>

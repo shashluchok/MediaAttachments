@@ -14,6 +14,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
+import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
 import kotlinx.android.synthetic.main.layout_visualizer_view.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -55,6 +57,11 @@ class MediaToolbarView : ConstraintLayout {
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
 
+    private var onMediaEditingCancel: (() -> Unit)? = null
+    private var onMediaCopy: (() -> Unit)? = null
+    private var onMediaEdit: (() -> Unit)? = null
+    private var onMediaDelete: (() -> Unit)? = null
+
     private var onOpenCamera: (() -> Unit)? = null
     private var onOpenSketch: (() -> Unit)? = null
 
@@ -69,6 +76,42 @@ class MediaToolbarView : ConstraintLayout {
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
     }
+
+    fun setOnMediaEditingCancelClickedCallback(callback: () -> Unit) {
+        cancel_tv.setOnClickListener {
+            callback.invoke()
+            hideMediaEditingToolbar()
+        }
+    }
+    fun setOnMediaCopyClickedCallback(callback: () -> Unit) {
+        copy_iv.setOnClickListener {
+            callback.invoke()
+        }
+    }
+    fun setOnMediaEditClickedCallback(callback: () -> Unit) {
+        edit_iv.setOnClickListener {
+            callback.invoke()
+        }
+    }
+    fun setOnMediaDeleteClickedCallback(callback: () -> Unit) {
+        delete_iv.setOnClickListener {
+            callback.invoke()
+        }
+    }
+
+    fun showMediaEditingToolbar(isCopyable:Boolean, isEditable:Boolean){
+        media_toolbar_default.isVisible = false
+        media_toolbar_note_edit.isVisible = true
+        copy_iv.isVisible = isCopyable
+        edit_iv.isVisible = isEditable
+    }
+
+    fun hideMediaEditingToolbar(){
+        media_toolbar_default.isVisible = true
+        media_toolbar_note_edit.isVisible = false
+    }
+
+
 
     fun setOnOpenCameraCallback(callback: () -> Unit) {
         notes_toolbar_camera_iv.visibility = View.VISIBLE
@@ -102,6 +145,7 @@ class MediaToolbarView : ConstraintLayout {
         note_editing_note_content_tv.isVisible = areVisible
         note_editing_close_editing_mode_iv.isVisible = areVisible
         editting_divider.isVisible = areVisible
+
     }
 
     private fun setVoiceRecordingViewsVisibility(areVisible: Boolean) {

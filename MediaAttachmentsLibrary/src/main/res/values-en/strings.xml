@@ -2,6 +2,7 @@
     <string name="empty"></string>
     <string name="editing">Editing</string>
     <string name="defaultHint">Enter text...</string>
+    <string name="defaultCancel">Cancel</string>
     <string name="defaultSwipeLeftToCancel">Left - cancel</string>
     <string name="defaultSwipeBottomToCancel">Bottom — cancel</string>
     <string name="defaultSwipeTopToCancel">Top — cancel</string>

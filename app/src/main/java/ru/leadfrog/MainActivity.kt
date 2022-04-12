@@ -46,8 +46,7 @@ class MainActivity : AppCompatActivity() {
        }
         camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)*/
 Handler(Looper.getMainLooper()).postDelayed({
-    camera_view.setText("213213")
-
+    camera_view.showMediaEditingToolbar(true,true)
 },2000)
     }
 
