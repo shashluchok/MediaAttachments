@@ -45,7 +45,7 @@ class ImageEditorView : ConstraintLayout {
         editable_photo_preview_civ.setImageBitmap(bitmap)
     }
 
-    fun setOnCompleteCallback(callback:(editedImage:Bitmap, textNote:String)->Unit){
+    fun setOnCompleteCallback(callback:(edittedImage:Bitmap, textNote:String)->Unit){
         onComplete = callback
     }
 
@@ -67,7 +67,7 @@ class ImageEditorView : ConstraintLayout {
                     cropRect = editable_photo_preview_civ.wholeImageRect
                     isShowCropOverlay = false
                     setFixedAspectRatio(false)
-                    scaleType = CropImageView.ScaleType.CENTER_CROP
+                    scaleType = CropImageView.ScaleType.FIT_CENTER
                 }
 
             }
@@ -103,7 +103,7 @@ class ImageEditorView : ConstraintLayout {
                 isAutoZoomEnabled = true
                 cropRect = wholeImageRect
                 setFixedAspectRatio(false)
-                scaleType = CropImageView.ScaleType.CENTER_CROP
+                scaleType = CropImageView.ScaleType.FIT_CENTER
 
                 setMinCropResultSize(400, 300)
                 isShowCropOverlay = true
@@ -113,7 +113,7 @@ class ImageEditorView : ConstraintLayout {
                 cropRect = wholeImageRect
                 isShowCropOverlay = false
                 setFixedAspectRatio(false)
-                scaleType = CropImageView.ScaleType.CENTER_CROP
+                scaleType = CropImageView.ScaleType.FIT_CENTER
             }
         }
     }

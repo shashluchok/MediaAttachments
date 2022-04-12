@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         app:cropBorderLineColor="@color/white"
         app:cropBorderLineThickness="1dp"
-        app:cropScaleType="centerCrop"
+        app:cropScaleType="fitCenter"
         app:cropShape="rectangle"
         app:layout_constraintBottom_toTopOf="@+id/image_add_note_cl"
         app:layout_constraintEnd_toEndOf="parent"
