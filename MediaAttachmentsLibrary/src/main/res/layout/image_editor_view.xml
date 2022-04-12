@@ -5,7 +5,6 @@
     android:id="@+id/editable_photo_preview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     >
 
     <com.theartofdev.edmodo.cropper.CropImageView
@@ -16,6 +15,7 @@
         app:cropBorderLineThickness="1dp"
         app:cropScaleType="fitCenter"
         app:cropShape="rectangle"
+        android:background="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/image_add_note_cl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +90,7 @@
         android:id="@+id/editable_photo_nav_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
