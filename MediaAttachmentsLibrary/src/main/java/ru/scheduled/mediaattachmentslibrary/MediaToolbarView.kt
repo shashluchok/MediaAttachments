@@ -20,10 +20,7 @@ import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
 import kotlinx.android.synthetic.main.layout_visualizer_view.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 
@@ -47,6 +44,8 @@ class MediaToolbarView : ConstraintLayout {
     private val amplitudesList = mutableListOf<Pair<MutableList<Int>, String>>()
 
     private var isPointerOn = false
+
+    private var job: Job? = null
 
     private var stopped = false
 
@@ -260,63 +259,66 @@ class MediaToolbarView : ConstraintLayout {
 
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
-
-
+                    isPointerOn = true
+                    isDraggingBlocked = true
                     if (checkRecordAudioPermission()) {
+                        job?.cancel()
+                        job = CoroutineScope(Dispatchers.IO).launch{
+                            delay(200)
+                            withContext(Dispatchers.Main){
+                                if (isPointerOn) {
+                                    onStartRecording?.invoke()
+                                    stopped = false
+                                    if (checkVibrationPermission()) {
+                                        val vibe =
+                                            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            if (isPointerOn) {
-                                onStartRecording?.invoke()
-                                stopped = false
-                                isPointerOn = true
-                                if (checkVibrationPermission()) {
-                                    val vibe =
-                                        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
-
-                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                        vibe?.vibrate(
-                                            VibrationEffect.createOneShot(
-                                                100,
-                                                VibrationEffect.DEFAULT_AMPLITUDE
+                                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                            vibe?.vibrate(
+                                                VibrationEffect.createOneShot(
+                                                    100,
+                                                    VibrationEffect.DEFAULT_AMPLITUDE
+                                                )
                                             )
-                                        )
-                                    } else vibe?.vibrate(100);
-                                }
-                                setEdittingViewsVisibility(areVisible = false)
-                                setNotesToolbarViewsVisibility(areVisible = false)
-                                setVoiceRecordingViewsVisibility(areVisible = true)
-                                isDraggingBlocked = false
-                                notes_toolbar_voice_background_iv.apply {
-                                    animate()
-                                        .scaleX(1f)
-                                        .scaleY(1f)
-                                        .alpha(1f)
-                                        .duration = 100
-                                }
-                                notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice_white)
-                                isVoiceBackgroundBeingAnimated = true
+                                        } else vibe?.vibrate(100);
+                                    }
+                                    setEdittingViewsVisibility(areVisible = false)
+                                    setNotesToolbarViewsVisibility(areVisible = false)
+                                    setVoiceRecordingViewsVisibility(areVisible = true)
+                                    isDraggingBlocked = false
+                                    notes_toolbar_voice_background_iv.apply {
+                                        animate()
+                                            .scaleX(1f)
+                                            .scaleY(1f)
+                                            .alpha(1f)
+                                            .duration = 100
+                                    }
+                                    notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice_white)
+                                    isVoiceBackgroundBeingAnimated = true
 
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    delay(100)
-                                    isVoiceBackgroundBeingAnimated = false
-                                    isRecording = true
-                                }
-                                voiceRecorder.startRecord()
-                                voiceRecordingStartMillis = System.currentTimeMillis()
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        delay(100)
+                                        isVoiceBackgroundBeingAnimated = false
+                                        isRecording = true
+                                    }
+                                    voiceRecorder.startRecord()
+                                    voiceRecordingStartMillis = System.currentTimeMillis()
 
-                                startChronometer()
+                                    startChronometer()
+                                }
                             }
-                        }, 1000)
+                        }
 
                     } else return@setOnTouchListener true
 
                 }
                 MotionEvent.ACTION_UP -> {
-
+                    job?.cancel()
+                    job = null
+                    isPointerOn = false
                     if (!stopped) {
                         stopped = true
                         isRecording = false
-                        isPointerOn = false
 
 
                         notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice)
