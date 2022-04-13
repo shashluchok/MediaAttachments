@@ -83,10 +83,10 @@ class ImageEditorView : ConstraintLayout {
 
         editable_photo_accept.setOnClickListener {
             if (isImageCropping) {
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"")
+                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"".trim())
             } else {
                 editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"" )
+                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"".trim() )
             }
         }
 
