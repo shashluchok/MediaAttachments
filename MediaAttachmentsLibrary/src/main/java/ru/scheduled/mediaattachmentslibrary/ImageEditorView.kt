@@ -41,6 +41,10 @@ class ImageEditorView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
     }
 
+    fun setImageText(text:String){
+        image_note_et.setText(text)
+    }
+
     fun setImageBitmap(bitmap: Bitmap){
         editable_photo_preview_civ.setImageBitmap(bitmap)
     }
