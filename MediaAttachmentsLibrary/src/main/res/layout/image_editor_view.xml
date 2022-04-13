@@ -56,19 +56,6 @@
                 android:textSize="@dimen/default_15sp" />
         </androidx.cardview.widget.CardView>
 
-
-        <ImageView
-            android:id="@+id/image_note_ready_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/confirm_round" />
-
         <View
             android:id="@+id/image_note_touch_filter"
             android:layout_width="0dp"
@@ -83,6 +70,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
+
+        <ImageView
+            android:id="@+id/image_note_ready_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:visibility="visible"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/confirm_round" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
