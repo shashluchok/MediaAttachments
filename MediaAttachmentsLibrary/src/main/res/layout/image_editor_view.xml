@@ -78,7 +78,7 @@
             android:layout_marginBottom="4dp"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
