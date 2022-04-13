@@ -45,21 +45,6 @@ class MainActivity : AppCompatActivity() {
 
        }
         camera_view.setSaveLocation(location = CameraCaptureView.SaveLocation.GALLERY)*/
-Handler(Looper.getMainLooper()).postDelayed({
-    camera_view.showMediaEditingToolbar(true,true)
-},2000)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
 }

@@ -14,6 +14,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.camera_capture_view.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
@@ -43,6 +45,8 @@ class MediaToolbarView : ConstraintLayout {
     private var voiceRecordingStartMillis = -1L
     private val newAmplitudes = mutableListOf<Int>()
     private val amplitudesList = mutableListOf<Pair<MutableList<Int>, String>>()
+
+    private var isPointerOn = false
 
     private var stopped = false
 
@@ -259,51 +263,51 @@ class MediaToolbarView : ConstraintLayout {
 
 
                     if (checkRecordAudioPermission()) {
-                        onStartRecording?.invoke()
-                        stopped = false
 
-                        if (checkVibrationPermission()) {
-                            val vibe =
-                                    context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (isPointerOn) {
+                                onStartRecording?.invoke()
+                                stopped = false
+                                isPointerOn = true
+                                if (checkVibrationPermission()) {
+                                    val vibe =
+                                        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                vibe?.vibrate(
-                                        VibrationEffect.createOneShot(
+                                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                        vibe?.vibrate(
+                                            VibrationEffect.createOneShot(
                                                 100,
                                                 VibrationEffect.DEFAULT_AMPLITUDE
+                                            )
                                         )
-                                )
-                            } else vibe?.vibrate(100);
-                        }
-                        setEdittingViewsVisibility(areVisible = false)
-                        setNotesToolbarViewsVisibility(areVisible = false)
-                        setVoiceRecordingViewsVisibility(areVisible = true)
+                                    } else vibe?.vibrate(100);
+                                }
+                                setEdittingViewsVisibility(areVisible = false)
+                                setNotesToolbarViewsVisibility(areVisible = false)
+                                setVoiceRecordingViewsVisibility(areVisible = true)
+                                isDraggingBlocked = false
+                                notes_toolbar_voice_background_iv.apply {
+                                    animate()
+                                        .scaleX(1f)
+                                        .scaleY(1f)
+                                        .alpha(1f)
+                                        .duration = 100
+                                }
+                                notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice_white)
+                                isVoiceBackgroundBeingAnimated = true
 
-                        /* showNotesCreatingOptionsToolbar()
-                        showVoiceRecordingToolbar()*/
-                        isDraggingBlocked = false
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    delay(100)
+                                    isVoiceBackgroundBeingAnimated = false
+                                    isRecording = true
+                                }
+                                voiceRecorder.startRecord()
+                                voiceRecordingStartMillis = System.currentTimeMillis()
 
-                        notes_toolbar_voice_background_iv.apply {
-                            animate()
-                                    .scaleX(1f)
-                                    .scaleY(1f)
-                                    .alpha(1f)
-                                    .duration = 100
-                        }
-                        notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice_white)
-                        isVoiceBackgroundBeingAnimated = true
+                                startChronometer()
+                            }
+                        }, 1000)
 
-
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            delay(100)
-                            isVoiceBackgroundBeingAnimated = false
-                            isRecording = true
-                        }
-                        voiceRecorder.startRecord()
-                        voiceRecordingStartMillis = System.currentTimeMillis()
-
-                        startChronometer()
                     } else return@setOnTouchListener true
 
                 }
@@ -312,7 +316,7 @@ class MediaToolbarView : ConstraintLayout {
                     if (!stopped) {
                         stopped = true
                         isRecording = false
-
+                        isPointerOn = false
 
 
                         notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice)
