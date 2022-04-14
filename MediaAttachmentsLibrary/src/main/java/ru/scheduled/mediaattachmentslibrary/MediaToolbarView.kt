@@ -21,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.doOnTextChanged
+import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
@@ -72,12 +73,12 @@ class MediaToolbarView : ConstraintLayout {
     private var onOpenSketch: (() -> Unit)? = null
 
     private var onCompleteRecording: ((amplitudesList: List<Int>, speech: String, filePath: String) -> Unit)? =
-            null
+        null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-            context,
-            attrs,
-            defStyle
+        context,
+        attrs,
+        defStyle
     )
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
@@ -89,87 +90,149 @@ class MediaToolbarView : ConstraintLayout {
             hideMediaEditingToolbar()
         }
     }
+
     fun setOnMediaCopyClickedCallback(callback: () -> Unit) {
         copy_iv.setOnClickListener {
             callback.invoke()
         }
     }
+
     fun setOnMediaEditClickedCallback(callback: () -> Unit) {
         edit_iv.setOnClickListener {
             callback.invoke()
         }
     }
+
     fun setOnMediaDeleteClickedCallback(callback: () -> Unit) {
         delete_iv.setOnClickListener {
             callback.invoke()
         }
     }
 
-    fun showMediaEditingToolbar(isCopyable:Boolean, isEditable:Boolean){
+    fun showMediaEditingToolbar(isCopyable: Boolean, isEditable: Boolean) {
 
-        val set = ConstraintSet()
-        set.clone(media_toolbar_note_edit_cl)
-        set.clear(R.id.copy_iv, ConstraintSet.START)
-        set.clear(R.id.edit_iv, ConstraintSet.START)
-        animateConstraintLayout(media_toolbar_note_edit_cl, set, 250)
-        if(isCopyable){
-            set.connect(
-                R.id.copy_iv,
-                ConstraintSet.START,
-                R.id.delete_iv,
-                ConstraintSet.END
-            )
+        if(media_toolbar_note_edit.alpha == 1f) {
 
+            if (isCopyable) {
+
+                please(duration = 150L) {
+                    animate(copy_iv) toBe {
+                        originalPosition()
+                        visible()
+                    }
+                }.start()
+
+
+            } else {
+                please(duration = 150L) {
+                    animate(copy_iv) toBe {
+                        leftOfItsParent()
+                        invisible()
+                    }
+                }.start()
+            }
+
+            if (isEditable) {
+                if (isCopyable) {
+                    please(duration = 150L) {
+                        animate(edit_iv) toBe {
+                            originalPosition()
+                            visible()
+                        }
+                    }.start()
+                } else {
+                    please(duration = 150L) {
+                        animate(edit_iv) toBe {
+                            rightOf(delete_iv)
+                            visible()
+                        }
+                    }.start()
+                }
+            } else {
+                please(duration = 150L) {
+                    animate(edit_iv) toBe {
+                        leftOfItsParent()
+                        invisible()
+                    }
+                }.start()
+            }
         }
         else {
-            set.connect(
-                R.id.copy_iv,
-                ConstraintSet.START,
-                R.id.media_toolbar_note_edit_cl,
-                ConstraintSet.END
-            )
-        }
+            if (isCopyable) {
 
-        if(isEditable){
-            if(isCopyable){
-                set.connect(
-                    R.id.edit_iv,
-                    ConstraintSet.START,
-                    R.id.copy_iv,
-                    ConstraintSet.END
-                )
+                please(duration = 0L) {
+                    animate(copy_iv) toBe {
+                        originalPosition()
+                        visible()
+                    }
+                }.start()
+
+
+            } else {
+                please(duration = 0L) {
+                    animate(copy_iv) toBe {
+                        leftOfItsParent()
+                        invisible()
+                    }
+                }.start()
             }
-            else {
-                set.connect(
-                    R.id.edit_iv,
-                    ConstraintSet.START,
-                    R.id.delete_iv,
-                    ConstraintSet.END
-                )
+
+            if (isEditable) {
+                if (isCopyable) {
+                    please(duration = 0L) {
+                        animate(edit_iv) toBe {
+                            originalPosition()
+                            visible()
+                        }
+                    }.start()
+                } else {
+                    please(duration = 0L) {
+                        animate(edit_iv) toBe {
+                            rightOf(delete_iv)
+                            visible()
+                        }
+                    }.start()
+                }
+            } else {
+                please(duration = 0L) {
+                    animate(edit_iv) toBe {
+                        leftOfItsParent()
+                        invisible()
+                    }
+                }.start()
             }
+            please(duration = 100L) {
+                animate(media_toolbar_default) toBe {
+                    invisible()
+                }
+            }.thenCouldYou(100L) {
+                animate(media_toolbar_note_edit) toBe {
+                    bottomOfItsParent()
+                    visible()
+                }
+            }.start()
         }
-        else {
-            set.connect(
-                R.id.edit_iv,
-                ConstraintSet.START,
-                R.id.media_toolbar_note_edit_cl,
-                ConstraintSet.START
-            )
-        }
 
 
-
-        media_toolbar_default.isVisible = false
-        media_toolbar_note_edit.isVisible = true
-        /*copy_iv.isVisible = isCopyable
-        edit_iv.isVisible = isEditable*/
     }
 
-    fun hideMediaEditingToolbar(){
-        media_toolbar_default.isVisible = true
-        media_toolbar_note_edit.isVisible = false
-    }
+    fun hideMediaEditingToolbar() {
+        /*media_toolbar_default.isVisible = true
+        media_toolbar_note_edit.isVisible = false*/
 
+        please(duration = 100L) {
+            animate(media_toolbar_note_edit) toBe {
+                originalPosition()
+                invisible()
+            }
+        }.thenCouldYou(100L) {
+            animate(media_toolbar_default) toBe {
+                visible()
+            }
+        }.start()
+
+
+    }
 
 
     fun setOnOpenCameraCallback(callback: () -> Unit) {
@@ -229,13 +292,13 @@ class MediaToolbarView : ConstraintLayout {
             setSelection(length())
         }
         val keyboard =
-                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+            (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
         keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     fun setOnToolBarReadyCallback(callback: (height: Int) -> Unit) {
         notes_toolbar_main_cl.viewTreeObserver?.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 if (notes_toolbar_main_cl.height > 0) {
                     callback.invoke(notes_toolbar_main_cl.height)
@@ -338,9 +401,9 @@ class MediaToolbarView : ConstraintLayout {
                     isDraggingBlocked = true
                     if (checkRecordAudioPermission()) {
                         job?.cancel()
-                        job = CoroutineScope(Dispatchers.IO).launch{
+                        job = CoroutineScope(Dispatchers.IO).launch {
                             delay(200)
-                            withContext(Dispatchers.Main){
+                            withContext(Dispatchers.Main) {
                                 if (isPointerOn) {
                                     onStartRecording?.invoke()
                                     stopped = false
@@ -399,20 +462,21 @@ class MediaToolbarView : ConstraintLayout {
                         notes_voice_iv.setImageResource(R.drawable.notes_toolbar_voice)
                         notes_toolbar_voice_background_iv.apply {
                             animate()
-                                    .scaleX(0f)
-                                    .scaleY(0f)
-                                    .duration = 50
+                                .scaleX(0f)
+                                .scaleY(0f)
+                                .duration = 50
                         }
                         voiceRecorder.stopRecord { file ->
 
-                            val recordDuration = System.currentTimeMillis() - voiceRecordingStartMillis
+                            val recordDuration =
+                                System.currentTimeMillis() - voiceRecordingStartMillis
 
                             if (isDraggingBlocked || recordDuration < MIN_DURATION) {
                                 deleteFile(file)
                             } else {
                                 (context as Activity).window.setFlags(
-                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                                 )
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     (context as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -446,8 +510,8 @@ class MediaToolbarView : ConstraintLayout {
                         if (initialSwipeToCancelX - (initialIconX - event.rawX) / 2.2.toFloat() <= swipeLeftConstraintX || recordDuration > 300000L) {
                             isDraggingBlocked = true
                             dispatchTouchEvents(
-                                    v,
-                                    listOf(MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP)
+                                v,
+                                listOf(MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP)
                             )
 
 
@@ -466,55 +530,59 @@ class MediaToolbarView : ConstraintLayout {
 
 
         voiceRecorder.mediaNotesWithText.observe(
-                (context as AppCompatActivity),
-                androidx.lifecycle.Observer {
+            (context as AppCompatActivity),
+            androidx.lifecycle.Observer {
 
-                    if (amplitudesList.isNotEmpty()) {
-                        onCompleteRecording?.invoke(amplitudesList[0].first, it, amplitudesList[0].second)
-                        amplitudesList.removeAt(0)
-                    }
+                if (amplitudesList.isNotEmpty()) {
+                    onCompleteRecording?.invoke(
+                        amplitudesList[0].first,
+                        it,
+                        amplitudesList[0].second
+                    )
+                    amplitudesList.removeAt(0)
+                }
 
-                })
+            })
 
         voiceRecorder.amplitude.observe(
-                (context as AppCompatActivity),
-                androidx.lifecycle.Observer {
-                    if (isRecording) {
-                        val newAmpl =
-                                if (it > MAX_AMPLITUDE) 15000 else if (it < MIN_AMPLITUDE) (MIN_AMPLITUDE..MIN_AMPLITUDE + 1000).random() else it
-                        newAmplitudes.add(newAmpl)
+            (context as AppCompatActivity),
+            androidx.lifecycle.Observer {
+                if (isRecording) {
+                    val newAmpl =
+                        if (it > MAX_AMPLITUDE) 15000 else if (it < MIN_AMPLITUDE) (MIN_AMPLITUDE..MIN_AMPLITUDE + 1000).random() else it
+                    newAmplitudes.add(newAmpl)
 
-                        if (!isAnimating) {
-                            val newScale = if (it > 5000) 5000f else it.toFloat()
-                            val additionalScale = newScale / 10000
-                            isAnimating = true
-                            notes_toolbar_voice_background_iv.apply {
-                                animate()
-                                        .scaleX((voiceCircleInitScale + additionalScale))
-                                        .scaleY((voiceCircleInitScale + additionalScale))
-                                        .duration = 100
-                            }
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                isAnimating = false
-                            }, 100)
+                    if (!isAnimating) {
+                        val newScale = if (it > 5000) 5000f else it.toFloat()
+                        val additionalScale = newScale / 10000
+                        isAnimating = true
+                        notes_toolbar_voice_background_iv.apply {
+                            animate()
+                                .scaleX((voiceCircleInitScale + additionalScale))
+                                .scaleY((voiceCircleInitScale + additionalScale))
+                                .duration = 100
                         }
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            isAnimating = false
+                        }, 100)
                     }
+                }
 
-                })
+            })
 
     }
 
     private fun dispatchTouchEvents(v: View, events: List<Int>) {
         for (e in events) {
             v.dispatchTouchEvent(
-                    MotionEvent.obtain(
-                            System.currentTimeMillis(),
-                            System.currentTimeMillis(),
-                            e,
-                            0f,
-                            0f,
-                            0
-                    )
+                MotionEvent.obtain(
+                    System.currentTimeMillis(),
+                    System.currentTimeMillis(),
+                    e,
+                    0f,
+                    0f,
+                    0
+                )
             )
         }
     }
@@ -525,10 +593,10 @@ class MediaToolbarView : ConstraintLayout {
         voice_recording_duration_tv.base = elapsedRealtime
         voice_recording_duration_tv.setOnChronometerTickListener {
             voice_recording_voice_record_on_iv.startAnimation(
-                    AnimationUtils.loadAnimation(
-                            context,
-                            R.anim.blink_fade
-                    )
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.blink_fade
+                )
             )
         }
 
@@ -546,34 +614,34 @@ class MediaToolbarView : ConstraintLayout {
 
     private fun resetToolbarOptionsPositions() {
         notes_voice_iv.animate()
-                .x(initialIconX)
-                .setDuration(300)
-                .start()
+            .x(initialIconX)
+            .setDuration(300)
+            .start()
         notes_toolbar_voice_background_iv.animate()
-                .x(initialIconBackgroundX)
-                .setDuration(300)
-                .start()
+            .x(initialIconBackgroundX)
+            .setDuration(300)
+            .start()
         voice_recording_swipe_to_cancel_cl.animate()
-                .x(initialSwipeToCancelX)
-                .setDuration(300)
-                .alpha(1f)
-                .start()
+            .x(initialSwipeToCancelX)
+            .setDuration(300)
+            .alpha(1f)
+            .start()
     }
 
     private fun setToolbarOptionsPositionsOnMoveEvent(xPostion: Float) {
         notes_voice_iv.animate()
-                .x(xPostion)
-                .setDuration(0)
-                .start()
+            .x(xPostion)
+            .setDuration(0)
+            .start()
         notes_toolbar_voice_background_iv.animate()
-                .x(initialIconBackgroundX - initialIconX + xPostion)
-                .setDuration(0)
-                .start()
+            .x(initialIconBackgroundX - initialIconX + xPostion)
+            .setDuration(0)
+            .start()
         voice_recording_swipe_to_cancel_cl.animate()
-                .x(initialSwipeToCancelX - (initialIconX - xPostion) / 2.2.toFloat())
-                .alpha((initialSwipeToCancelX - (initialIconX - xPostion) / 2.2.toFloat() - swipeLeftConstraintX) / (initialSwipeToCancelX - swipeLeftConstraintX))
-                .setDuration(0)
-                .start()
+            .x(initialSwipeToCancelX - (initialIconX - xPostion) / 2.2.toFloat())
+            .alpha((initialSwipeToCancelX - (initialIconX - xPostion) / 2.2.toFloat() - swipeLeftConstraintX) / (initialSwipeToCancelX - swipeLeftConstraintX))
+            .setDuration(0)
+            .start()
     }
 
     private fun setUpTextNoteCreationToolbarVisibility(isVisible: Boolean) {
@@ -584,39 +652,39 @@ class MediaToolbarView : ConstraintLayout {
         notes_toolbar_voice_background_iv.isVisible = !isVisible
         bottom_notes_add_text_note_send_iv.isVisible = isVisible
         bottom_notes_add_text_note_et.isVisible = isVisible
-        if(isVisible){
+        if (isVisible) {
             bottom_notes_add_text_note_et.apply {
                 requestFocus()
                 this.text?.clear()
             }
             val keyboard =
-                    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
             keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
         }
     }
 
     private fun hideKeyboard() {
         val imm: InputMethodManager =
-                context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun setToolbarsLayoutListeners() {
         viewTreeObserver?.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 initialIconX = notes_voice_iv.x
                 initialIconBackgroundX = notes_toolbar_voice_background_iv.x
                 rect = Rect(
-                        notes_toolbar_voice_background_iv.left,
-                        notes_toolbar_voice_background_iv.top,
-                        notes_toolbar_voice_background_iv.right,
-                        notes_toolbar_voice_background_iv.bottom
+                    notes_toolbar_voice_background_iv.left,
+                    notes_toolbar_voice_background_iv.top,
+                    notes_toolbar_voice_background_iv.right,
+                    notes_toolbar_voice_background_iv.bottom
                 )
                 initialSwipeToCancelX =
-                        voice_recording_swipe_to_cancel_cl.x
+                    voice_recording_swipe_to_cancel_cl.x
                 swipeLeftConstraintX =
-                        voice_recording_duration_tv.right.toFloat()
+                    voice_recording_duration_tv.right.toFloat()
                 if (initialSwipeToCancelX != 0f && swipeLeftConstraintX != 0f) {
                     setVoiceRecordingViewsVisibility(areVisible = false)
                     setNotesToolbarViewsVisibility(areVisible = true)
@@ -631,16 +699,16 @@ class MediaToolbarView : ConstraintLayout {
     private fun checkRecordAudioPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.RECORD_AUDIO
-                    ) ==
-                    PackageManager.PERMISSION_GRANTED
+                    context,
+                    Manifest.permission.RECORD_AUDIO
+                ) ==
+                PackageManager.PERMISSION_GRANTED
             ) {
                 true
             } else {
                 (context as Activity).requestPermissions(
-                        arrayOf(android.Manifest.permission.RECORD_AUDIO),
-                        184567
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                    184567
                 )
                 false
             }
@@ -654,10 +722,10 @@ class MediaToolbarView : ConstraintLayout {
     private fun checkVibrationPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.VIBRATE
-                    ) ==
-                    PackageManager.PERMISSION_GRANTED
+                    context,
+                    Manifest.permission.VIBRATE
+                ) ==
+                PackageManager.PERMISSION_GRANTED
             ) {
                 true
             } else {
@@ -685,19 +753,8 @@ class MediaToolbarView : ConstraintLayout {
             }
         }
     }
-
-    private fun animateConstraintLayout(
-        constraintLayout: ConstraintLayout?,
-        set: ConstraintSet,
-        duration: Long
-    ) {
-        val trans = AutoTransition()
-        trans.setDuration(duration)
-        trans.setInterpolator(AccelerateDecelerateInterpolator())
-        TransitionManager.beginDelayedTransition(constraintLayout, trans)
-        set.applyTo(constraintLayout)
-    }
 }
+
 
  class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(

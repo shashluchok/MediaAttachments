@@ -41,6 +41,39 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        camera_view.apply {
+            setOnMediaCopyClickedCallback {
+
+            }
+            setOnMediaDeleteClickedCallback {
+
+            }
+            setOnMediaEditClickedCallback {
+
+            }
+
+        }
+        cardView4.setOnClickListener{
+
+        }
+        cardView5.setOnClickListener{
+            camera_view.showMediaEditingToolbar(false,true)
+        }
+        cardView6.setOnClickListener{
+            camera_view.showMediaEditingToolbar(false,false)
+        }
+        cardView7.setOnClickListener{
+            camera_view.showMediaEditingToolbar(true,true)
+        }
+        cardView.setOnClickListener{
+            camera_view.hideMediaEditingToolbar()
+        }
+        cardView2.setOnClickListener{
+            camera_view.showMediaEditingToolbar(true,false)
+
+        }
+
+
        /*camera_view.setOnVideoSavedCallback {
 
        }
