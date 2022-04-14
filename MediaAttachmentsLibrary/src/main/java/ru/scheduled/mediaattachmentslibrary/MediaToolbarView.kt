@@ -5,24 +5,27 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Rect
 import android.os.*
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.AttributeSet
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.camera_capture_view.view.*
+import androidx.core.widget.ImageViewCompat
+import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
-import kotlinx.android.synthetic.main.layout_visualizer_view.view.*
 import kotlinx.coroutines.*
 import java.io.File
-import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
 class MediaToolbarView : ConstraintLayout {
@@ -103,10 +106,63 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     fun showMediaEditingToolbar(isCopyable:Boolean, isEditable:Boolean){
+
+        val set = ConstraintSet()
+        set.clone(media_toolbar_note_edit_cl)
+        set.clear(R.id.copy_iv, ConstraintSet.START)
+        set.clear(R.id.edit_iv, ConstraintSet.START)
+        animateConstraintLayout(media_toolbar_note_edit_cl, set, 250)
+        if(isCopyable){
+            set.connect(
+                R.id.copy_iv,
+                ConstraintSet.START,
+                R.id.delete_iv,
+                ConstraintSet.END
+            )
+
+        }
+        else {
+            set.connect(
+                R.id.copy_iv,
+                ConstraintSet.START,
+                R.id.media_toolbar_note_edit_cl,
+                ConstraintSet.END
+            )
+        }
+
+        if(isEditable){
+            if(isCopyable){
+                set.connect(
+                    R.id.edit_iv,
+                    ConstraintSet.START,
+                    R.id.copy_iv,
+                    ConstraintSet.END
+                )
+            }
+            else {
+                set.connect(
+                    R.id.edit_iv,
+                    ConstraintSet.START,
+                    R.id.delete_iv,
+                    ConstraintSet.END
+                )
+            }
+        }
+        else {
+            set.connect(
+                R.id.edit_iv,
+                ConstraintSet.START,
+                R.id.media_toolbar_note_edit_cl,
+                ConstraintSet.START
+            )
+        }
+
+
+
         media_toolbar_default.isVisible = false
         media_toolbar_note_edit.isVisible = true
-        copy_iv.isVisible = isCopyable
-        edit_iv.isVisible = isEditable
+        /*copy_iv.isVisible = isCopyable
+        edit_iv.isVisible = isEditable*/
     }
 
     fun hideMediaEditingToolbar(){
@@ -236,17 +292,36 @@ class MediaToolbarView : ConstraintLayout {
 
         bottom_notes_add_text_note_send_iv.setOnClickListener {
             val text =
-                    if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) "" else bottom_notes_add_text_note_et.text.toString()
-            onSend?.invoke(text)
-            setEdittingViewsVisibility(areVisible = false)
-            bottom_notes_add_text_note_et?.text?.clear()
-            bottom_notes_add_text_note_et.clearFocus()
-            hideKeyboard()
-            setUpTextNoteCreationToolbarVisibility(isVisible = false)
+                if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) "" else bottom_notes_add_text_note_et.text.toString()
+            if (text.isNotEmpty()) {
+                onSend?.invoke(text)
+                setEdittingViewsVisibility(areVisible = false)
+                bottom_notes_add_text_note_et?.text?.clear()
+                bottom_notes_add_text_note_et.clearFocus()
+                hideKeyboard()
+                setUpTextNoteCreationToolbarVisibility(isVisible = false)
+            }
         }
 
         notes_toolbar_text_iv.setOnClickListener {
             setUpTextNoteCreationToolbarVisibility(isVisible = true)
+        }
+
+        bottom_notes_add_text_note_et.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                ImageViewCompat.setImageTintList(
+                    bottom_notes_add_text_note_send_iv,
+                    ColorStateList.valueOf(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.defaultTextLight
+                        )
+                    )
+                )
+
+            } else {
+                bottom_notes_add_text_note_send_iv.imageTintList = null
+            }
         }
 
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
@@ -609,6 +684,18 @@ class MediaToolbarView : ConstraintLayout {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun animateConstraintLayout(
+        constraintLayout: ConstraintLayout?,
+        set: ConstraintSet,
+        duration: Long
+    ) {
+        val trans = AutoTransition()
+        trans.setDuration(duration)
+        trans.setInterpolator(AccelerateDecelerateInterpolator())
+        TransitionManager.beginDelayedTransition(constraintLayout, trans)
+        set.applyTo(constraintLayout)
     }
 }
 

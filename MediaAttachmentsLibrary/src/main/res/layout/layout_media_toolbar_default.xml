@@ -164,7 +164,7 @@
             android:focusable="true"
             android:fontFamily="@font/roboto_regular"
             android:hint="@string/defaultHint"
-            android:maxLines="9"
+            android:maxLines="6"
             android:paddingStart="12dp"
             android:paddingTop="18dp"
             android:paddingBottom="18dp"
@@ -187,6 +187,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/bottom_notes_add_text_note_et"
             app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/defaultTextLight"
             app:srcCompat="@drawable/send" />
 
         <!--voice tools-->
