@@ -219,7 +219,24 @@ class MediaToolbarView : ConstraintLayout {
 
     fun hideMediaEditingToolbar() {
         setEdittingViewsVisibility(areVisible = !bottom_notes_add_text_note_et.text.isNullOrEmpty())
-        setUpTextNoteCreationToolbarVisibility(isVisible = false)
+        if(!bottom_notes_add_text_note_et.text.isNullOrEmpty()){
+            notes_toolbar_text_iv.isVisible = false
+            notes_toolbar_camera_iv.isVisible = false
+            notes_toolbar_sketch_iv.isVisible = false
+            notes_voice_iv.isVisible = false
+            notes_toolbar_voice_background_iv.isVisible = false
+            bottom_notes_add_text_note_send_iv.isVisible = true
+            bottom_notes_add_text_note_et.isVisible = true
+                bottom_notes_add_text_note_et.apply {
+                    requestFocus()
+                }
+                val keyboard =
+                    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+                keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        }
+        else {
+            setUpTextNoteCreationToolbarVisibility(isVisible = false)
+        }
         please(duration = 100L) {
             animate(media_toolbar_note_edit) toBe {
                 originalPosition()
@@ -235,7 +252,6 @@ class MediaToolbarView : ConstraintLayout {
         }, 30)
 
     }
-
 
     fun setOnOpenCameraCallback(callback: () -> Unit) {
         notes_toolbar_camera_iv.visibility = View.VISIBLE
