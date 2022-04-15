@@ -326,6 +326,14 @@ class MediaToolbarView : ConstraintLayout {
             visibility = if (value) View.VISIBLE else View.GONE
         }
 
+    fun stopEditing(){
+        onCancelEditting?.invoke()
+        setEdittingViewsVisibility(areVisible = false)
+        bottom_notes_add_text_note_et?.text?.clear()
+        bottom_notes_add_text_note_et.clearFocus()
+        setUpTextNoteCreationToolbarVisibility(isVisible = false)
+        hideKeyboard()
+    }
 
     init {
         View.inflate(context, R.layout.layout_media_toolbar_view, this)
@@ -344,13 +352,9 @@ class MediaToolbarView : ConstraintLayout {
         }
 
 
+
         note_editing_close_editing_mode_iv.setOnClickListener {
-            onCancelEditting?.invoke()
-            setEdittingViewsVisibility(areVisible = false)
-            bottom_notes_add_text_note_et?.text?.clear()
-            bottom_notes_add_text_note_et.clearFocus()
-            setUpTextNoteCreationToolbarVisibility(isVisible = false)
-            hideKeyboard()
+            stopEditing()
         }
 
         bottom_notes_add_text_note_send_iv.setOnClickListener {
