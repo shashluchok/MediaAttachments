@@ -72,8 +72,6 @@ class MainActivity : AppCompatActivity() {
             camera_view.showMediaEditingToolbar(true,false)
 
         }
-        camera_view.setText("11")
-
        /*camera_view.setOnVideoSavedCallback {
 
        }

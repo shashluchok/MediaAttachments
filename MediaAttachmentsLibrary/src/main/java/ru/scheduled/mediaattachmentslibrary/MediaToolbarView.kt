@@ -62,7 +62,7 @@ class MediaToolbarView : ConstraintLayout {
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
 
-    private var onVoiceInvalidClick: (() -> Unit)? = null
+    private var onVoiceInvalidClick: ((voiceView:View) -> Unit)? = null
 
     private var onMediaEditingCancel: (() -> Unit)? = null
     private var onMediaCopy: (() -> Unit)? = null
@@ -86,7 +86,7 @@ class MediaToolbarView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
     }
 
-    fun setOnVoiceInvalidClickCallback(callback: () -> Unit) {
+    fun setOnVoiceInvalidClickCallback(callback: (View) -> Unit) {
         onVoiceInvalidClick = callback
     }
 
@@ -438,10 +438,10 @@ class MediaToolbarView : ConstraintLayout {
 
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
-                    touchedButNotRecording = true
                     isPointerOn = true
                     isDraggingBlocked = true
                     if (checkRecordAudioPermission()) {
+                        touchedButNotRecording = true
                         job?.cancel()
                         job = CoroutineScope(Dispatchers.IO).launch {
                             delay(200)
@@ -494,8 +494,8 @@ class MediaToolbarView : ConstraintLayout {
 
                 }
                 MotionEvent.ACTION_UP -> {
-                    if(!touchedButNotRecording){
-                        onVoiceInvalidClick?.invoke()
+                    if(touchedButNotRecording){
+                        onVoiceInvalidClick?.invoke(notes_voice_iv)
                     }
                     touchedButNotRecording = false
                     job?.cancel()
