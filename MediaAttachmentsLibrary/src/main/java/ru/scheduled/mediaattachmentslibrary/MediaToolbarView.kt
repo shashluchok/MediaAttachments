@@ -108,7 +108,7 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     fun showMediaEditingToolbar(isCopyable: Boolean, isEditable: Boolean) {
-
+        setEdittingViewsVisibility(areVisible = true)
         if(media_toolbar_note_edit.alpha == 1f) {
 
             if (isCopyable) {
@@ -218,7 +218,7 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     fun hideMediaEditingToolbar() {
-
+        setEdittingViewsVisibility(areVisible = false)
 
         please(duration = 100L) {
             animate(media_toolbar_note_edit) toBe {
