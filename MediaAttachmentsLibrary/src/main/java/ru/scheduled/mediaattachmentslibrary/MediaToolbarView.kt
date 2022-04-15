@@ -274,6 +274,7 @@ class MediaToolbarView : ConstraintLayout {
         voice_recording_voice_record_on_iv.isVisible = areVisible
         voice_recording_duration_tv.isVisible = areVisible
         voice_recording_swipe_to_cancel_cl.isVisible = areVisible
+        notes_toolbar_voice_background_iv.isVisible = areVisible
     }
 
     private fun setNotesToolbarViewsVisibility(areVisible: Boolean) {
@@ -428,6 +429,7 @@ class MediaToolbarView : ConstraintLayout {
                                     setNotesToolbarViewsVisibility(areVisible = false)
                                     setVoiceRecordingViewsVisibility(areVisible = true)
                                     isDraggingBlocked = false
+                                    notes_toolbar_voice_background_iv.visibility = View.VISIBLE
                                     notes_toolbar_voice_background_iv.apply {
                                         animate()
                                             .scaleX(1f)
@@ -496,7 +498,9 @@ class MediaToolbarView : ConstraintLayout {
                         }
                         resetToolbarOptionsPositions()
                         voiceRecordingStartMillis = -1
-                        setVoiceRecordingViewsVisibility(areVisible = false)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            setVoiceRecordingViewsVisibility(areVisible = false)
+                        },100)
                         setEdittingViewsVisibility(areVisible = false)
                         setNotesToolbarViewsVisibility(areVisible = true)
                         stopChronometer()

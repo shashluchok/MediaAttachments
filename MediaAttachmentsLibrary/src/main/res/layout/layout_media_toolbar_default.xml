@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="120dp"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/notes_toolbar_main_cl"
@@ -263,6 +262,7 @@
         android:alpha="1"
         android:elevation="1dp"
         android:scaleX="0"
+        android:visibility="visible"
         android:scaleY="0"
         android:src="@drawable/notes_toolbar_voice_background"
         app:layout_constraintBottom_toBottomOf="@+id/notes_voice_iv"
