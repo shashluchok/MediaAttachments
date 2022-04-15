@@ -6,11 +6,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.*
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
@@ -68,6 +70,8 @@ class MediaToolbarView : ConstraintLayout {
     private var onMediaCopy: (() -> Unit)? = null
     private var onMediaEdit: (() -> Unit)? = null
     private var onMediaDelete: (() -> Unit)? = null
+
+    private var onNewToolbarHeight: ((Int) -> Unit)? = null
 
     private var onOpenCamera: (() -> Unit)? = null
     private var onOpenSketch: (() -> Unit)? = null
@@ -274,7 +278,6 @@ class MediaToolbarView : ConstraintLayout {
         voice_recording_voice_record_on_iv.isVisible = areVisible
         voice_recording_duration_tv.isVisible = areVisible
         voice_recording_swipe_to_cancel_cl.isVisible = areVisible
-        notes_toolbar_voice_background_iv.isVisible = areVisible
     }
 
     private fun setNotesToolbarViewsVisibility(areVisible: Boolean) {
@@ -336,6 +339,10 @@ class MediaToolbarView : ConstraintLayout {
         hideKeyboard()
     }
 
+    fun setOnNewToolbarHeightCallback(callback: (height: Int) -> Unit){
+        onNewToolbarHeight = callback
+    }
+
     init {
         View.inflate(context, R.layout.layout_media_toolbar_view, this)
 
@@ -386,10 +393,10 @@ class MediaToolbarView : ConstraintLayout {
                         )
                     )
                 )
-
             } else {
                 bottom_notes_add_text_note_send_iv.imageTintList = null
             }
+            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
         }
 
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
@@ -429,7 +436,6 @@ class MediaToolbarView : ConstraintLayout {
                                     setNotesToolbarViewsVisibility(areVisible = false)
                                     setVoiceRecordingViewsVisibility(areVisible = true)
                                     isDraggingBlocked = false
-                                    notes_toolbar_voice_background_iv.visibility = View.VISIBLE
                                     notes_toolbar_voice_background_iv.apply {
                                         animate()
                                             .scaleX(1f)
@@ -498,9 +504,7 @@ class MediaToolbarView : ConstraintLayout {
                         }
                         resetToolbarOptionsPositions()
                         voiceRecordingStartMillis = -1
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            setVoiceRecordingViewsVisibility(areVisible = false)
-                        },100)
+                        setVoiceRecordingViewsVisibility(areVisible = false)
                         setEdittingViewsVisibility(areVisible = false)
                         setNotesToolbarViewsVisibility(areVisible = true)
                         stopChronometer()
