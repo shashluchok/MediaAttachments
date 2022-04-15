@@ -56,7 +56,7 @@ class MediaToolbarView : ConstraintLayout {
 
     }
 
-    private var onSend: ((String) -> Unit)? = null
+    private var onSend: ((String) -> Boolean)? = null
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
 
@@ -271,7 +271,7 @@ class MediaToolbarView : ConstraintLayout {
         onCompleteRecording = callback
     }
 
-    fun setOnSendTextCallback(callback: (String) -> Unit) {
+    fun setOnSendTextCallback(callback: (String) -> Boolean) {
         onSend = callback
     }
 
@@ -388,12 +388,14 @@ class MediaToolbarView : ConstraintLayout {
         bottom_notes_add_text_note_send_iv.setOnClickListener {
             val text =
                 if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) "" else bottom_notes_add_text_note_et.text.toString()
-                onSend?.invoke(text)
-                setEdittingViewsVisibility(areVisible = false)
-                bottom_notes_add_text_note_et?.text?.clear()
-                bottom_notes_add_text_note_et.clearFocus()
-                hideKeyboard()
-                setUpTextNoteCreationToolbarVisibility(isVisible = false)
+                if(onSend?.invoke(text) != false){
+                    setEdittingViewsVisibility(areVisible = false)
+                    bottom_notes_add_text_note_et?.text?.clear()
+                    bottom_notes_add_text_note_et.clearFocus()
+                    hideKeyboard()
+                    setUpTextNoteCreationToolbarVisibility(isVisible = false)
+                }
+
         }
 
         notes_toolbar_text_iv.setOnClickListener {
