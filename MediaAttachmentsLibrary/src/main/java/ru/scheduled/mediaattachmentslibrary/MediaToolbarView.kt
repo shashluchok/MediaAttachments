@@ -381,7 +381,6 @@ class MediaToolbarView : ConstraintLayout {
             .setUpText("Удерживайте для записи,\n" +
                     "отпустите для отправки ")
             .setUpArrowPosition(arrowPosition = ToolTip.ArrowPosition.BOTTOM_RIGHT).build()
-        toolTip.show()
 
         bottom_notes_add_text_note_et.setUpOnKeyPreImePressedCallback {
             hideKeyboard()
