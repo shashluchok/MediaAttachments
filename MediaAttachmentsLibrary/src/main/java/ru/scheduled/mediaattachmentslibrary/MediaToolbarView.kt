@@ -401,7 +401,7 @@ class MediaToolbarView : ConstraintLayout {
         }
 
         bottom_notes_add_text_note_et.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty()) {
+            if (text.isNullOrEmpty() && !note_editing_title_tv.isVisible) {
                 ImageViewCompat.setImageTintList(
                     bottom_notes_add_text_note_send_iv,
                     ColorStateList.valueOf(
@@ -416,7 +416,7 @@ class MediaToolbarView : ConstraintLayout {
             }
             Handler(Looper.getMainLooper()).postDelayed({
                 onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
-            }, 50)
+            }, 30)
         }
 
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
