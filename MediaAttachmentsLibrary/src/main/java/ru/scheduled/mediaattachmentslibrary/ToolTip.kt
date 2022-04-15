@@ -243,7 +243,7 @@ class ToolTip(builder: Builder) {
                                             it.bottom + 8.toPx().toInt()
                                         }
                                         else -> {
-                                            it.top - 8.toPx().toInt() - toolTipMainCl.height
+                                            anchorViewLocation[1] - 8.toPx().toInt() - toolTipMainCl.height
                                         }
                                     }
 
