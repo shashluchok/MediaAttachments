@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.PopupWindow
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.layout_tooltip.view.*
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import java.time.Duration
 
 
@@ -20,21 +21,36 @@ class ToolTip(builder: Builder) {
     private var arrowPosition: ArrowPosition = builder.arrowPosition
     private var message: String = builder.message
     private var duration: Long = builder.duration
+    private var margin: Float = builder.margin
 
     private var animJob: Job? = null
+
+    private var toolTipView:View? = null
 
     enum class ArrowPosition {
         TOP_LEFT, TOP_RIGHT, TOP_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT, BOTTOM_CENTER
     }
 
+    fun hide(){
+        animJob?.cancel()
+        animJob = null
+        toolTipView?.apply {
+            toolTipMainCl.animate().alpha(0f).duration = 150
+            android.os.Handler(Looper.getMainLooper()).postDelayed({
+                this@ToolTip.rootView?.removeView(toolTipMainCl)
+                toolTipView = null
+            }, 200)
+        }
+    }
 
     fun show() {
+        if(toolTipView!=null) return
         rootView?.let { rootView ->
+            animJob?.cancel()
+            animJob = null
+            toolTipView = LayoutInflater.from(rootView.context).inflate(R.layout.layout_tooltip,null)
 
-            var newBinding = LayoutInflater.from(rootView.context).inflate(R.layout.layout_tooltip,null)
-
-
-            newBinding?.apply {
+            toolTipView?.apply {
 
                 toolTipTextTv.text = message
 
@@ -202,22 +218,24 @@ class ToolTip(builder: Builder) {
 
                 }
                 rootView.addView(toolTipMainCl)
+                toolTipMainCl.also {
+                    it.layoutParams.apply {
+                        width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                        height =ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    }
+                }
                 toolTipMainCl.alpha = 0f
 
-                android.os.Handler(Looper.getMainLooper()).postDelayed({
-                    toolTipMainCl.animate().alpha(0f).duration = 150
-                    android.os.Handler(Looper.getMainLooper()).postDelayed({
-                        rootView.removeView(toolTipMainCl)
-                        newBinding = null
-                    }, 200)
-                }, 10000)
+                animJob = CoroutineScope(Dispatchers.IO).launch {
+                    delay(duration)
+                    if(isActive)
+                    withContext(Dispatchers.Main){
+                        hide()
+                    }
+                }
 
                 tooltipCloseIv.setOnClickListener {
-                    toolTipMainCl.animate().alpha(0f).duration = 150
-                    android.os.Handler(Looper.getMainLooper()).postDelayed({
-                        rootView.removeView(toolTipMainCl)
-                        newBinding = null
-                    }, 200)
+                    hide()
                 }
 
                 anchorView?.let {
@@ -240,10 +258,10 @@ class ToolTip(builder: Builder) {
 
                                     val rootY = when (arrowPosition) {
                                         ArrowPosition.TOP_RIGHT, ArrowPosition.TOP_CENTER, ArrowPosition.TOP_LEFT -> {
-                                            it.bottom + 8.toPx().toInt()
+                                            it.bottom + margin
                                         }
                                         else -> {
-                                            anchorViewLocation[1] - 8.toPx().toInt() - toolTipMainCl.height
+                                            anchorViewLocation[1] - margin - toolTipMainCl.height
                                         }
                                     }
 
@@ -274,6 +292,7 @@ class ToolTip(builder: Builder) {
         var arrowPosition: ToolTip.ArrowPosition = ToolTip.ArrowPosition.TOP_RIGHT
         var message: String = ""
         var duration:Long = 10000L
+        var margin:Float = 0f
         fun setUpViews(targetView: View, containerView: ViewGroup): Builder {
             this.anchorView = targetView
             this.rootView = containerView
@@ -292,6 +311,11 @@ class ToolTip(builder: Builder) {
 
         fun setUpDuration(duration: Long):Builder{
             this.duration = duration
+            return this
+        }
+
+        fun setMargin(margin: Float):Builder{
+            this.margin = margin
             return this
         }
 

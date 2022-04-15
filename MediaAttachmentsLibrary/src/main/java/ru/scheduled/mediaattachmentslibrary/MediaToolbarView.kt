@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Rect
 import android.os.*
 import android.util.AttributeSet
@@ -51,6 +52,8 @@ class MediaToolbarView : ConstraintLayout {
 
     private var stopped = false
 
+    private var toolTip:ToolTip? = null
+
     companion object {
         const val MAX_AMPLITUDE = 15000
         const val MIN_AMPLITUDE = 1500
@@ -61,8 +64,6 @@ class MediaToolbarView : ConstraintLayout {
     private var onSend: ((String) -> Boolean)? = null
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
-
-    private var onVoiceInvalidClick: ((voiceView:View) -> Unit)? = null
 
     private var onMediaEditingCancel: (() -> Unit)? = null
     private var onMediaCopy: (() -> Unit)? = null
@@ -84,10 +85,6 @@ class MediaToolbarView : ConstraintLayout {
     )
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
-    }
-
-    fun setOnVoiceInvalidClickCallback(callback: (View) -> Unit) {
-        onVoiceInvalidClick = callback
     }
 
     fun setOnMediaEditingCancelClickedCallback(callback: () -> Unit) {
@@ -374,6 +371,18 @@ class MediaToolbarView : ConstraintLayout {
     init {
         View.inflate(context, R.layout.layout_media_toolbar_view, this)
 
+        val toolTip = ToolTip.Builder()
+            .setUpViews(
+                targetView = notes_voice_iv,
+                containerView = (context as Activity).window.decorView as ViewGroup
+            )
+            .setUpDuration(3000)
+            .setMargin(4.toPx())
+            .setUpText("Удерживайте для записи,\n" +
+                    "отпустите для отправки ")
+            .setUpArrowPosition(arrowPosition = ToolTip.ArrowPosition.BOTTOM_RIGHT).build()
+        toolTip.show()
+
         bottom_notes_add_text_note_et.setUpOnKeyPreImePressedCallback {
             hideKeyboard()
             bottom_notes_add_text_note_et.clearFocus()
@@ -447,6 +456,7 @@ class MediaToolbarView : ConstraintLayout {
                             delay(200)
                             withContext(Dispatchers.Main) {
                                 if (isPointerOn) {
+                                    toolTip?.hide()
                                     touchedButNotRecording = false
                                     onStartRecording?.invoke()
                                     stopped = false
@@ -495,7 +505,7 @@ class MediaToolbarView : ConstraintLayout {
                 }
                 MotionEvent.ACTION_UP -> {
                     if(touchedButNotRecording){
-                        onVoiceInvalidClick?.invoke(notes_voice_iv)
+                        toolTip?.show()
                     }
                     touchedButNotRecording = false
                     job?.cancel()
@@ -617,6 +627,10 @@ class MediaToolbarView : ConstraintLayout {
 
             })
 
+    }
+
+    private  fun Int.toPx():Float {
+        return this *  Resources.getSystem().displayMetrics.density
     }
 
     private fun dispatchTouchEvents(v: View, events: List<Int>) {
