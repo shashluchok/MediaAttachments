@@ -47,6 +47,8 @@ class MediaToolbarView : ConstraintLayout {
 
     private var job: Job? = null
 
+    private var touchedButNotRecording = false
+
     private var stopped = false
 
     companion object {
@@ -59,6 +61,8 @@ class MediaToolbarView : ConstraintLayout {
     private var onSend: ((String) -> Boolean)? = null
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
+
+    private var onVoiceInvalidClick: (() -> Unit)? = null
 
     private var onMediaEditingCancel: (() -> Unit)? = null
     private var onMediaCopy: (() -> Unit)? = null
@@ -80,6 +84,10 @@ class MediaToolbarView : ConstraintLayout {
     )
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
+    }
+
+    fun setOnVoiceInvalidClickCallback(callback: () -> Unit) {
+        onVoiceInvalidClick = callback
     }
 
     fun setOnMediaEditingCancelClickedCallback(callback: () -> Unit) {
@@ -380,7 +388,6 @@ class MediaToolbarView : ConstraintLayout {
         }
 
 
-
         note_editing_close_editing_mode_iv.setOnClickListener {
             stopEditing()
         }
@@ -431,6 +438,7 @@ class MediaToolbarView : ConstraintLayout {
 
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
+                    touchedButNotRecording = true
                     isPointerOn = true
                     isDraggingBlocked = true
                     if (checkRecordAudioPermission()) {
@@ -439,6 +447,7 @@ class MediaToolbarView : ConstraintLayout {
                             delay(200)
                             withContext(Dispatchers.Main) {
                                 if (isPointerOn) {
+                                    touchedButNotRecording = false
                                     onStartRecording?.invoke()
                                     stopped = false
                                     if (checkVibrationPermission()) {
@@ -485,6 +494,10 @@ class MediaToolbarView : ConstraintLayout {
 
                 }
                 MotionEvent.ACTION_UP -> {
+                    if(!touchedButNotRecording){
+                        onVoiceInvalidClick?.invoke()
+                    }
+                    touchedButNotRecording = false
                     job?.cancel()
                     job = null
                     isPointerOn = false
