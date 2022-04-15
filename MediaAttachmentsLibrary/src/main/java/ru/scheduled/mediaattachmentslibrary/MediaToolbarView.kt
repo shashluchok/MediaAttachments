@@ -108,8 +108,7 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     fun showMediaEditingToolbar(isCopyable: Boolean, isEditable: Boolean) {
-        setEdittingViewsVisibility(areVisible = true)
-        setUpTextNoteCreationToolbarVisibility(isVisible = true)
+        setEdittingViewsVisibility(areVisible = false)
         if(media_toolbar_note_edit.alpha == 1f) {
 
             if (isCopyable) {
@@ -214,12 +213,12 @@ class MediaToolbarView : ConstraintLayout {
 
         Handler(Looper.getMainLooper()).postDelayed({
             onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
-        }, 50)
+        }, 30)
 
     }
 
     fun hideMediaEditingToolbar() {
-        setEdittingViewsVisibility(areVisible = false)
+        setEdittingViewsVisibility(areVisible = !bottom_notes_add_text_note_et.text.isNullOrEmpty())
         setUpTextNoteCreationToolbarVisibility(isVisible = false)
         please(duration = 100L) {
             animate(media_toolbar_note_edit) toBe {
@@ -233,7 +232,7 @@ class MediaToolbarView : ConstraintLayout {
         }.start()
         Handler(Looper.getMainLooper()).postDelayed({
             onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
-        }, 50)
+        }, 30)
 
     }
 
@@ -299,7 +298,7 @@ class MediaToolbarView : ConstraintLayout {
         keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
         Handler(Looper.getMainLooper()).postDelayed({
             onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
-        }, 50)
+        }, 30)
     }
 
     fun setOnToolBarReadyCallback(callback: (height: Int) -> Unit) {
@@ -341,7 +340,7 @@ class MediaToolbarView : ConstraintLayout {
         hideKeyboard()
         Handler(Looper.getMainLooper()).postDelayed({
             onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
-        }, 50)
+        }, 30)
     }
 
     fun setOnNewToolbarHeightCallback(callback: (height: Int) -> Unit){
