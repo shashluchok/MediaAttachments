@@ -6,20 +6,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.Rect
 import android.os.*
-import android.transition.AutoTransition
-import android.transition.TransitionManager
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.doOnTextChanged
@@ -217,12 +211,14 @@ class MediaToolbarView : ConstraintLayout {
             }.start()
         }
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+        }, 50)
 
     }
 
     fun hideMediaEditingToolbar() {
-        /*media_toolbar_default.isVisible = true
-        media_toolbar_note_edit.isVisible = false*/
+
 
         please(duration = 100L) {
             animate(media_toolbar_note_edit) toBe {
@@ -234,7 +230,9 @@ class MediaToolbarView : ConstraintLayout {
                 visible()
             }
         }.start()
-
+        Handler(Looper.getMainLooper()).postDelayed({
+            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+        }, 50)
 
     }
 
@@ -298,6 +296,9 @@ class MediaToolbarView : ConstraintLayout {
         val keyboard =
             (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
         keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        Handler(Looper.getMainLooper()).postDelayed({
+            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+        }, 50)
     }
 
     fun setOnToolBarReadyCallback(callback: (height: Int) -> Unit) {
@@ -337,6 +338,9 @@ class MediaToolbarView : ConstraintLayout {
         bottom_notes_add_text_note_et.clearFocus()
         setUpTextNoteCreationToolbarVisibility(isVisible = false)
         hideKeyboard()
+        Handler(Looper.getMainLooper()).postDelayed({
+            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+        }, 50)
     }
 
     fun setOnNewToolbarHeightCallback(callback: (height: Int) -> Unit){
@@ -396,7 +400,9 @@ class MediaToolbarView : ConstraintLayout {
             } else {
                 bottom_notes_add_text_note_send_iv.imageTintList = null
             }
-            onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+            Handler(Looper.getMainLooper()).postDelayed({
+                onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+            }, 50)
         }
 
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
