@@ -22,130 +22,89 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/image_add_note_cl"
-        android:layout_width="match_parent"
+
+    <ru.scheduled.mediaattachmentslibrary.CustomEditText
+        android:id="@+id/image_note_et"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/editable_photo_nav_bar">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/image_note_cv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/image_note_ready_iv"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ru.scheduled.mediaattachmentslibrary.CustomEditText
-                android:id="@+id/image_note_et"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:fontFamily="@font/roboto_regular"
-                android:hint="@string/defaultSignHint"
-                android:paddingTop="7dp"
-                android:paddingBottom="7dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/defaultTextLight"
-                android:textSize="@dimen/default_15sp" />
-        </androidx.cardview.widget.CardView>
-
-        <View
-            android:id="@+id/image_note_touch_filter"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            android:elevation="5dp"
-            android:focusable="true"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <ImageView
-            android:id="@+id/image_note_ready_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:visibility="gone"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/confirm_round" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@null"
+        android:fontFamily="@font/roboto_regular"
+        android:hint="@string/defaultSignHint"
+        android:paddingStart="12dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="12dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:paddingBottom="18dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/defaultTextLight"
+        android:textSize="@dimen/default_15sp"
+        app:layout_constraintBottom_toTopOf="@+id/editable_photo_close"
+        app:layout_constraintEnd_toStartOf="@+id/image_note_ready_iv"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/editable_photo_nav_bar"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/image_note_ready_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/image_note_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/confirm_round" />
+
+
+    <ImageView
+        android:id="@+id/editable_photo_accept"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/send">
 
-        <ImageView
-            android:id="@+id/editable_photo_accept"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/send">
-
-        </ImageView>
+    </ImageView>
 
 
-        <ImageView
-            android:id="@+id/editable_photo_close"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/cancel_round" />
+    <ImageView
+        android:id="@+id/editable_photo_close"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/cancel_round" />
 
-        <ImageView
-            android:id="@+id/editable_photo_rotate_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editable_photo_accept"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editable_photo_crop_photo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/rotate_photo" />
+    <ImageView
+        android:id="@+id/editable_photo_rotate_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editable_photo_accept"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editable_photo_crop_photo"
+        app:srcCompat="@drawable/rotate_photo" />
 
-        <ImageView
-            android:id="@+id/editable_photo_crop_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editable_photo_rotate_photo"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editable_photo_close"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/editable_photo_crop_photo" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/editable_photo_crop_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editable_photo_rotate_photo"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editable_photo_close"
+        app:srcCompat="@drawable/editable_photo_crop_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

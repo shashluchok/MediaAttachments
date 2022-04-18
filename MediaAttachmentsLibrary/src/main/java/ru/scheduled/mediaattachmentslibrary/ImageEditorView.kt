@@ -138,9 +138,7 @@ class ImageEditorView : ConstraintLayout {
         View.inflate(context, R.layout.image_editor_view, this)
         val keyListener = image_note_et.keyListener
         initPhotoPreviewListeners()
-        image_note_touch_filter.setOnClickListener{
-            image_note_et.requestFocus()
-        }
+
 
         image_note_et.setUpOnKeyPreImePressedCallback {
             image_note_et.clearFocus()
@@ -153,9 +151,7 @@ class ImageEditorView : ConstraintLayout {
         }
 
         image_note_et.setOnFocusChangeListener { _, isFocused ->
-            editable_photo_nav_bar.isVisible = !isFocused
             image_note_ready_iv.isVisible = isFocused
-            image_note_touch_filter.isVisible = !isFocused
             if(!isFocused){
                 image_note_et.apply {
                     this.keyListener = null

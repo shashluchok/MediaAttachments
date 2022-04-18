@@ -53,8 +53,6 @@ class CameraCaptureView: ConstraintLayout {
 
     private var currentSavedVideoUri: Uri? = null
 
-    //callbacks
-//    private var onGalleryClicked : (()->Unit)? = null
     private var onVideoSaved: ((Uri) -> Unit)? = null
     private var onImageSaved: ((uri: Uri) -> Unit)? = null
     private var onPhotoClicked: (() -> Unit)? = null
