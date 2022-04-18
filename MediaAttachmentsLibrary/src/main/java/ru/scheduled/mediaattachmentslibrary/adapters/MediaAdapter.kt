@@ -179,7 +179,7 @@ class MediaAdapter(
 
             }
             TYPE_PHOTO -> {
-                viewToSetOnClickListener = holder.itemView.media_note_photo_iv
+                viewToSetOnClickListener = holder.itemView.item_media_note_photo_cv
                 selectionView = holder.itemView.selection_view_photo
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo

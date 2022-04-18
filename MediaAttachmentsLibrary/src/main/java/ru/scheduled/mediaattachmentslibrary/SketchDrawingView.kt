@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.*
 import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -21,7 +19,6 @@ class SketchDrawingView : ConstraintLayout {
 
     private var activeColor:Int = R.color.defaultActive
     private var disabledColor:Int = R.color.defaultNotActive
-    private var hintText:Int = R.string.empty
     private var isEraserEnabled = false
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
@@ -42,10 +39,7 @@ class SketchDrawingView : ConstraintLayout {
                 R.color.defaultNotActive
         )
 
-        hintText = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "hintText", R.string.empty
-        )
+
         val a = context.theme.obtainStyledAttributes(
                 attrs, R.styleable.SketchDrawingView, 0, 0)
         try {
@@ -72,6 +66,10 @@ class SketchDrawingView : ConstraintLayout {
             background = drawable
             start_drawing_tv?.visibility = View.GONE
         }
+    }
+
+    fun setOnFirstTouchCallback(callback: () -> Unit) {
+        sketch_view.setOnFirstTouchEventAction(callback)
     }
 
     fun getSketchByteArray(): ByteArray {
@@ -117,16 +115,8 @@ class SketchDrawingView : ConstraintLayout {
         start_drawing_tv.visibility = View.VISIBLE
         enableDrawBack(false)
         enableDrawForward(false)
-        start_drawing_tv.text = context.resources.getString(hintText)
         onEraserEnabled(isEnabled = false)
-        sketch_view.setOnFirstTouchEventAction {
-            start_drawing_tv.apply {
-                animate().alpha(0f).setDuration(300)
-            }
-            Handler(Looper.getMainLooper()).postDelayed({
-                start_drawing_tv?.visibility = View.GONE
-            }, 300)
-        }
+
     }
 
     private fun onEraserEnabled(isEnabled: Boolean){
@@ -159,11 +149,10 @@ class SketchDrawingView : ConstraintLayout {
             )
             )
         } else {
-
             ImageViewCompat.setImageTintList(
-                    media_sketch_draw_back_iv, ColorStateList.valueOf(
-                    ContextCompat.getColor(context, disabledColor)
-            )
+                media_sketch_draw_back_iv, ColorStateList.valueOf(
+                    resources.getColor(R.color.defaultTextLight)
+                )
             )
         }
     }
@@ -178,9 +167,9 @@ class SketchDrawingView : ConstraintLayout {
             )
         } else {
             ImageViewCompat.setImageTintList(
-                    media_sketch_draw_forward_iv, ColorStateList.valueOf(
-                    ContextCompat.getColor(context, disabledColor)
-            )
+                media_sketch_draw_forward_iv, ColorStateList.valueOf(
+                    resources.getColor(R.color.defaultTextLight)
+                )
             )
         }
     }
