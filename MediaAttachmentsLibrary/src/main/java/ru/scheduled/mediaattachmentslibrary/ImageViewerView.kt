@@ -16,8 +16,10 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.item_pager_image_viewer.view.*
 import kotlinx.android.synthetic.main.layout_image_viewer_view.view.*
+import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlin.math.abs
 
 class ImageViewerView : ConstraintLayout {
@@ -44,7 +46,7 @@ class ImageViewerView : ConstraintLayout {
 
     private var initIndex = 0
 
-    private lateinit var listOfImageUris: List<MediaRecyclerView.MediaNote>
+    private lateinit var listOfMedia: List<MediaRecyclerView.MediaNote>
 
     //callbacks
     private var onToolBarBackClicked: (() -> Unit)? = null
@@ -84,8 +86,6 @@ class ImageViewerView : ConstraintLayout {
                                         .y(initialPagerY)
                                         .setDuration(300)
                                         .start()
-
-
 
                             }
                             isAnimating = false
@@ -192,10 +192,10 @@ class ImageViewerView : ConstraintLayout {
         onDeleteClicked = callback
     }
 
-    fun setImageUris(listOfMediaNotes: List<MediaRecyclerView.MediaNote>, index: Int) {
-        listOfImageUris = listOfMediaNotes
+    fun setMediaNotes(listOfMediaNotes: List<MediaRecyclerView.MediaNote>, index: Int) {
+        listOfMedia = listOfMediaNotes
         currentIndex = index
-        setUpViewPagerAdapter(listOfImageUris)
+        setUpViewPagerAdapter(listOfMedia)
         setUpUrisCountTitle(currentIndex)
         media_image_viewer_view_pager.currentItem = currentIndex
     }
@@ -258,7 +258,7 @@ class ImageViewerView : ConstraintLayout {
 
     private fun setUpUrisCountTitle(currentPosition: Int) {
         media_image_viewer_counter_tv.text =
-                String.format("%d из %d", currentPosition + 1, if (listOfImageUris.isNotEmpty()) listOfImageUris.size else 1)
+                String.format("%d из %d", currentPosition + 1, if (listOfMedia.isNotEmpty()) listOfMedia.size else 1)
     }
 
     class DepthPageTransformer : ViewPager.PageTransformer {
@@ -490,7 +490,7 @@ class ImageViewerView : ConstraintLayout {
         }
 
         media_image_viewer_delete_iv.setOnClickListener {
-            onDeleteClicked?.invoke(listOfImageUris[currentIndex])
+            onDeleteClicked?.invoke(listOfMedia[currentIndex])
         }
 
     }
