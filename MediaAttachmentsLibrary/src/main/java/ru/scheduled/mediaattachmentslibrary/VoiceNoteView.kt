@@ -381,7 +381,7 @@ class VoiceNoteView : ConstraintLayout {
 }
 
 
- class Visualizer : View {
+private class Visualizer : View {
     private var mPath: Path? = null
     private var mX: Float = 0f
     private var mY: Float = 0f

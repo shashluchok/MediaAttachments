@@ -27,7 +27,7 @@
         android:id="@+id/image_note_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:background="@color/black"
         android:fontFamily="@font/roboto_regular"
         android:hint="@string/defaultSignHint"
         android:paddingStart="12dp"
