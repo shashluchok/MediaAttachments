@@ -109,13 +109,13 @@ class ImageViewerView : ConstraintLayout {
                             }
 
                             if (isAnimating) {
-                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 1000) {
+                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 300) {
                                     viewToAnimate!!.animate()
                                             .y(initialPagerY + (ev.rawY - startY) / 2)
                                             .setDuration(0)
                                             .start()
 
-                                    lastPercent = 100 - ((ev.rawY - startY) / 1000 * 100)
+                                    lastPercent = 100 - ((ev.rawY - startY) / 300 * 100)
                                     fadeOtherViews?.invoke((lastPercent / 100.toFloat()))
                                     val currentTint = "#${getTransparentPercentage(lastPercent.toInt())}000000"
 
@@ -123,7 +123,7 @@ class ImageViewerView : ConstraintLayout {
                                     mainLayout!!.setBackgroundColor(color)
                                 }
                                 if ((ev.rawY - startY) > 300) {
-//                                    isAnimating = false
+                                    isAnimating = false
                                     val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
                                     animator.addUpdateListener { animation ->
                                         val percent = (animation.animatedValue as Int)
@@ -133,12 +133,12 @@ class ImageViewerView : ConstraintLayout {
                                         mainLayout!!.setBackgroundColor(color)
                                         fadeOtherViews?.invoke(percent / 100.toFloat())
                                     }
-                                    animator.duration = 300
+                                    animator.duration = 100
                                     animator.start()
 
                                     viewToAnimate!!.animate()
                                             .y(initialPagerY)
-                                            .setDuration(300)
+                                            .setDuration(100)
                                             .start()
                                     onToolBarBackClicked?.invoke()
                                 }
