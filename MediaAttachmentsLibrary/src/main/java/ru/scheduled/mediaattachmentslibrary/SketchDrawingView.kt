@@ -55,6 +55,10 @@ class SketchDrawingView : ConstraintLayout {
 
     }
 
+    fun wasAnythingDrawn():Boolean{
+        return sketch_view.wasAnythingDrawn()
+    }
+
     fun setEdittingToolbarVisibility(isVisible: Boolean) {
         media_sketch_bottom_toolbar.visibility = if (isVisible) View.VISIBLE else View.GONE
         if (isVisible) setEdittingToolbarClickListeners()
@@ -223,6 +227,9 @@ private class SketchView : View {
         initView()
     }
 
+    fun wasAnythingDrawn():Boolean{
+        return states.isNotEmpty()
+    }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
