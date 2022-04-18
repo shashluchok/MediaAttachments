@@ -4,9 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.*
 import android.widget.ImageView
@@ -46,11 +44,11 @@ class ImageViewerView : ConstraintLayout {
 
     private var initIndex = 0
 
-    private lateinit var listOfImageUris: List<String>
+    private lateinit var listOfImageUris: List<MediaRecyclerView.MediaNote>
 
     //callbacks
     private var onToolBarBackClicked: (() -> Unit)? = null
-    private var onDeleteClicked: ((imageUri:String, imageIndex:Int) -> Unit)? = null
+    private var onDeleteClicked: ((MediaRecyclerView.MediaNote) -> Unit)? = null
 
     @SuppressLint("ClickableViewAccessibility")
     fun setOnTryToLeaveCallback(callback:()->Unit){
@@ -189,13 +187,13 @@ class ImageViewerView : ConstraintLayout {
 
     }
 
-    fun setOnDeleteClickedCallback(callback:(imageUri:String, imageIndex:Int)->Unit){
+    fun setOnDeleteClickedCallback(callback:(MediaRecyclerView.MediaNote)->Unit){
         media_image_viewer_delete_iv.visibility = View.VISIBLE
         onDeleteClicked = callback
     }
 
-    fun setImageUris(listOfUris: List<String>, index: Int) {
-        listOfImageUris = listOfUris
+    fun setImageUris(listOfMediaNotes: List<MediaRecyclerView.MediaNote>, index: Int) {
+        listOfImageUris = listOfMediaNotes
         currentIndex = index
         setUpViewPagerAdapter(listOfImageUris)
         setUpUrisCountTitle(currentIndex)
@@ -251,7 +249,7 @@ class ImageViewerView : ConstraintLayout {
         })
     }
 
-    private fun setUpViewPagerAdapter(listOfMediaNotes: List<String>) {
+    private fun setUpViewPagerAdapter(listOfMediaNotes: List<MediaRecyclerView.MediaNote>) {
         if (listOfMediaNotes.isNotEmpty()) {
             media_image_viewer_view_pager.adapter =
                     ImageViewPagerAdapter(context, listOfMediaNotes)
@@ -294,8 +292,8 @@ class ImageViewerView : ConstraintLayout {
     }
 
     inner class ImageViewPagerAdapter(
-            private val mContext: Context,
-            private val listOfMediaNotes: List<String>,
+        private val mContext: Context,
+        private val listOfMediaNotes: List<MediaRecyclerView.MediaNote>,
     ) : PagerAdapter() {
 
         override fun getCount(): Int {
@@ -310,7 +308,7 @@ class ImageViewerView : ConstraintLayout {
                     false
             )
             itemView.tag = position
-            Glide.with(mContext).load(listOfMediaNotes[position]).listener(object : RequestListener<Drawable> {
+            Glide.with(mContext).load(listOfMediaNotes[position].value).listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     return false
                 }
@@ -492,7 +490,7 @@ class ImageViewerView : ConstraintLayout {
         }
 
         media_image_viewer_delete_iv.setOnClickListener {
-            onDeleteClicked?.invoke(listOfImageUris[currentIndex], currentIndex)
+            onDeleteClicked?.invoke(listOfImageUris[currentIndex])
         }
 
     }
