@@ -9,7 +9,6 @@
     android:animateLayoutChanges="true"
     >
 
-
     <ImageView
         android:id="@+id/note_checkbox_voice"
         android:layout_width="wrap_content"
