@@ -17,16 +17,17 @@
             android:background="@drawable/checkbox_to_checked"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/item_media_note_sketch_cv"
-            app:layout_constraintEnd_toStartOf="@+id/note_text_cl"
+            app:layout_constraintEnd_toStartOf="@+id/note_text_cv"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/note_text_cl"
+            android:id="@+id/note_text_cv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
             app:cardBackgroundColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +36,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/note_text_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="14dp"
