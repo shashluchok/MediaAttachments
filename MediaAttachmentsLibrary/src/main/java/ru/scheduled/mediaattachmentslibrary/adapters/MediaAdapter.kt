@@ -13,6 +13,7 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
 import kotlinx.android.synthetic.main.item_media_note_sketch.view.*
 import kotlinx.android.synthetic.main.item_media_note_text.view.*
@@ -118,8 +119,10 @@ class MediaAdapter(
                 selectionView = holder.itemView.selection_view_sketch
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
-                Glide.with(mContext).load(mediaList[position].value)
-                        .into(holder.itemView.media_note_sketch_iv)
+                Glide.with(mContext)
+                    .load(mediaList[position].value)
+                    .transition(DrawableTransitionOptions.withCrossFade(300))
+                     .into(holder.itemView.media_note_sketch_iv)
 
             }
             TYPE_VOICE -> {
@@ -184,6 +187,7 @@ class MediaAdapter(
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo
                 Glide.with(mContext).load(mediaList[position].value)
+                    .transition(DrawableTransitionOptions.withCrossFade(300))
                         .into(holder.itemView.media_note_photo_iv)
 
                 if (!mediaList[position].imageNoteText.isNullOrEmpty()) {
