@@ -69,7 +69,9 @@ class SketchDrawingView : ConstraintLayout {
     }
 
     fun setOnFirstTouchCallback(callback: () -> Unit) {
-        sketch_view.setOnFirstTouchEventAction(callback)
+        sketch_view.setOnFirstTouchEventAction{
+            callback.invoke()
+        }
     }
 
     fun getSketchByteArray(): ByteArray {
