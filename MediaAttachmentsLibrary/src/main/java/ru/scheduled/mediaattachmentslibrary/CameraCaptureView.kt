@@ -57,6 +57,7 @@ class CameraCaptureView: ConstraintLayout {
 //    private var onGalleryClicked : (()->Unit)? = null
     private var onVideoSaved: ((Uri) -> Unit)? = null
     private var onImageSaved: ((uri: Uri) -> Unit)? = null
+    private var onPhotoClicked: (() -> Unit)? = null
 
     private var saveDestination: SaveLocation = SaveLocation.INTERNAL_STORAGE
 
@@ -108,6 +109,7 @@ class CameraCaptureView: ConstraintLayout {
     }
 
 
+    @SuppressLint("Range")
     private fun setLastGalleryImage() {
         var lastImageUri = ""
         var imageCursor: Cursor? = null
@@ -257,7 +259,7 @@ class CameraCaptureView: ConstraintLayout {
 
                         MotionEvent.ACTION_UP -> {
                             if (isLessThanLongClick) {
-                                loaderVisible(true)
+                               onPhotoClicked?.invoke()
                                 disableUserInteraction()
                                 takePhoto()
                             }
@@ -317,7 +319,7 @@ class CameraCaptureView: ConstraintLayout {
         }
         else {
             photo_video_capture_icon.setOnClickListener {
-                loaderVisible(true)
+                onPhotoClicked?.invoke()
                 disableUserInteraction()
                 takePhoto()
             }
@@ -415,7 +417,6 @@ class CameraCaptureView: ConstraintLayout {
         imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 enableUserInteraction()
-                loaderVisible(false)
                 if(photoFile!=null){
                     onImageSaved?.invoke(Uri.fromFile(photoFile))
                 }
@@ -534,21 +535,11 @@ class CameraCaptureView: ConstraintLayout {
         )
     }
 
-    private fun loaderVisible(visible: Boolean) {
-        if (visible) {
-            progress_bar_photo_loading.visibility = View.VISIBLE
-        } else {
-            progress_bar_photo_loading.visibility = View.GONE
-        }
-    }
-
     private fun startCamera(cameraSelector: CameraSelector) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
 
-        loaderVisible(true)
         disableUserInteraction()
         Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            loaderVisible(false)
             enableUserInteraction()
         }, 500)
 
@@ -941,16 +932,11 @@ class CameraCaptureView: ConstraintLayout {
     }
         private fun checkVibrationPermission(): Boolean {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ContextCompat.checkSelfPermission(
+                ContextCompat.checkSelfPermission(
                         context,
                         Manifest.permission.VIBRATE
                     ) ==
                     PackageManager.PERMISSION_GRANTED
-                ) {
-                    true
-                } else {
-                    false
-                }
 
             } else {
                 true
