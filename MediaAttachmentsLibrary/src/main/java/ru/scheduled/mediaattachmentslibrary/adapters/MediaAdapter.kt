@@ -223,7 +223,7 @@ class MediaAdapter(
             releasePlayer()
             if (selectedNotes.contains(mediaList[position])) {
                 checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
-                holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.defaultNotActive))
+                holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
 
             } else {
                 checkBox?.setImageResource(R.drawable.checkbox_to_checked)
@@ -248,7 +248,7 @@ class MediaAdapter(
             holder.itemView.visualizer_view.setOnLongClickCallback {
                 if (!isSelecting) {
                     onSelecting(true)
-                    holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.defaultNotActive))
+                    holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
                     selectedNotes.add(mediaList[position])
                     onItemsSelected.invoke(selectedNotes)
                     checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
@@ -259,7 +259,7 @@ class MediaAdapter(
             contentView?.setOnLongClickListener {
                 if (!isSelecting) {
                     onSelecting(true)
-                    holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.defaultNotActive))
+                    holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
                     selectedNotes.add(mediaList[position])
                     onItemsSelected.invoke(selectedNotes)
                     checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
@@ -280,7 +280,7 @@ class MediaAdapter(
                    onItemsSelected.invoke(selectedNotes)
                    holder.itemView.setBackgroundColor(Color.TRANSPARENT)
                } else {
-                   holder.itemView.setBackgroundColor(mContext.resources.getColor(R.color.defaultNotActive))
+                   holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
                    selectedNotes.add(mediaList[position])
                    onItemsSelected.invoke(selectedNotes)
                    checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
