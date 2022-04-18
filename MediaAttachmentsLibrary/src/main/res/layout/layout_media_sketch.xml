@@ -91,18 +91,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/start_drawing_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="@dimen/default_15sp"
-        app:layout_constraintBottom_toTopOf="@+id/media_sketch_bottom_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <ru.scheduled.mediaattachmentslibrary.SketchView
         android:id="@+id/sketch_view"
         android:layout_width="0dp"

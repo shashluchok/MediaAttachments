@@ -64,7 +64,6 @@ class SketchDrawingView : ConstraintLayout {
         sketch_view.apply {
             reInit()
             background = drawable
-            start_drawing_tv?.visibility = View.GONE
         }
     }
 
@@ -114,7 +113,6 @@ class SketchDrawingView : ConstraintLayout {
 
     init {
         View.inflate(context, R.layout.layout_media_sketch, this)
-        start_drawing_tv.visibility = View.VISIBLE
         enableDrawBack(false)
         enableDrawForward(false)
         onEraserEnabled(isEnabled = false)
