@@ -7,10 +7,9 @@
     android:id="@+id/mainCl"
     tools:context=".MainActivity">
 
-    <ru.scheduled.mediaattachmentslibrary.ImageEditorView
-        android:id="@+id/imageEditor"
+    <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

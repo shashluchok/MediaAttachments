@@ -381,7 +381,7 @@ class VoiceNoteView : ConstraintLayout {
 }
 
 
-private class Visualizer : View {
+ class Visualizer : View {
     private var mPath: Path? = null
     private var mX: Float = 0f
     private var mY: Float = 0f
@@ -568,7 +568,7 @@ private class Visualizer : View {
                                 if (mX + spacing < mWidth) {
                                     val amplitude = amplitudes[i]
                                     mY = mHeight * amplitude / 17000.toFloat()
-                                    mPath!!.moveTo(mX, mHeight.toFloat())
+                                    mPath!!.moveTo(mX, mHeight.toFloat()-dpToPx(1))
                                     mPath!!.lineTo(mX, mHeight.toFloat() - mY)
                                     var newVectorIndex: Int = insertIdx * 4
                                     vectors?.let { vectorsList ->
