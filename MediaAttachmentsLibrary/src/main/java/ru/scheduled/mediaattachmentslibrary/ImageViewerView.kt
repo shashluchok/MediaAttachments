@@ -1,6 +1,7 @@
 package ru.scheduled.mediaattachmentslibrary
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
@@ -51,6 +52,7 @@ class ImageViewerView : ConstraintLayout {
     private var onToolBarBackClicked: (() -> Unit)? = null
     private var onDeleteClicked: ((imageUri:String, imageIndex:Int) -> Unit)? = null
 
+    @SuppressLint("ClickableViewAccessibility")
     fun setOnTryToLeaveCallback(callback:()->Unit){
         onToolBarBackClicked = callback
         media_image_viewer_back_iv.visibility = View.VISIBLE
@@ -107,13 +109,13 @@ class ImageViewerView : ConstraintLayout {
                             }
 
                             if (isAnimating) {
-                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 300) {
+                                if ((ev.rawY - startY) > 0 && (ev.rawY - startY) <= 1000) {
                                     viewToAnimate!!.animate()
                                             .y(initialPagerY + (ev.rawY - startY) / 2)
                                             .setDuration(0)
                                             .start()
 
-                                    lastPercent = 100 - ((ev.rawY - startY) / 300 * 100)
+                                    lastPercent = 100 - ((ev.rawY - startY) / 1000 * 100)
                                     fadeOtherViews?.invoke((lastPercent / 100.toFloat()))
                                     val currentTint = "#${getTransparentPercentage(lastPercent.toInt())}000000"
 
@@ -121,7 +123,7 @@ class ImageViewerView : ConstraintLayout {
                                     mainLayout!!.setBackgroundColor(color)
                                 }
                                 if ((ev.rawY - startY) > 300) {
-                                    isAnimating = false
+//                                    isAnimating = false
                                     val animator = ValueAnimator.ofInt(lastPercent.toInt(), 100)
                                     animator.addUpdateListener { animation ->
                                         val percent = (animation.animatedValue as Int)
