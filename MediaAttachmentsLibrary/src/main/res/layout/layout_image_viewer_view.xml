@@ -11,32 +11,27 @@
     android:transitionGroup="true"
     >
 
-
     <ImageView
         android:id="@+id/media_image_viewer_back_iv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingTop="15dp"
-        android:paddingEnd="30dp"
+        android:layout_height="50dp"
         android:visibility="invisible"
-        android:paddingBottom="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/arrow_left"
+        app:srcCompat="@drawable/arrow_toolbar_back"
         app:tint="@color/white" />
 
     <TextView
         android:id="@+id/media_image_viewer_counter_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
         android:text="0 из 0"
         android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/media_image_viewer_back_iv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/media_image_viewer_back_iv"
         app:layout_constraintTop_toTopOf="parent" />
 
 
