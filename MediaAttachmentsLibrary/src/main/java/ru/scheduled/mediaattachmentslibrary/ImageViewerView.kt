@@ -199,6 +199,9 @@ class ImageViewerView : ConstraintLayout {
         if(currentIndex==null) {
             currentIndex = index
         }
+        else if(currentIndex!!>listOfMedia.lastIndex) {
+            currentIndex = listOfMedia.lastIndex
+        }
         currentIndex?.let{
             setUpUrisCountTitle(it)
             media_image_viewer_view_pager.currentItem = it
