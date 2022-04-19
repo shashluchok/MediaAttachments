@@ -299,26 +299,36 @@ class MediaAdapter(
     }
 
     fun setData(newData: List<MediaRecyclerView.MediaNote>) {
-        val oldList = mutableListOf<MediaRecyclerView.MediaNote>().also{
+        val oldList = mutableListOf<ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote>().also{
             it.addAll(mediaList)
         }
-        mediaList.clear()
-        mediaList.addAll(newData)
+
         when {
-            oldList.size == 0 || newData.size == 0-> notifyDataSetChanged()
+            oldList.size == 0 || newData.size == 0-> {
+                mediaList.clear()
+                mediaList.addAll(newData)
+                notifyDataSetChanged()
+            }
             newData.size < oldList.size -> {
                 oldList.onEach {
-                    if(!newData.contains(it))
+                    if(!newData.contains(it)) {
                         notifyItemRemoved(oldList.indexOf(it))
+                        mediaList.remove(it)
+                    }
                 }
+                notifyItemRangeChanged(0,oldList.size)
+
             }
             newData.size > oldList.size -> {
+                mediaList.clear()
+                mediaList.addAll(newData)
                 newData.onEach {
                     if(!oldList.contains(it))
                         notifyItemInserted(newData.indexOf(it))
                 }
             }
             newData.size == oldList.size -> {
+
                 newData.onEach {
                     if(!oldList.contains(it))
                         notifyItemChanged(newData.indexOf(it))
