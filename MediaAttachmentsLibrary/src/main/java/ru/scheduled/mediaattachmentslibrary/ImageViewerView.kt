@@ -46,7 +46,7 @@ class ImageViewerView : ConstraintLayout {
 
     private var initIndex = 0
 
-    private lateinit var listOfMedia: MutableList<MediaRecyclerView.MediaNote>
+    private val listOfMedia = mutableListOf<MediaRecyclerView.MediaNote>()
 
     //callbacks
     private var onToolBarBackClicked: (() -> Unit)? = null
