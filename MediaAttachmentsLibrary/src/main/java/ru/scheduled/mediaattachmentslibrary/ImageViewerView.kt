@@ -24,7 +24,7 @@ import kotlin.math.abs
 
 class ImageViewerView : ConstraintLayout {
 
-    private var currentIndex: Int = 0
+    private var currentIndex:Int? = null
 
     private var gestureDetector: GestureDetector? = null
 
@@ -46,7 +46,7 @@ class ImageViewerView : ConstraintLayout {
 
     private var initIndex = 0
 
-    private lateinit var listOfMedia: List<MediaRecyclerView.MediaNote>
+    private lateinit var listOfMedia: MutableList<MediaRecyclerView.MediaNote>
 
     //callbacks
     private var onToolBarBackClicked: (() -> Unit)? = null
@@ -193,11 +193,16 @@ class ImageViewerView : ConstraintLayout {
     }
 
     fun setMediaNotes(listOfMediaNotes: List<MediaRecyclerView.MediaNote>, index: Int) {
-        listOfMedia = listOfMediaNotes
-        currentIndex = index
+        listOfMedia.clear()
+        listOfMedia.addAll(listOfMediaNotes)
         setUpViewPagerAdapter(listOfMedia)
-        setUpUrisCountTitle(currentIndex)
-        media_image_viewer_view_pager.currentItem = currentIndex
+        if(currentIndex==null) {
+            currentIndex = index
+        }
+        currentIndex?.let{
+            setUpUrisCountTitle(it)
+            media_image_viewer_view_pager.currentItem = it
+        }
     }
 
 
@@ -212,7 +217,7 @@ class ImageViewerView : ConstraintLayout {
             if (initIndex != currentIndex) {
                 media_image_viewer_view_pager.transitionName = "mediaShared2"
             }
-            setUpUrisCountTitle(currentPosition = currentIndex)
+            setUpUrisCountTitle(currentPosition = currentIndex!!)
         }
     }
 
@@ -483,14 +488,14 @@ class ImageViewerView : ConstraintLayout {
         media_image_viewer_view_pager.setPageTransformer(true, DepthPageTransformer())
         media_image_viewer_view_pager.addOnPageChangeListener(PageListener())
 
-        initIndex = currentIndex
+        initIndex = currentIndex?:0
 
         media_image_viewer_back_iv.setOnClickListener {
             onToolBarBackClicked?.invoke()
         }
 
         media_image_viewer_delete_iv.setOnClickListener {
-            onDeleteClicked?.invoke(listOfMedia[currentIndex])
+            onDeleteClicked?.invoke(listOfMedia[currentIndex?:0])
         }
 
     }
