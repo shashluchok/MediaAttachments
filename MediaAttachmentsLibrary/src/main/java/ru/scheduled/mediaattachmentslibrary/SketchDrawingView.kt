@@ -1,11 +1,9 @@
 package ru.scheduled.mediaattachmentslibrary
 
-import android.R.attr.data
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -54,6 +52,10 @@ class SketchDrawingView : ConstraintLayout {
             a.recycle();
         }
 
+    }
+
+    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
+        sketch_view.setOnEmptyCallback(callback)
     }
 
     fun wasAnythingDrawn():Boolean{
@@ -214,6 +216,8 @@ private class SketchView : View {
 
     private var existingSketchBitmap:Bitmap? = null
 
+    private var onEmpty: ((Boolean)->Unit)? = null
+
     constructor(context: Context?) : super(context) {
         initView()
     }
@@ -229,6 +233,10 @@ private class SketchView : View {
         defStyleAttr
     ) {
         initView()
+    }
+
+    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
+        onEmpty = callback
     }
 
     fun wasAnythingDrawn():Boolean{
@@ -316,6 +324,7 @@ private class SketchView : View {
         } else {
             canvas.drawPath(circlePath!!, circlePaint!!);
         }
+        onEmpty?.invoke(isEmpty())
 
     }
 
@@ -477,13 +486,11 @@ private class SketchView : View {
 
 
         val canvas = Canvas(bitmap)
-//        canvas.drawColor(Color.WHITE)
         draw(canvas)
 
         val emptyBitmap =
             Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig())
-        Log.v("ZhoppaBit","empty = ${bitmap.sameAs(emptyBitmap)}")
-        return if(bitmap.sameAs(emptyBitmap)){
+        return if (bitmap.sameAs(emptyBitmap)) {
             null
 
         } else {
@@ -494,12 +501,24 @@ private class SketchView : View {
 
     }
 
-    fun setLineWidth(width: Int){
+    fun isEmpty(): Boolean {
+        val bitmap =
+            Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+        draw(canvas)
+
+        val emptyBitmap =
+            Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        return bitmap.sameAs(emptyBitmap)
+    }
+
+    fun setLineWidth(width: Int) {
         penLineWidth = width.toFloat()
         mPaint?.strokeWidth = width.toFloat()
     }
 
-    fun setEraserWidth(width: Int){
+    fun setEraserWidth(width: Int) {
         eraserLineWidth = width.toFloat()
     }
 
