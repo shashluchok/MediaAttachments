@@ -353,7 +353,7 @@ class MediaAdapter(
                         notifyItemRemoved(ind)
                     }
                 }
-//                notifyItemRangeChanged(0,oldList.size)
+                notifyItemRangeChanged(0,mediaList.size)
 
             }
             newData.size > oldList.size -> {
