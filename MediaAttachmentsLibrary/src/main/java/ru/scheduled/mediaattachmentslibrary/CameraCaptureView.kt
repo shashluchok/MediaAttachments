@@ -839,13 +839,13 @@ class CameraCaptureView: ConstraintLayout {
                             imageCapture!!.targetRotation =  Surface.ROTATION_0
                         }
                         90 -> {
-                            imageCapture!!.targetRotation =  Surface.ROTATION_90
+                            imageCapture!!.targetRotation =  Surface.ROTATION_270
                         }
                         180->{
                             imageCapture!!.targetRotation =  Surface.ROTATION_180
                         }
                         270 -> {
-                            imageCapture!!.targetRotation =  Surface.ROTATION_270
+                            imageCapture!!.targetRotation =  Surface.ROTATION_90
                         }
                     }
                     if (orientation == 0 || orientation == 180) {
