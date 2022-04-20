@@ -351,10 +351,10 @@ class MediaAdapter(
                     if(!newData.contains(it)){
                         mediaList.removeAt(ind)
                         notifyItemRemoved(ind)
-                        notifyItemRangeChanged(ind,mediaList.size)
+                        notifyItemRangeChanged(ind,itemCount)
                     }
                 }
-
+                notifyItemRangeChanged(0,itemCount)
             }
             newData.size > oldList.size -> {
                 mediaList.clear()
