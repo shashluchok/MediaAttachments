@@ -24,6 +24,7 @@ import ru.scheduled.mediaattachmentslibrary.CustomLinearLayoutManager
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 import ru.scheduled.mediaattachmentslibrary.R
 import java.io.File
+import java.lang.Exception
 import kotlin.math.abs
 
 
@@ -346,15 +347,20 @@ class MediaAdapter(
                 notifyDataSetChanged()
             }
             newData.size < oldList.size -> {
-                oldList.onEach {
-                    val ind = mediaList.indexOf(it)
-                    if(!newData.contains(it)){
-                        mediaList.removeAt(ind)
-                        notifyItemRemoved(ind)
-                        notifyItemRangeChanged(ind,itemCount)
+                try {
+                    oldList.onEach {
+                        val ind = mediaList.indexOf(it)
+                        if (!newData.contains(it)) {
+                            mediaList.removeAt(ind)
+                            notifyItemRemoved(ind)
+                            notifyItemRangeChanged(ind, itemCount)
+                        }
                     }
+                    notifyItemRangeChanged(0, itemCount)
                 }
-                notifyItemRangeChanged(0,itemCount)
+                catch (e:Exception) {
+                    notifyDataSetChanged()
+                }
             }
             newData.size > oldList.size -> {
                 mediaList.clear()
