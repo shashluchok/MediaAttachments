@@ -8,12 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MenuInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.scheduled.mediaattachmentslibrary.CameraCaptureView
+import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +43,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+      dfdfdfsdfsd.initRecycler(
+          mediaPlayer = MediaPlayer(),onItemClicked = {},onItemsSelected = {}
+      )
+      dfdfdfsdfsd.setData(
+          List<MediaRecyclerView.MediaNote>(5) {
+              MediaRecyclerView.MediaNote(
+                  id = "2132131",
+                  mediaType = MediaRecyclerView.MediaItemTypes.TYPE_TEXT,
+                  value = "Fdsfsdfds",
+                  recognizedSpeechText = "",
+                  voiceAmplitudesList = listOf(),
+                  imageNoteText = "",
+                  timeStamp = 1231,
+              )
+          }
+      )
 
     }
 

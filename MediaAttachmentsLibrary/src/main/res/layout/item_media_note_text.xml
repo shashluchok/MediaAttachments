@@ -47,12 +47,9 @@
                     android:id="@+id/item_media_note_text_tv"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:background="@null"
                     android:textColor="@color/defaultText"
                     android:textSize="15sp"
-
+                    android:gravity="start"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

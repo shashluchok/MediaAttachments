@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainCl"
+    android:background="@color/black"
     tools:context=".MainActivity">
 
-    <ru.scheduled.mediaattachmentslibrary.ImageEditorView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+   <ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
+       android:id="@+id/dfdfdfsdfsd"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
