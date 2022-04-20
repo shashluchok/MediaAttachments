@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isEmpty
 import androidx.core.widget.ImageViewCompat
 import kotlinx.android.synthetic.main.layout_media_sketch.view.*
 import java.io.ByteArrayOutputStream
@@ -103,9 +104,11 @@ class SketchDrawingView : ConstraintLayout {
         }
 
         media_sketch_eraser.setOnClickListener {
-            if (!isEraserEnabled) {
-                isEraserEnabled = true
-                onEraserEnabled(isEraserEnabled)
+            if(!sketch_view.isEmpty()) {
+                if (!isEraserEnabled) {
+                    isEraserEnabled = true
+                    onEraserEnabled(isEraserEnabled)
+                }
             }
 
         }
