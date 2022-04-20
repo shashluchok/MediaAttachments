@@ -141,8 +141,8 @@ class MediaAdapter(
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onBindViewHolder(holder: NotesViewHolder, s: Int) {
-        val position = holder.bindingAdapterPosition
+    override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
+//        val position = holder.bindingAdapterPosition
         val contentView: View?
         val checkBox: ImageView?
         val selectionView: View?
