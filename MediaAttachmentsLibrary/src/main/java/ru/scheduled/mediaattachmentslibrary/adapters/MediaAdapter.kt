@@ -141,8 +141,8 @@ class MediaAdapter(
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-//        val position = holder.bindingAdapterPosition
+    override fun onBindViewHolder(holder: NotesViewHolder, s: Int) {
+        val position = holder.bindingAdapterPosition
         val contentView: View?
         val checkBox: ImageView?
         val selectionView: View?
@@ -347,13 +347,13 @@ class MediaAdapter(
             }
             newData.size < oldList.size -> {
                 oldList.onEach {
+                    val ind = mediaList.indexOf(it)
                     if(!newData.contains(it)){
-                        val ind = mediaList.indexOf(it)
                         mediaList.removeAt(ind)
                         notifyItemRemoved(ind)
+                        notifyItemRangeChanged(ind,mediaList.size)
                     }
                 }
-                notifyItemRangeChanged(0,mediaList.size)
 
             }
             newData.size > oldList.size -> {
