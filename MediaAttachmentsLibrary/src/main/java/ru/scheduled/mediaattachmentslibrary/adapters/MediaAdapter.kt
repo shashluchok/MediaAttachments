@@ -201,7 +201,7 @@ class MediaAdapter(
                 viewToSetOnClickListener = null
                 selectionView=  holder.itemView.selection_view_text
                 checkBox = holder.itemView.note_checkbox_text
-                contentView = holder.itemView.note_text_cl
+                contentView = holder.itemView.note_text_cv
                 holder.itemView.item_media_note_text_tv.setText(mediaList[position].value)
             }
             else -> {
@@ -390,7 +390,7 @@ class MediaAdapter(
 
                     MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> {
                         checkBoxM = it.note_checkbox_text
-                        contentViewM = it.note_text_cl
+                        contentViewM = it.note_text_cv
                         selectionViewM = it.selection_view_text
                     }
 

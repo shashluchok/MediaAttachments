@@ -50,6 +50,8 @@
                     android:textColor="@color/defaultText"
                     android:textSize="15sp"
                     android:gravity="start"
+                    android:paddingEnd="12dp"
+                    android:paddingStart="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
