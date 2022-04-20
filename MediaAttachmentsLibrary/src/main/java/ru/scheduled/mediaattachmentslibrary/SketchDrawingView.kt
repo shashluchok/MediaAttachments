@@ -54,10 +54,6 @@ class SketchDrawingView : ConstraintLayout {
 
     }
 
-    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
-        sketch_view.setOnEmptyCallback(callback)
-    }
-
     fun wasAnythingDrawn():Boolean{
         return sketch_view.wasAnythingDrawn()
     }
@@ -216,8 +212,6 @@ private class SketchView : View {
 
     private var existingSketchBitmap:Bitmap? = null
 
-    private var onEmpty: ((Boolean)->Unit)? = null
-
     constructor(context: Context?) : super(context) {
         initView()
     }
@@ -235,9 +229,6 @@ private class SketchView : View {
         initView()
     }
 
-    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
-        onEmpty = callback
-    }
 
     fun wasAnythingDrawn():Boolean{
         return states.isNotEmpty()
@@ -324,7 +315,6 @@ private class SketchView : View {
         } else {
             canvas.drawPath(circlePath!!, circlePaint!!);
         }
-        onEmpty?.invoke(isEmpty())
 
     }
 
@@ -499,18 +489,6 @@ private class SketchView : View {
             stream.toByteArray()
         }
 
-    }
-
-    fun isEmpty(): Boolean {
-        val bitmap =
-            Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-
-        val canvas = Canvas(bitmap)
-        draw(canvas)
-
-        val emptyBitmap =
-            Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
-        return bitmap.sameAs(emptyBitmap)
     }
 
     fun setLineWidth(width: Int) {
