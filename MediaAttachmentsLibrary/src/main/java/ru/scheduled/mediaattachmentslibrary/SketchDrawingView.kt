@@ -255,7 +255,16 @@ private class SketchView : View {
     }
 
     fun wasAnythingDrawn():Boolean{
-        return states.isNotEmpty()
+        val bitmap =
+            Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+        draw(canvas)
+        return if(existingSketchBitmap!=null){
+            bitmap.sameAs(existingSketchBitmap)
+        }
+        else states.isNotEmpty()
+
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
