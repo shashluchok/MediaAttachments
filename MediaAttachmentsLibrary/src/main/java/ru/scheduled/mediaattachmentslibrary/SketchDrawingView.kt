@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -77,7 +78,7 @@ class SketchDrawingView : ConstraintLayout {
         }
     }
 
-    fun getSketchByteArray(): ByteArray {
+    fun getSketchByteArray(): ByteArray? {
         return sketch_view.getSketchByteArray()
     }
 
@@ -330,8 +331,9 @@ private class SketchView : View {
                 style = Paint.Style.STROKE
                 strokeJoin = Paint.Join.ROUND
                 strokeCap = Paint.Cap.ROUND
-                color = Color.WHITE
+                color = Color.TRANSPARENT
                 strokeWidth = eraserLineWidth
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             }
 
         } else {
@@ -459,17 +461,27 @@ private class SketchView : View {
         initView()
     }
 
-    fun getSketchByteArray(): ByteArray {
+
+    fun getSketchByteArray(): ByteArray? {
         val bitmap =
                 Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
 
-        canvas.drawColor(Color.WHITE)
+
+        val canvas = Canvas(bitmap)
+//        canvas.drawColor(Color.WHITE)
         draw(canvas)
 
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
-        return stream.toByteArray()
+        val emptyBitmap =
+            Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig())
+        Log.v("Zhoppa23","same? = ${bitmap.sameAs(emptyBitmap)}")
+        return if(bitmap.sameAs(emptyBitmap)){
+            null
+        } else {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            stream.toByteArray()
+        }
+
     }
 
     fun setLineWidth(width: Int){

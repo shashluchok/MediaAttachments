@@ -12,6 +12,19 @@
        android:id="@+id/dfdfdfsdfsd"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
+       android:visibility="gone"
        />
+   <ru.scheduled.mediaattachmentslibrary.SketchDrawingView
+       android:id="@+id/sketch"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"/>
+
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/fab"
+       android:layout_width="50dp"
+       android:layout_height="50dp"
+       android:background="@color/defaultActive"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

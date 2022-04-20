@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+      fab.setOnClickListener {
+          sketch.getSketchByteArray()
+      }
+      sketch.setEdittingToolbarVisibility(isVisible = true)
       dfdfdfsdfsd.initRecycler(
           mediaPlayer = MediaPlayer(),onItemClicked = {},onItemsSelected = {}
       )
