@@ -352,6 +352,14 @@ class MediaToolbarView : ConstraintLayout {
             visibility = if (value) View.VISIBLE else View.GONE
         }
 
+    fun stopRecording(){
+        isDraggingBlocked = true
+        dispatchTouchEvents(
+            notes_voice_iv,
+            listOf(MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP)
+        )
+    }
+
     fun stopEditing(){
         onCancelEditting?.invoke()
         setEdittingViewsVisibility(areVisible = false)
