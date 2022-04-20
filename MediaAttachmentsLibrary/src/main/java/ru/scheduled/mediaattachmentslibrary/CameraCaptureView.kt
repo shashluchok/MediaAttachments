@@ -28,6 +28,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class CameraCaptureView: ConstraintLayout {
 
     private val MEDIA_NOTES_INTERNAL_DIRECTORY = "media_attachments"
@@ -831,8 +832,22 @@ class CameraCaptureView: ConstraintLayout {
             context) {
             override fun onOrientationChanged(orientation: Int) {
 
-                if (camera_fragment_main_layout != null && change_camera_iv != null) {
 
+                if (camera_fragment_main_layout != null && change_camera_iv != null) {
+                    when(orientation){
+                        0 -> {
+                            imageCapture!!.targetRotation =  Surface.ROTATION_0
+                        }
+                        90 -> {
+                            imageCapture!!.targetRotation =  Surface.ROTATION_90
+                        }
+                        180->{
+                            imageCapture!!.targetRotation =  Surface.ROTATION_180
+                        }
+                        270 -> {
+                            imageCapture!!.targetRotation =  Surface.ROTATION_270
+                        }
+                    }
                     if (orientation == 0 || orientation == 180) {
                         val animator = ValueAnimator.ofFloat(change_camera_iv.rotation, 0f)
 
