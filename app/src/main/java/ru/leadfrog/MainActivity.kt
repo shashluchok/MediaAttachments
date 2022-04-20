@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.scheduled.mediaattachmentslibrary.CameraCaptureView
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
@@ -48,6 +49,9 @@ class MainActivity : AppCompatActivity() {
           sketch.getSketchByteArray()
       }
       sketch.setEdittingToolbarVisibility(isVisible = true)
+      sketch.setOnEmptyCallback {
+          Toast.makeText(this,"$it",Toast.LENGTH_SHORT).show()
+      }
       dfdfdfsdfsd.initRecycler(
           mediaPlayer = MediaPlayer(),onItemClicked = {},onItemsSelected = {}
       )

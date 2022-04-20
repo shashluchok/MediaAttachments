@@ -54,6 +54,10 @@ class SketchDrawingView : ConstraintLayout {
 
     }
 
+    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
+        sketch_view.setOnEmptyCallback(callback)
+    }
+
     fun wasAnythingDrawn():Boolean{
         return sketch_view.wasAnythingDrawn()
     }
@@ -212,6 +216,10 @@ private class SketchView : View {
 
     private var existingSketchBitmap:Bitmap? = null
 
+    private var onEmpty: ((Boolean)->Unit)? = null
+
+    private var isChecking = false
+
     constructor(context: Context?) : super(context) {
         initView()
     }
@@ -229,6 +237,9 @@ private class SketchView : View {
         initView()
     }
 
+    fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
+        onEmpty = callback
+    }
 
     fun wasAnythingDrawn():Boolean{
         return states.isNotEmpty()
@@ -258,6 +269,7 @@ private class SketchView : View {
             MotionEvent.ACTION_UP -> {
                 touchUp()
                 invalidate()
+                isChecking = true
 
             }
         }
@@ -314,6 +326,10 @@ private class SketchView : View {
             canvas.drawPath(mPath!!, mPaint!!);
         } else {
             canvas.drawPath(circlePath!!, circlePaint!!);
+        }
+        if(isChecking){
+            isChecking = false
+            onEmpty?.invoke(isEmpty())
         }
 
     }
@@ -373,7 +389,9 @@ private class SketchView : View {
             }
             for (state in states) {
                 mCanvas!!.drawPath(state.first, state.second)
+
             }
+            isChecking = true
         }
 
 
@@ -414,6 +432,7 @@ private class SketchView : View {
                 mCanvas!!.drawPath(state.first, state.second)
 
             }
+            isChecking = true
         }
         invalidate()
     }
@@ -489,6 +508,18 @@ private class SketchView : View {
             stream.toByteArray()
         }
 
+    }
+
+    fun isEmpty(): Boolean {
+        val bitmap =
+            Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(bitmap)
+        draw(canvas)
+
+        val emptyBitmap =
+            Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        return bitmap.sameAs(emptyBitmap)
     }
 
     fun setLineWidth(width: Int) {
