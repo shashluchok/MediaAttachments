@@ -261,7 +261,7 @@ private class SketchView : View {
         val canvas = Canvas(bitmap)
         draw(canvas)
         return if(existingSketchBitmap!=null){
-            bitmap.sameAs(existingSketchBitmap)
+            !bitmap.sameAs(existingSketchBitmap)
         }
         else states.isNotEmpty()
 
