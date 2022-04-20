@@ -124,6 +124,10 @@ class SketchDrawingView : ConstraintLayout {
 
     init {
         View.inflate(context, R.layout.layout_media_sketch, this)
+        sketch_view.setOnDeleteLastCallback {
+            isEraserEnabled = false
+            onEraserEnabled(isEraserEnabled)
+        }
         enableDrawBack(false)
         enableDrawForward(false)
         onEraserEnabled(isEnabled = false)
@@ -223,6 +227,8 @@ private class SketchView : View {
 
     private var isChecking = false
 
+    private var onDeleteLast :(()->Unit)? = null
+
     constructor(context: Context?) : super(context) {
         initView()
     }
@@ -238,6 +244,10 @@ private class SketchView : View {
         defStyleAttr
     ) {
         initView()
+    }
+
+    fun setOnDeleteLastCallback(callback: () -> Unit){
+        onDeleteLast = callback
     }
 
     fun setOnEmptyCallback(callback: (isEmpty: Boolean) -> Unit){
@@ -332,7 +342,9 @@ private class SketchView : View {
         }
         if(isChecking){
             isChecking = false
-            onEmpty?.invoke(isEmpty())
+            val isEmpty = isEmpty()
+            if(isEmpty) onDeleteLast?.invoke()
+            onEmpty?.invoke(isEmpty)
         }
 
     }
@@ -433,10 +445,10 @@ private class SketchView : View {
         } else {
             for (state in states) {
                 mCanvas!!.drawPath(state.first, state.second)
-
             }
-            isChecking = true
+
         }
+        isChecking = true
         invalidate()
     }
 
