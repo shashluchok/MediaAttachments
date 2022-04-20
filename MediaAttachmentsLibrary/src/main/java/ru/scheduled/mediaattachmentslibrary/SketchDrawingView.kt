@@ -225,7 +225,7 @@ private class SketchView : View {
 
     private var onEmpty: ((Boolean)->Unit)? = null
 
-    private var isChecking = false
+    private var isChecking = true
 
     private var onDeleteLast :(()->Unit)? = null
 
@@ -551,7 +551,8 @@ private class SketchView : View {
         options.inMutable = true
         existingSketchBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
         existingSketchBitmap?.let{
-            mCanvas?.drawBitmap(it, 0f, 0f, mBitmapPaint);
+            mCanvas?.drawBitmap(it, 0f, 0f, mBitmapPaint)
+            isChecking = true
             invalidate()
         }
     }
