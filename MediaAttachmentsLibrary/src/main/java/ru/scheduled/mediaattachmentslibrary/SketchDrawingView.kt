@@ -1,11 +1,10 @@
 package ru.scheduled.mediaattachmentslibrary
 
+import android.R.attr.data
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -65,10 +64,11 @@ class SketchDrawingView : ConstraintLayout {
         if (isVisible) setEdittingToolbarClickListeners()
     }
 
-    fun setExistingSketch(drawable: Drawable) {
+    fun setExistingSketch(byteArray: ByteArray) {
         sketch_view.apply {
             reInit()
-            background = drawable
+            setExistingSketchByteArray(byteArray)
+
         }
     }
 
@@ -456,7 +456,6 @@ private class SketchView : View {
     }
 
     fun reInit() {
-        this.background = null
         turnEraserMode(false)
         initView()
     }
@@ -473,7 +472,6 @@ private class SketchView : View {
 
         val emptyBitmap =
             Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig())
-        Log.v("Zhoppa23","same? = ${bitmap.sameAs(emptyBitmap)}")
         return if(bitmap.sameAs(emptyBitmap)){
             null
         } else {
@@ -493,5 +491,12 @@ private class SketchView : View {
         eraserLineWidth = width.toFloat()
     }
 
+    fun setExistingSketchByteArray(byteArray: ByteArray){
+        val options = BitmapFactory.Options()
+        options.inMutable = true
+        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
+        val canvas = Canvas(bmp)
+        draw(canvas)
+    }
 
 }
