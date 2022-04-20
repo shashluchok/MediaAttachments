@@ -57,4 +57,5 @@ dependencies {
 
     implementation 'com.github.florent37:kotlinpleaseanimate:1.0.2'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
 }

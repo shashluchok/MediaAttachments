@@ -437,6 +437,9 @@ class MediaToolbarView : ConstraintLayout {
         }
 
         bottom_notes_add_text_note_et.setOnFocusChangeListener { _, isFocused ->
+            if(isFocused){
+                onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
+            }
             if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) {
                 setUpTextNoteCreationToolbarVisibility(isVisible = isFocused)
             }

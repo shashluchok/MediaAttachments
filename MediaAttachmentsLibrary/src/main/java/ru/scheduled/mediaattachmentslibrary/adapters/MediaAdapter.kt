@@ -1,5 +1,6 @@
 package ru.scheduled.mediaattachmentslibrary.adapters
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
@@ -14,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
 import kotlinx.android.synthetic.main.item_media_note_sketch.view.*
 import kotlinx.android.synthetic.main.item_media_note_text.view.*
@@ -22,6 +24,7 @@ import ru.scheduled.mediaattachmentslibrary.CustomLinearLayoutManager
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 import ru.scheduled.mediaattachmentslibrary.R
 import java.io.File
+import kotlin.math.abs
 
 
 class MediaAdapter(
@@ -29,7 +32,40 @@ class MediaAdapter(
     private val onItemClicked: (MediaRecyclerView.MediaNote)->Unit
 ) : RecyclerView.Adapter<MediaAdapter.NotesViewHolder>() {
 
-    class NotesViewHolder(v: View) : RecyclerView.ViewHolder(v)
+   inner class NotesViewHolder(v: View) : RecyclerView.ViewHolder(v), AnimateViewHolder {
+        override fun animateAddImpl(
+            holder: RecyclerView.ViewHolder,
+            listener: Animator.AnimatorListener
+        ) {
+            itemView.animate().apply {
+                alpha(1f)
+                duration = 100
+                setListener(listener)
+            }.start()
+        }
+
+        override fun animateRemoveImpl(
+            holder: RecyclerView.ViewHolder,
+            listener: Animator.AnimatorListener
+        ) {
+            itemView.animate().apply {
+                alpha(0f)
+                    .scaleX(1.5f)
+                    .scaleY(1.5f)
+                duration = 150
+                interpolator = interpolator
+            }.start()
+        }
+
+        override fun preAnimateAddImpl(holder: RecyclerView.ViewHolder) {
+            itemView.setAlpha(0f)
+        }
+
+        override fun preAnimateRemoveImpl(holder: RecyclerView.ViewHolder) {
+
+        }
+
+    }
 
     private lateinit var mContext: Context
 
