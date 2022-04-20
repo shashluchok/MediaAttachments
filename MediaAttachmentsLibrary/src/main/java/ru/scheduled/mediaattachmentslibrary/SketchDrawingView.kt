@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,21 +23,21 @@ class SketchDrawingView : ConstraintLayout {
     private var isEraserEnabled = false
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-            context,
-            attrs,
-            defStyle
+        context,
+        attrs,
+        defStyle
     )
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
 
         activeColor = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "activeColor",
-                R.color.defaultActive
+            "http://schemas.android.com/apk/res-auto",
+            "activeColor",
+            R.color.defaultActive
         )
         disabledColor = attrs.getAttributeResourceValue(
-                "http://schemas.android.com/apk/res-auto",
-                "disabledColor",
-                R.color.defaultNotActive
+            "http://schemas.android.com/apk/res-auto",
+            "disabledColor",
+            R.color.defaultNotActive
         )
 
 
@@ -132,15 +133,15 @@ class SketchDrawingView : ConstraintLayout {
         val eraserColor = if(isEnabled) activeColor else disabledColor
 
         ImageViewCompat.setImageTintList(
-                media_sketch_pen_iv, ColorStateList.valueOf(
+            media_sketch_pen_iv, ColorStateList.valueOf(
                 ContextCompat.getColor(context, penColor)
-        )
+            )
         )
 
         ImageViewCompat.setImageTintList(
-                media_sketch_eraser_iv, ColorStateList.valueOf(
+            media_sketch_eraser_iv, ColorStateList.valueOf(
                 ContextCompat.getColor(context, eraserColor)
-        )
+            )
         )
         sketch_view.turnEraserMode(isEnabled)
     }
@@ -149,9 +150,9 @@ class SketchDrawingView : ConstraintLayout {
         media_sketch_draw_back_iv.imageTintList = null
         if (on) {
             ImageViewCompat.setImageTintList(
-                    media_sketch_draw_back_iv, ColorStateList.valueOf(
+                media_sketch_draw_back_iv, ColorStateList.valueOf(
                     ContextCompat.getColor(context, activeColor)
-            )
+                )
             )
         } else {
             ImageViewCompat.setImageTintList(
@@ -166,9 +167,9 @@ class SketchDrawingView : ConstraintLayout {
         media_sketch_draw_forward_iv.imageTintList = null
         if (on) {
             ImageViewCompat.setImageTintList(
-                    media_sketch_draw_forward_iv, ColorStateList.valueOf(
+                media_sketch_draw_forward_iv, ColorStateList.valueOf(
                     ContextCompat.getColor(context, activeColor)
-            )
+                )
             )
         } else {
             ImageViewCompat.setImageTintList(
@@ -211,6 +212,8 @@ private class SketchView : View {
 
     private var isEraseModeOn = false
 
+    private var existingSketchBitmap:Bitmap? = null
+
     constructor(context: Context?) : super(context) {
         initView()
     }
@@ -221,9 +224,9 @@ private class SketchView : View {
 
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-            context,
-            attrs,
-            defStyleAttr
+        context,
+        attrs,
+        defStyleAttr
     ) {
         initView()
     }
@@ -352,6 +355,11 @@ private class SketchView : View {
     fun drawForward() {
 
         if (backedStates.isNotEmpty()) {
+            mCanvas!!.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+
+            existingSketchBitmap?.let{
+                mCanvas?.drawBitmap(it, 0f, 0f, mBitmapPaint);
+            }
             val lastState = backedStates.last()
 
             val forwardedPath = Path()
@@ -364,7 +372,6 @@ private class SketchView : View {
             if (onHasUnDoStackCallback != null) {
                 onHasUnDoStackCallback?.invoke(true)
             }
-            mCanvas!!.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
             for (state in states) {
                 mCanvas!!.drawPath(state.first, state.second)
             }
@@ -381,9 +388,12 @@ private class SketchView : View {
 
     fun drawBack() {
 
-        mCanvas!!.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
 
         if (states.isNotEmpty()) {
+            mCanvas!!.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
+            existingSketchBitmap?.let{
+                mCanvas?.drawBitmap(it, 0f, 0f, mBitmapPaint);
+            }
             val lastState = states.last()
 
             val backedPath = Path()
@@ -463,7 +473,7 @@ private class SketchView : View {
 
     fun getSketchByteArray(): ByteArray? {
         val bitmap =
-                Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
+            Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
 
 
         val canvas = Canvas(bitmap)
@@ -472,8 +482,10 @@ private class SketchView : View {
 
         val emptyBitmap =
             Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig())
+        Log.v("ZhoppaBit","empty = ${bitmap.sameAs(emptyBitmap)}")
         return if(bitmap.sameAs(emptyBitmap)){
             null
+
         } else {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
@@ -494,9 +506,11 @@ private class SketchView : View {
     fun setExistingSketchByteArray(byteArray: ByteArray){
         val options = BitmapFactory.Options()
         options.inMutable = true
-        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
-        val canvas = Canvas(bmp)
-        draw(canvas)
+        existingSketchBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
+        existingSketchBitmap?.let{
+            mCanvas?.drawBitmap(it, 0f, 0f, mBitmapPaint);
+            invalidate()
+        }
     }
 
 }
