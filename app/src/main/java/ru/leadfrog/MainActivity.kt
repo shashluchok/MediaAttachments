@@ -18,7 +18,7 @@ import ru.scheduled.mediaattachmentslibrary.CameraCaptureView
 class MainActivity : AppCompatActivity() {
 
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+  /*  override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v: View? = currentFocus
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(event)
 
     }
-
+*/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

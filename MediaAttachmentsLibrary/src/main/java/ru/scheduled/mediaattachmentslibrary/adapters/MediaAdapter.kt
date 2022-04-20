@@ -326,6 +326,7 @@ class MediaAdapter(
                     if(!oldList.contains(it))
                         notifyItemInserted(newData.indexOf(it))
                 }
+                parentRecyclerView.scrollToPosition(mediaList.lastIndex)
             }
             newData.size == oldList.size -> {
 

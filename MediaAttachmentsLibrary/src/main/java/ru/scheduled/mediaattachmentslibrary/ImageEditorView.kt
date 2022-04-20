@@ -12,6 +12,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -146,8 +147,8 @@ class ImageEditorView : ConstraintLayout {
         }
 
         image_note_ready_iv.setOnClickListener {
-            image_note_et.clearFocus()
             hideKeyboard()
+            image_note_et.clearFocus()
         }
 
         image_note_et.setOnFocusChangeListener { _, isFocused ->
