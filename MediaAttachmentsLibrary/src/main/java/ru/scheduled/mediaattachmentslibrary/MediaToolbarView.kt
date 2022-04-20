@@ -418,7 +418,7 @@ class MediaToolbarView : ConstraintLayout {
         }
 
         bottom_notes_add_text_note_et.doOnTextChanged { text, _, _, _ ->
-            if (text.isNullOrEmpty() && !note_editing_title_tv.isVisible) {
+            if (text?.trim().isNullOrEmpty() && !note_editing_title_tv.isVisible) {
                 ImageViewCompat.setImageTintList(
                     bottom_notes_add_text_note_send_iv,
                     ColorStateList.valueOf(
