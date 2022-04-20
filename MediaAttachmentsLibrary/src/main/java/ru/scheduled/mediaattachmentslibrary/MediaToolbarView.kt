@@ -448,7 +448,7 @@ class MediaToolbarView : ConstraintLayout {
             if(isFocused){
                 onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
             }
-            if (bottom_notes_add_text_note_et.text.isNullOrEmpty()) {
+            if (bottom_notes_add_text_note_et.text.isNullOrEmpty() && !note_editing_title_tv.isVisible) {
                 setUpTextNoteCreationToolbarVisibility(isVisible = isFocused)
             }
         }
@@ -728,9 +728,12 @@ class MediaToolbarView : ConstraintLayout {
                 requestFocus()
                 this.text?.clear()
             }
-            val keyboard =
-                (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
-            keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            Handler(Looper.getMainLooper()).postDelayed({
+                val keyboard =
+                    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+                keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
+            },60)
+
         }
     }
 
