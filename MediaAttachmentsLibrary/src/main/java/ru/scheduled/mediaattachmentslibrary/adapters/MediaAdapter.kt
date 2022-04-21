@@ -347,13 +347,7 @@ class MediaAdapter(
                 notifyDataSetChanged()
             }
             newData.size < oldList.size -> {
-                oldList.onEach {
-                    val ind = mediaList.indexOf(it)
-                    if(!newData.contains(it)){
-                        notifyItemRemoved(ind)
-                    }
-                }
-                notifyItemRangeChanged(0,itemCount)
+               notifyDataSetChanged()
             }
             newData.size > oldList.size -> {
                 mediaList.clear()
