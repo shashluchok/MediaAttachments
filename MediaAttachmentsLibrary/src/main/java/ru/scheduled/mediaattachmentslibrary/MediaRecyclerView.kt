@@ -59,6 +59,10 @@ class MediaRecyclerView : RecyclerView {
         return (this.adapter as MediaAdapter).getSelectedItems()
     }
 
+    fun getData():List<MediaNote>{
+        return (this.adapter as MediaAdapter).getData()
+    }
+
     fun setData(data: List<MediaNote>) {
         if (this.adapter !is MediaAdapter) {
             return

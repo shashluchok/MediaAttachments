@@ -32,6 +32,7 @@ class MediaAdapter(
     private val onItemClicked: (MediaRecyclerView.MediaNote)->Unit
 ) : RecyclerView.Adapter<MediaAdapter.NotesViewHolder>() {
 
+
    inner class NotesViewHolder(v: View) : RecyclerView.ViewHolder(v), AnimateViewHolder {
         override fun animateAddImpl(
             holder: RecyclerView.ViewHolder,
@@ -82,6 +83,13 @@ class MediaAdapter(
 
     private var isSelecting = false
 
+    companion object {
+        const val TYPE_SKETCH = 0
+        const val TYPE_TEXT = 1
+        const val TYPE_VOICE = 2
+        const val TYPE_PHOTO = 3
+    }
+
     private val selectedNotes = mutableListOf<MediaRecyclerView.MediaNote>()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -90,12 +98,9 @@ class MediaAdapter(
         mContext = recyclerView.context
     }
 
-    companion object {
-        const val TYPE_SKETCH = 0
-        const val TYPE_TEXT = 1
-        const val TYPE_VOICE = 2
-        const val TYPE_PHOTO = 3
-    }
+   fun getData():List<MediaRecyclerView.MediaNote>{
+       return mediaList
+   }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -338,8 +343,7 @@ class MediaAdapter(
         val oldList = mutableListOf<ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote>().also{
             it.addAll(mediaList)
         }
-        mediaList.clear()
-        mediaList.addAll(newData)
+
         when {
             oldList.size == 0 || newData.size == 0-> {
                 mediaList.clear()
@@ -347,7 +351,15 @@ class MediaAdapter(
                 notifyDataSetChanged()
             }
             newData.size < oldList.size -> {
-               notifyDataSetChanged()
+                oldList.onEach {
+                    val ind = mediaList.indexOf(it)
+                    if(!newData.contains(it)){
+                        mediaList.removeAt(ind)
+                        notifyItemRemoved(ind)
+                        notifyItemRangeChanged(ind,itemCount)
+                    }
+                }
+                notifyItemRangeChanged(0,itemCount)
             }
             newData.size > oldList.size -> {
                 mediaList.clear()
