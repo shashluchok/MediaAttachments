@@ -355,7 +355,7 @@ class MediaAdapter(
                     val ind = mediaList.indexOf(it)
                     if(!newData.contains(it)){
                         mediaList.removeAt(ind)
-                        notifyItemRemoved(ind)
+                        notifyItemRangeRemoved(ind,1)
                         notifyItemRangeChanged(ind,itemCount)
                     }
                 }
@@ -378,6 +378,7 @@ class MediaAdapter(
                 }
             }
         }
+        notifyItemRangeChanged(0,itemCount)
         releasePlayer()
 
     }
