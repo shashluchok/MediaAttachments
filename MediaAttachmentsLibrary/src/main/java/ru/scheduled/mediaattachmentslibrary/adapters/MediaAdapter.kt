@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -351,15 +353,20 @@ class MediaAdapter(
                 notifyDataSetChanged()
             }
             newData.size < oldList.size -> {
-                oldList.onEach {
-                    val ind = mediaList.indexOf(it)
-                    if(!newData.contains(it)){
-                        mediaList.removeAt(ind)
-                        notifyItemRangeRemoved(ind,1)
-                        notifyItemRangeChanged(ind,itemCount)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    oldList.onEach {
+                        val ind = mediaList.indexOf(it)
+                        if (!newData.contains(it)) {
+                            mediaList.removeAt(ind)
+                            notifyItemRemoved(ind)
+                            notifyItemRangeChanged(ind, itemCount)
+                        }
                     }
-                }
-                notifyItemRangeChanged(0,itemCount)
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        notifyItemRangeChanged(0, itemCount)
+                    },100)
+                },200)
             }
             newData.size > oldList.size -> {
                 mediaList.clear()
