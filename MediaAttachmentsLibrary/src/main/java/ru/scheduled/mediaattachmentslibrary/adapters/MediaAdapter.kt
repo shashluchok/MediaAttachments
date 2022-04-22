@@ -388,9 +388,6 @@ class MediaAdapter(
                         if(!oldList.contains(it))
                             notifyItemChanged(newData.indexOf(it))
                     }
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        notifyItemRangeChanged(0, itemCount)
-                    },100)
                 },200)
 
             }
