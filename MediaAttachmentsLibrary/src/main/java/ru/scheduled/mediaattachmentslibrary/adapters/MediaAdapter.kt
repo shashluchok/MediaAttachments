@@ -16,6 +16,7 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
@@ -164,6 +165,8 @@ class MediaAdapter(
                 contentView = holder.itemView.item_media_note_sketch_cv
                 Glide.with(mContext)
                     .load(mediaList[position].value)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                     .transition(DrawableTransitionOptions.withCrossFade(300))
                      .into(holder.itemView.media_note_sketch_iv)
 
@@ -231,6 +234,8 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_photo
                 Glide.with(mContext).load(mediaList[position].value)
                     .transition(DrawableTransitionOptions.withCrossFade(300))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
                         .into(holder.itemView.media_note_photo_iv)
 
                 if (!mediaList[position].imageNoteText.isNullOrEmpty()) {
