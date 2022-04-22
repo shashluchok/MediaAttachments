@@ -50,7 +50,7 @@ class MediaToolbarView : ConstraintLayout {
 
     private var touchedButNotRecording = false
 
-    private var stopped = false
+    private var stopped = true
 
     private var toolTip:ToolTip? = null
 
