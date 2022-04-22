@@ -383,11 +383,16 @@ class MediaAdapter(
                 parentRecyclerView.scrollToPosition(mediaList.lastIndex)
             }
             newData.size == oldList.size -> {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    newData.onEach {
+                        if(!oldList.contains(it))
+                            notifyItemChanged(newData.indexOf(it))
+                    }
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        notifyItemRangeChanged(0, itemCount)
+                    },100)
+                },200)
 
-                newData.onEach {
-                    if(!oldList.contains(it))
-                        notifyItemChanged(newData.indexOf(it))
-                }
             }
         }
         notifyItemRangeChanged(0,itemCount)
