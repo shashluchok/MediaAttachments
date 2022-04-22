@@ -48,7 +48,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textColor="@color/defaultText"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/default_15sp"
                     android:gravity="start"
                     android:paddingEnd="12dp"
                     android:paddingStart="12dp"
