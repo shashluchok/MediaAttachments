@@ -98,11 +98,14 @@ class CameraCaptureView: ConstraintLayout {
     }
 
     fun setOnGalleryClickedCallback(callback: () -> Unit) {
-        previous_photo_container.setOnClickListener {
-            if (previous_photo_iv.visibility == View.VISIBLE) {
-                callback.invoke()
+        Handler(Looper.getMainLooper()).postDelayed({
+            previous_photo_container?.setOnClickListener {
+                if (previous_photo_iv.visibility == View.VISIBLE) {
+                    callback.invoke()
+                }
             }
-        }
+        },300)
+
     }
 
     fun setOnCloseClickedCallback(callback: () -> Unit) {
@@ -836,16 +839,16 @@ class CameraCaptureView: ConstraintLayout {
                 if (camera_fragment_main_layout != null && change_camera_iv != null) {
                     when(orientation){
                         0 -> {
-                            imageCapture!!.targetRotation =  Surface.ROTATION_0
+                            imageCapture?.targetRotation =  Surface.ROTATION_0
                         }
                         90 -> {
-                            imageCapture!!.targetRotation =  Surface.ROTATION_270
+                            imageCapture?.targetRotation =  Surface.ROTATION_270
                         }
                         180->{
-                            imageCapture!!.targetRotation =  Surface.ROTATION_180
+                            imageCapture?.targetRotation =  Surface.ROTATION_180
                         }
                         270 -> {
-                            imageCapture!!.targetRotation =  Surface.ROTATION_90
+                            imageCapture?.targetRotation =  Surface.ROTATION_90
                         }
                     }
                     if (orientation == 0 || orientation == 180) {
@@ -866,12 +869,12 @@ class CameraCaptureView: ConstraintLayout {
                         animator.duration = 500
                         animator.start()
 
-                        flashlight_icon.rotation = 360 - orientation.toFloat()
-                        previous_photo_iv.rotation = 360 - orientation.toFloat()
+                        flashlight_icon?.rotation = 360 - orientation.toFloat()
+                        previous_photo_iv?.rotation = 360 - orientation.toFloat()
 
                         if (lastRotation != orientation) {
 
-                            video_recording_swipe_to_cancel_tv.apply {
+                            video_recording_swipe_to_cancel_tv?.apply {
                                 alpha = 0f
                                 text = getSwipeToCancelTextFromCurrentRotation(360 - orientation)
                                 animate()
