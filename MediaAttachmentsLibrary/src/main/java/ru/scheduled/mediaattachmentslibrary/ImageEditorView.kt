@@ -147,8 +147,11 @@ class ImageEditorView : ConstraintLayout {
         }
 
         image_note_ready_iv.setOnClickListener {
-            hideKeyboard()
             image_note_et.clearFocus()
+            hideKeyboard()
+            it.isEnabled = false
+            Handler(Looper.getMainLooper()).postDelayed({it.isEnabled = true},200)
+
         }
 
         image_note_et.setOnFocusChangeListener { _, isFocused ->

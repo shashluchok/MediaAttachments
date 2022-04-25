@@ -130,6 +130,20 @@ class VoiceRecorder(private val mContext: Context) {
                 if (mMediaRecorder == null) {
                     mediaNotesWithText.value = recognizedSpeechText ?: ""
                 }
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(400)
+                    try {
+                        mAudioManager.setStreamVolume(
+                            AudioManager.STREAM_NOTIFICATION,
+                            mStreamVolume,
+                            0
+                        )
+                    }
+                    catch (e:java.lang.Exception){
+                        e.printStackTrace()
+                    }
+
+                }
             }
 
             override fun onBeginningOfSpeech() {
