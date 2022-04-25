@@ -36,18 +36,23 @@ class VoiceRecorder(private val mContext: Context) {
 
     private val mHandler: Handler = Handler(Looper.getMainLooper())
     private lateinit var mAudioManager: AudioManager
-    private var mStreamVolume = 0
+    private var mStreamVolume = Pair(0,0)
 
 
     fun startRecord() {
         try {
             mAudioManager = mContext.getSystemService(AppCompatActivity.AUDIO_SERVICE) as AudioManager
-            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
+            mStreamVolume = Pair(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC),mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
             try {
                 mAudioManager.setStreamVolume(
                         AudioManager.STREAM_NOTIFICATION,
                         0,
                         0
+                )
+                mAudioManager.setStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    0,
+                    0
                 )
             }
             catch (e:java.lang.Exception){
@@ -104,8 +109,13 @@ class VoiceRecorder(private val mContext: Context) {
                         try {
                             mAudioManager.setStreamVolume(
                                     AudioManager.STREAM_NOTIFICATION,
-                                    mStreamVolume,
+                                    mStreamVolume.second,
                                     0
+                            )
+                            mAudioManager.setStreamVolume(
+                                AudioManager.STREAM_NOTIFICATION,
+                                mStreamVolume.first,
+                                0
                             )
                         }
                         catch (e:java.lang.Exception){
@@ -123,7 +133,7 @@ class VoiceRecorder(private val mContext: Context) {
             }
 
             override fun onError(error: Int) {
-                Log.v("MediaToolbar", "VoiceRecorder onError")
+                Log.v("MediaToolbar", "VoiceRecorder onError $error")
                 if(error == SpeechRecognizer.ERROR_NO_MATCH) {
                     startSpeechRecognizer(appName = mContext.packageName)
                 }
@@ -135,7 +145,12 @@ class VoiceRecorder(private val mContext: Context) {
                     try {
                         mAudioManager.setStreamVolume(
                             AudioManager.STREAM_NOTIFICATION,
-                            mStreamVolume,
+                            mStreamVolume.second,
+                            0
+                        )
+                        mAudioManager.setStreamVolume(
+                            AudioManager.STREAM_NOTIFICATION,
+                            mStreamVolume.first,
                             0
                         )
                     }

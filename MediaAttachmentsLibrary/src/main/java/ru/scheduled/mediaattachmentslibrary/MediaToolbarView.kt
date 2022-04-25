@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -25,7 +26,11 @@ import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
 import kotlinx.coroutines.*
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("ClickableViewAccessibility")
 class MediaToolbarView : ConstraintLayout {
 
@@ -565,9 +570,9 @@ class MediaToolbarView : ConstraintLayout {
                                     amplitudesList[0].first,
                                     amplitudesList[0].second
                                 )
+
                                 amplitudesList.removeAt(0)
                                 newAmplitudes.clear()
-
 
                             }
                         }
