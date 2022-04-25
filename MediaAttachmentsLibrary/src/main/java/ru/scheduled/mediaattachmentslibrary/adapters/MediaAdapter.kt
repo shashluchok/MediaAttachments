@@ -386,6 +386,10 @@ class MediaAdapter(
                 Handler(Looper.getMainLooper()).postDelayed({
                     newData.onEach {
                         if(!oldList.contains(it))
+                            mediaList[newData.indexOf(it)].apply {
+                                value = it.value
+                                recognizedSpeechText = it.recognizedSpeechText
+                            }
                             notifyItemChanged(newData.indexOf(it))
                     }
                     Handler(Looper.getMainLooper()).postDelayed({

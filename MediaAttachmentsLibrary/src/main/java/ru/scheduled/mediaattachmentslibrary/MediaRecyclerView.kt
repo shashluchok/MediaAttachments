@@ -79,8 +79,8 @@ class MediaRecyclerView : RecyclerView {
     data class MediaNote(
         val id:String,
         val mediaType: MediaItemTypes,
-        val value: String,
-        val recognizedSpeechText: String,
+        var value: String,
+        var recognizedSpeechText: String,
         val voiceAmplitudesList: List<Int>,
         val imageNoteText: String,
         val timeStamp:Long,
