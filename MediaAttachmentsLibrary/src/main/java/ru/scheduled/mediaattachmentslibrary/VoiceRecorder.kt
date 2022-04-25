@@ -107,13 +107,13 @@ class VoiceRecorder(private val mContext: Context) {
                         delay(400)
                         try {
                             mAudioManager.setStreamVolume(
-                                    AudioManager.STREAM_NOTIFICATION,
-                                    mStreamVolume.second,
+                                    AudioManager.STREAM_MUSIC,
+                                    mStreamVolume.first,
                                     0
                             )
                             mAudioManager.setStreamVolume(
                                 AudioManager.STREAM_NOTIFICATION,
-                                mStreamVolume.first,
+                                mStreamVolume.second,
                                 0
                             )
                         }
@@ -143,13 +143,13 @@ class VoiceRecorder(private val mContext: Context) {
                     delay(400)
                     try {
                         mAudioManager.setStreamVolume(
-                            AudioManager.STREAM_NOTIFICATION,
-                            mStreamVolume.second,
+                            AudioManager.STREAM_MUSIC,
+                            mStreamVolume.first,
                             0
                         )
                         mAudioManager.setStreamVolume(
                             AudioManager.STREAM_NOTIFICATION,
-                            mStreamVolume.first,
+                            mStreamVolume.second,
                             0
                         )
                     }
