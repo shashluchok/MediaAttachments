@@ -133,7 +133,7 @@ class VoiceRecorder(private val mContext: Context) {
 
             override fun onError(error: Int) {
                 Log.v("MediaToolbar", "VoiceRecorder onError $error")
-                if(error == SpeechRecognizer.ERROR_NO_MATCH) {
+                if(error == SpeechRecognizer.ERROR_NO_MATCH && mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0 ) {
                     startSpeechRecognizer(appName = mContext.packageName)
                 }
                 if (mMediaRecorder == null) {
