@@ -34,7 +34,6 @@ class VoiceRecorder(private val mContext: Context) {
 
     private var recognizedSpeechText:String? = null
 
-    private val mHandler: Handler = Handler(Looper.getMainLooper())
     private lateinit var mAudioManager: AudioManager
     private var mStreamVolume = Pair(0,0)
 
