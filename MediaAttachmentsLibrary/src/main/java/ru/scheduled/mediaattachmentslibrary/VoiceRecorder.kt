@@ -87,8 +87,10 @@ class VoiceRecorder(private val mContext: Context) {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, appName)
         intent.putExtra("android.speech.extra.DICTATION_MODE", true)
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false)
+        Log.v("MediaToolbar", "VoiceRecorder startSpeechRecognizer")
         mSpeechRecognizer?.setRecognitionListener(object : RecognitionListener {
             override fun onResults(results: Bundle) {
+                Log.v("MediaToolbar", "VoiceRecorder onResults")
                 val resultsList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 recognizedSpeechText += " " + (resultsList as MutableList<String>).joinToString()
 
@@ -117,22 +119,21 @@ class VoiceRecorder(private val mContext: Context) {
             }
 
             override fun onReadyForSpeech(params: Bundle) {
-                Log.v("VoiceRecRec","onReadyForSpeech.")
+                Log.v("MediaToolbar", "VoiceRecorder onReadyForSpeech")
             }
 
             override fun onError(error: Int) {
-
+                Log.v("MediaToolbar", "VoiceRecorder onError")
                 if(error == SpeechRecognizer.ERROR_NO_MATCH) {
                     startSpeechRecognizer(appName = mContext.packageName)
                 }
                 if (mMediaRecorder == null) {
                     mediaNotesWithText.value = recognizedSpeechText ?: ""
                 }
-                Log.v("VoiceRecRec","onError.$error")
             }
 
             override fun onBeginningOfSpeech() {
-                Log.v("VoiceRecRec","onBeginningOfSpeech.")
+                Log.v("MediaToolbar", "VoiceRecorder onBeginningOfSpeech")
             }
 
             override fun onBufferReceived(buffer: ByteArray) {
@@ -140,10 +141,12 @@ class VoiceRecorder(private val mContext: Context) {
             }
 
             override fun onEndOfSpeech() {
-                Log.v("VoiceRecRec","onEndOfSpeech.")
+                Log.v("MediaToolbar", "VoiceRecorder onEndOfSpeech")
             }
 
-            override fun onEvent(eventType: Int, params: Bundle) {}
+            override fun onEvent(eventType: Int, params: Bundle) {
+                Log.v("MediaToolbar", "VoiceRecorder onEvent")
+            }
             override fun onPartialResults(partialResults: Bundle) {}
             override fun onRmsChanged(rmsdB: Float) {}
         })
@@ -180,6 +183,7 @@ class VoiceRecorder(private val mContext: Context) {
 
     fun stopRecord(onSuccess: (fileName: String) -> Unit) {
         try {
+            Log.v("MediaToolbar", "VoiceRecorder stopRecord")
             amplitudeListener?.cancel()
             amplitudeListener=null
             mMediaRecorder?.stop()

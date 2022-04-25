@@ -12,11 +12,11 @@
        android:id="@+id/dfdfdfsdfsd"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:visibility="visible"
+       android:visibility="gone"
        />
    <ru.scheduled.mediaattachmentslibrary.SketchDrawingView
        android:id="@+id/sketch"
-
+      android:visibility="gone"
        android:layout_width="match_parent"
        android:layout_height="match_parent"/>
 
@@ -24,8 +24,14 @@
        android:id="@+id/fab"
        android:layout_width="50dp"
        android:layout_height="50dp"
+       android:visibility="gone"
        android:background="@color/defaultActive"
        app:layout_constraintStart_toStartOf="parent"
        app:layout_constraintTop_toTopOf="parent" />
+
+   <ru.scheduled.mediaattachmentslibrary.MediaToolbarView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

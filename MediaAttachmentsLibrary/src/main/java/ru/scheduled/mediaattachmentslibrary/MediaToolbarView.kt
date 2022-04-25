@@ -10,6 +10,7 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.os.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -65,6 +66,8 @@ class MediaToolbarView : ConstraintLayout {
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
 
+    private var onRecognizedSpeech: ((String) -> Unit)? = null
+
     private var onMediaEditingCancel: (() -> Unit)? = null
     private var onMediaCopy: (() -> Unit)? = null
     private var onMediaEdit: (() -> Unit)? = null
@@ -75,7 +78,7 @@ class MediaToolbarView : ConstraintLayout {
     private var onOpenCamera: (() -> Unit)? = null
     private var onOpenSketch: (() -> Unit)? = null
 
-    private var onCompleteRecording: ((amplitudesList: List<Int>, speech: String, filePath: String) -> Unit)? =
+    private var onCompleteRecording: ((amplitudesList: List<Int>, filePath: String) -> Unit)? =
         null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
@@ -104,6 +107,10 @@ class MediaToolbarView : ConstraintLayout {
         edit_iv.setOnClickListener {
             callback.invoke()
         }
+    }
+
+    fun setOnSpeechRecognizedCallback(callback: (recognizedSpeech:String) -> Unit) {
+        onRecognizedSpeech = callback
     }
 
     fun setOnMediaDeleteClickedCallback(callback: () -> Unit) {
@@ -272,7 +279,7 @@ class MediaToolbarView : ConstraintLayout {
         onStartRecording = callback
     }
 
-    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, speech: String, filePath: String) -> Unit) {
+    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, filePath: String) -> Unit) {
         onCompleteRecording = callback
     }
 
@@ -502,6 +509,7 @@ class MediaToolbarView : ConstraintLayout {
                                         isVoiceBackgroundBeingAnimated = false
                                         isRecording = true
                                     }
+                                    Log.v("MediaToolbar", "Started recording")
                                     voiceRecorder.startRecord()
                                     voiceRecordingStartMillis = System.currentTimeMillis()
 
@@ -534,6 +542,7 @@ class MediaToolbarView : ConstraintLayout {
                                 .duration = 50
                         }
                         voiceRecorder.stopRecord { file ->
+                            Log.v("MediaToolbar", "Stopped recording, File = $file")
 
                             val recordDuration =
                                 System.currentTimeMillis() - voiceRecordingStartMillis
@@ -552,6 +561,11 @@ class MediaToolbarView : ConstraintLayout {
                                 val tempList = mutableListOf<Int>()
                                 tempList.addAll(newAmplitudes)
                                 amplitudesList.add(Pair(tempList, file))
+                                onCompleteRecording?.invoke(
+                                    amplitudesList[0].first,
+                                    amplitudesList[0].second
+                                )
+                                amplitudesList.removeAt(0)
                                 newAmplitudes.clear()
 
 
@@ -599,15 +613,15 @@ class MediaToolbarView : ConstraintLayout {
         voiceRecorder.mediaNotesWithText.observe(
             (context as AppCompatActivity),
             androidx.lifecycle.Observer {
-
-                if (amplitudesList.isNotEmpty()) {
+                onRecognizedSpeech?.invoke(it)
+               /* if (amplitudesList.isNotEmpty()) {
                     onCompleteRecording?.invoke(
                         amplitudesList[0].first,
                         it,
                         amplitudesList[0].second
                     )
                     amplitudesList.removeAt(0)
-                }
+                }*/
 
             })
 
