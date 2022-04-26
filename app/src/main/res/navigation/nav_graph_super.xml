@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+    <fragment
+        android:id="@+id/mediaNotesFragment"
+        android:name="ru.leadfrog.ui.media_attachments.media_notes.MediaNotesFragment"
+        android:label="MediaNotesFragment" >
+        <action
+            android:id="@+id/action_mediaNotesFragment_to_cameraCaptureFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/cameraCaptureFragment" />
+        <action
+            android:id="@+id/action_mediaNotesFragment_to_mediaSketchFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/mediaSketchFragment" />
+        <action
+            android:id="@+id/action_mediaNotesFragment_to_mediaImageViewerFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/mediaImageViewerFragment" />
+        <action
+            android:id="@+id/action_mediaNotesFragment_to_imageCropFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/imageCropFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraCaptureFragment"
+        android:name="ru.leadfrog.ui.media_attachments.camera_capture.CameraCaptureFragment"
+        android:label="CameraCaptureFragment" >
+        <action
+            android:id="@+id/action_cameraCaptureFragment_to_imageCropFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/imageCropFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mediaSketchFragment"
+        android:name="ru.leadfrog.ui.media_attachments.media_sketch.MediaSketchFragment"
+        android:label="MediaSketchFragment" />
+    <fragment
+        android:id="@+id/mediaImageViewerFragment"
+        android:name="ru.leadfrog.ui.media_attachments.media_image_viewer.MediaImageViewerFragment"
+        android:label="MediaImageViewerFragment" />
+    <fragment
+        android:id="@+id/imageCropFragment"
+        android:name="ru.leadfrog.ui.media_attachments.camera_capture.image_crop.ImageCropFragment"
+        android:label="ImageCropFragment" />
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.leadfrog.ui.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_mediaNotesFragment"
+            app:enterAnim="@anim/scale_in"
+            app:exitAnim="@anim/scale_out"
+            app:popEnterAnim="@anim/pop_scale_in"
+            app:popExitAnim="@anim/pop_scale_out"
+            app:destination="@id/mediaNotesFragment" />
+    </fragment>
+
+
+</navigation>

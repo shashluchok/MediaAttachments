@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pop_up_media_notes_edit_overlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_pop_up_overlay">
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pop_up_media_notes_edit_main_cl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginEnd="13dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <include
+            android:id="@+id/media_note_photo"
+            layout="@layout/item_media_note_photo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/media_note_sketch"
+            layout="@layout/item_media_note_sketch"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/media_note_text"
+            layout="@layout/item_media_note_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/media_note_voice"
+            layout="@layout/layout_visualizer_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pop_up_media_notes_options_cl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0"
+        android:background="@drawable/bg_pop_up_media_notes"
+        app:layout_constraintStart_toStartOf="@+id/pop_up_media_notes_edit_main_cl"
+        app:layout_constraintTop_toBottomOf="@+id/pop_up_media_notes_edit_main_cl">
+
+        <TextView
+            android:id="@+id/pop_up_media_notes_delete_tv"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_semibold"
+            android:paddingStart="14dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="@string/delete"
+            android:textColor="@color/app_red"
+            android:textSize="@dimen/default_17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pop_up_media_notes_edit_tv" />
+
+        <ImageView
+            android:id="@+id/pop_up_media_notes_delete_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pop_up_media_notes_delete_tv"
+            app:layout_constraintEnd_toEndOf="@+id/pop_up_media_notes_delete_tv"
+            app:layout_constraintTop_toTopOf="@+id/pop_up_media_notes_delete_tv"
+            app:srcCompat="@drawable/edits_remove" />
+
+        <View
+            android:id="@+id/pop_up_media_notes_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:alpha="0.7"
+            android:background="@color/profile_summary_rows_divider"
+            app:layout_constraintBottom_toTopOf="@+id/pop_up_media_notes_delete_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/pop_up_media_notes_edit_tv"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_pro_semibold"
+            android:paddingStart="14dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="@string/edit"
+            android:textColor="@color/app_black"
+            android:textSize="@dimen/default_17sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/pop_up_media_notes_edit_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            app:layout_constraintBottom_toTopOf="@+id/pop_up_media_notes_delete_tv"
+            app:layout_constraintEnd_toEndOf="@+id/pop_up_media_notes_edit_tv"
+            app:layout_constraintTop_toTopOf="@+id/pop_up_media_notes_edit_tv"
+            app:srcCompat="@drawable/sketch_pen"
+            app:tint="@color/black" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

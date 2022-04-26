@@ -92,7 +92,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/close_new"
-            android:tint="@color/defaultTextLight"
+            app:tint="@color/defaultTextLight"
             android:visibility="gone"
             android:layout_marginEnd="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/note_editing_note_content_tv"

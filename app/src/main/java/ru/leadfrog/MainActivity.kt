@@ -1,74 +1,92 @@
 package ru.leadfrog
 
-import android.app.Activity
-import android.content.Context
-import android.graphics.Rect
-import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.MenuInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.scheduled.mediaattachmentslibrary.CameraCaptureView
-import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
+import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
+import ru.leadfrog.ui.base.BaseActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-
-  /*  override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            val v: View? = currentFocus
-            if (v is EditText) {
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
-                }
-                return true
-            }
-
-        }
-        return super.dispatchTouchEvent(event)
-
-    }
-*/
+    var navHostFragment: Fragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
 
-      fab.setOnClickListener {
-          sketch.getSketchByteArray()
-      }
-      sketch.setEdittingToolbarVisibility(isVisible = true)
-      sketch.setOnEmptyCallback {
-          Toast.makeText(this,"$it",Toast.LENGTH_SHORT).show()
-      }
-      dfdfdfsdfsd.initRecycler(
-          mediaPlayer = MediaPlayer(),onItemClicked = {},onItemsSelected = {}
-      )
-      dfdfdfsdfsd.setData(
-          List<MediaRecyclerView.MediaNote>(5) {
-              MediaRecyclerView.MediaNote(
-                  id = "2132131",
-                  mediaType = MediaRecyclerView.MediaItemTypes.TYPE_TEXT,
-                  value = "Fdsfsdfds",
-                  recognizedSpeechText = "",
-                  voiceAmplitudesList = listOf(),
-                  imageNoteText = "",
-                  timeStamp = 1231,
-              )
-          }
-      )
+        please(duration = 0L) {
+            animate(loaderCl) toBe {
+                invisible()
+                leftOf(mainCl)
+            }
+        }.start()
 
     }
 
+    fun showLoader(){
+        please(duration = 0L) {
+            animate(loaderCl) toBe {
+                originalPosition()
+            }
+        }.thenCouldYou(150L) {
+            animate(loaderCl) toBe {
+                visible()
+            }
+        }.start()
+    }
+    fun hideLoader(){
+        please(duration = 150L) {
+            animate(loaderCl) toBe {
+                invisible()
+            }
+        }.thenCouldYou(150L) {
+            animate(loaderCl) toBe {
+                leftOf(mainCl)
+            }
+        }.start()
+    }
+
+    override fun onBackPressed() {
+            if (popUpAlert == null) {
+
+                val fragment =
+                    navHostFragment?.childFragmentManager?.fragments?.last()
+                if (fragment is IOnBackPressed) {
+                    (fragment as? IOnBackPressed)?.onBackPressed()?.let {
+                        if (it) {
+                            super.onBackPressed()
+                        } else {
+                            /*if (fragment.childFragmentManager.fragments.isNotEmpty()) {
+                                val m = fragment.childFragmentManager.fragments.last()
+                                val n = m.childFragmentManager.fragments.last()
+                                if (n is IOnBackPressed) {
+                                    (n as? IOnBackPressed)?.onBackPressed()?.let {
+                                        if (it) {
+                                            super.onBackPressed()
+                                        } else {
+                                            return
+                                        }
+                                    }
+                                }
+                            } else {
+                                return
+                            }*/
+                            return
+                        }
+                    }
+                } else {
+                    super.onBackPressed()
+                }
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val frag = navHostFragment?.childFragmentManager?.fragments?.lastOrNull()
+        frag?.let{
+            frag.onActivityResult(requestCode,resultCode,data)
+        }
+    }
 }

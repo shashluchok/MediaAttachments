@@ -84,7 +84,8 @@ class MediaRecyclerView : RecyclerView {
         val voiceAmplitudesList: List<Int>,
         val imageNoteText: String,
         val timeStamp:Long,
-        var isChosen:Boolean = false
+        var isChosen:Boolean = false,
+        var loadPercent:Int = 0
 
     ):Parcelable
 }

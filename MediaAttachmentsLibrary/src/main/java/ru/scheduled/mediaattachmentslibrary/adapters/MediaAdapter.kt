@@ -155,6 +155,9 @@ class MediaAdapter(
         val checkBox: ImageView?
         val selectionView: View?
         var viewToSetOnClickListener:View? = null
+        val loadingLayout:View?
+
+
 
         when (getItemViewType(position)) {
 
@@ -389,6 +392,7 @@ class MediaAdapter(
                             mediaList[newData.indexOf(it)].apply {
                                 value = it.value
                                 recognizedSpeechText = it.recognizedSpeechText
+                                loadPercent = it.loadPercent
                             }
                             notifyItemChanged(newData.indexOf(it))
                     }
@@ -420,6 +424,8 @@ class MediaAdapter(
         currentHolder = null
         currentVoice = -1
     }
+
+
 
     private fun onSelecting(isSelecting: Boolean) {
         this.isSelecting = isSelecting

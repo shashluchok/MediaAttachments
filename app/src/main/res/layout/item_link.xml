@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/link_container"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/linkTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="17dp"
+        android:letterSpacing="0.024"
+        tools:text="Elements Envato"
+        android:textColor="@color/app_black"
+        android:textSize="@dimen/default_15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/linkValueTextView"
+        android:layout_width="0dp"
+        android:autoLink="web"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="15dp"
+        tools:text="https://elements.envato.com/ru/all-items/warranty/123/333/22222"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/default_14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/linkTitleTextView"
+        app:layout_constraintTop_toBottomOf="@id/linkTitleTextView" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/default_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/linkValueTextView"
+        app:layout_constraintTop_toBottomOf="@id/linkValueTextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>
