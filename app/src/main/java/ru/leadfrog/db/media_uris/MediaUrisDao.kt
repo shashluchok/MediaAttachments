@@ -11,7 +11,10 @@ interface MediaUrisDao {
     fun getAllMediaNotesByShardId(shardId: String): LiveData<List<DbMediaNotes>>
 
     @Query("SELECT * FROM mediaNotes")
-    fun getAllMediaNotes(): LiveData<List<DbMediaNotes>>
+    fun getAllMediaNotesLiveData(): LiveData<List<DbMediaNotes>>
+
+    @Query("SELECT * FROM mediaNotes")
+    fun getAllMediaNotes(): List<DbMediaNotes>
 
    /* @Query("SELECT * FROM mediaNotes ORDER BY `order` ASC LIMIT 1")
     fun getFirstMediaNoteByShardId(shardId: String): DbMediaNotes*/

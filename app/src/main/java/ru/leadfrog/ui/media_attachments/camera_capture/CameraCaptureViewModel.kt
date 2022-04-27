@@ -90,7 +90,9 @@ class CameraCaptureViewModel(
                         value = fileName.toString(),
                         shardId = shardId,
                         mediaType = "video",
-                        order = System.currentTimeMillis()
+                        order = System.currentTimeMillis(),
+                        downloadPercent = 100,
+                        uploadPercent = 0
                     )
                         saveDbMediaNotes(
                             dbMediaUri

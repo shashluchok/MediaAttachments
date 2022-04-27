@@ -17,4 +17,6 @@ data class DbMediaNotes(
         var imageNoteText:String = "",
         @TypeConverters(AmplitudesConverter::class)
         val voiceAmplitudesList:List<Int>? = listOf(),
+        var uploadPercent:Int,
+        var downloadPercent:Int
 )

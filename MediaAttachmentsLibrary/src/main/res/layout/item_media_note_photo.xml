@@ -2,6 +2,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="6dp"
@@ -19,6 +20,7 @@
         app:layout_constraintEnd_toStartOf="@+id/item_media_note_photo_cv"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/item_media_note_photo_cv"
         android:layout_width="match_parent"
@@ -26,6 +28,7 @@
         android:layout_marginStart="12dp"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginEnd="12dp"
         android:longClickable="true"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
@@ -59,67 +62,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <include
+                android:id="@+id/loadingLayout"
+                layout="@layout/layout_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:focusable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loadingLayoutCl"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        android:focusable="true"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/item_media_note_photo_cv"
-        app:layout_constraintEnd_toEndOf="@+id/item_media_note_photo_cv"
-        app:layout_constraintStart_toStartOf="@+id/item_media_note_photo_cv"
-        app:layout_constraintTop_toTopOf="@+id/item_media_note_photo_cv" >
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardBackgroundColor="@color/defaultActive"
-            app:cardCornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:indeterminate="false"
-                    app:indicatorColor="@color/white"
-                    app:trackCornerRadius="5dp"
-                    app:indicatorSize="2dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/close_new"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
-
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/selection_view_photo"

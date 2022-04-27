@@ -9,6 +9,7 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,21 +19,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
 import kotlinx.android.synthetic.main.item_media_note_sketch.view.*
 import kotlinx.android.synthetic.main.item_media_note_text.view.*
 import kotlinx.android.synthetic.main.item_voice.view.*
+import kotlinx.android.synthetic.main.layout_loading.view.*
 import ru.scheduled.mediaattachmentslibrary.CustomLinearLayoutManager
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 import ru.scheduled.mediaattachmentslibrary.R
 import java.io.File
-import kotlin.math.abs
 
 
 class MediaAdapter(
     private val onItemsSelected: (List<MediaRecyclerView.MediaNote>) -> Unit,
-    private val onItemClicked: (MediaRecyclerView.MediaNote)->Unit
+    private val onItemClicked: (MediaRecyclerView.MediaNote) -> Unit,
+    private val onStartDownloading: (MediaRecyclerView.MediaNote) -> Unit,
+    private val onCancelDownloading: (MediaRecyclerView.MediaNote) -> Unit,
+    private val onCancelUploading: (MediaRecyclerView.MediaNote) -> Unit
 ) : RecyclerView.Adapter<MediaAdapter.NotesViewHolder>() {
 
 
@@ -154,31 +159,44 @@ class MediaAdapter(
         val contentView: View?
         val checkBox: ImageView?
         val selectionView: View?
-        var viewToSetOnClickListener:View? = null
-        val loadingLayout:View?
+        var viewToSetOnClickListener: View? = null
+        val loadingLayoutCl: View?
+        val loadingLayoutIv: ImageView?
+        val loadingLayoutProgressIndicator: CircularProgressIndicator?
 
-
+        val uploadPercent = mediaList[position].uploadPercent
+        val downloadPercent = mediaList[position].downloadPercent
 
         when (getItemViewType(position)) {
 
             TYPE_SKETCH -> {
+                loadingLayoutCl = holder.itemView.loadingLayoutSketch
+                loadingLayoutIv = holder.itemView.loadingLayoutIv
+                loadingLayoutProgressIndicator = holder.itemView.loadingLayoutProgress
                 viewToSetOnClickListener = holder.itemView.item_media_note_sketch_cv
                 selectionView = holder.itemView.selection_view_sketch
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
-                Glide.with(mContext)
-                    .load(mediaList[position].value)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .transition(DrawableTransitionOptions.withCrossFade(300))
-                     .into(holder.itemView.media_note_sketch_iv)
+                if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
+                    Glide.with(mContext)
+                        .load(mediaList[position].value)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .transition(DrawableTransitionOptions.withCrossFade(300))
+                        .into(holder.itemView.media_note_sketch_iv)
+                } else if (downloadPercent < 100) {
+                    holder.itemView.media_note_sketch_iv.setImageResource(R.drawable.image_test)
+                }
 
             }
             TYPE_VOICE -> {
+                loadingLayoutCl = holder.itemView.loadingLayoutVoiceCl
+                loadingLayoutIv = holder.itemView.loadingLayoutIv
+                loadingLayoutProgressIndicator = holder.itemView.loadingLayoutProgress
                 viewToSetOnClickListener = null
                 selectionView = holder.itemView.selection_view_voice
                 checkBox = holder.itemView.note_checkbox_voice
-                contentView = holder.itemView.visualizer_view
+                contentView = holder.itemView.voiceNoteCl
 
 
                 holder.itemView.visualizer_view.apply {
@@ -231,15 +249,23 @@ class MediaAdapter(
 
             }
             TYPE_PHOTO -> {
+                loadingLayoutCl = holder.itemView.loadingLayout
+                loadingLayoutIv = holder.itemView.loadingLayout.loadingLayoutIv
+                loadingLayoutProgressIndicator = holder.itemView.loadingLayout.loadingLayoutProgress
                 viewToSetOnClickListener = holder.itemView.item_media_note_photo_cv
                 selectionView = holder.itemView.selection_view_photo
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo
-                Glide.with(mContext).load(mediaList[position].value)
-                    .transition(DrawableTransitionOptions.withCrossFade(300))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+
+                if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
+                    Glide.with(mContext).load(mediaList[position].value)
+                        .transition(DrawableTransitionOptions.withCrossFade(300))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
                         .into(holder.itemView.media_note_photo_iv)
+                } else if (downloadPercent < 100) {
+                    holder.itemView.media_note_photo_iv.setImageResource(R.drawable.image_test)
+                }
 
                 if (!mediaList[position].imageNoteText.isNullOrEmpty()) {
                     holder.itemView.media_note_photo_tv.apply {
@@ -249,13 +275,20 @@ class MediaAdapter(
                 }
             }
             TYPE_TEXT -> {
+                loadingLayoutCl = null
+                loadingLayoutIv = null
+                loadingLayoutProgressIndicator = null
                 viewToSetOnClickListener = null
-                selectionView=  holder.itemView.selection_view_text
+                holder.itemView.textUploadingIv.isVisible = uploadPercent in 0 until 100
+                selectionView = holder.itemView.selection_view_text
                 checkBox = holder.itemView.note_checkbox_text
                 contentView = holder.itemView.note_text_cv
                 holder.itemView.item_media_note_text_tv.setText(mediaList[position].value)
             }
             else -> {
+                loadingLayoutCl = null
+                loadingLayoutIv = null
+                loadingLayoutProgressIndicator = null
                 viewToSetOnClickListener = null
                 checkBox = null
                 contentView = null
@@ -263,8 +296,68 @@ class MediaAdapter(
             }
         }
 
-        viewToSetOnClickListener?.setOnClickListener{
-            onItemClicked.invoke(mediaList[position])
+
+        if (uploadPercent == 100) {
+
+            if (downloadPercent in 0 until 100) {
+
+                loadingLayoutCl?.visibility = View.VISIBLE
+
+                if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
+                else loadingLayoutProgressIndicator?.progress = downloadPercent
+
+                val imageId = if (mediaList[position].isLoadingStopped) {
+                    R.drawable.download
+                } else R.drawable.close_new
+
+                loadingLayoutIv?.apply {
+                    setImageResource(imageId)
+                    setOnClickListener {
+                        if (mediaList[position].isLoadingStopped) {
+                            onStartDownloading.invoke(mediaList[position])
+                            mediaList[position].isLoadingStopped = false
+
+                        } else {
+                            onCancelDownloading.invoke(mediaList[position])
+                            mediaList[position].isLoadingStopped = true
+                        }
+                        val imageId = if (mediaList[position].isLoadingStopped) {
+                            R.drawable.download
+                        } else R.drawable.close_new
+                        setImageResource(imageId)
+                    }
+                }
+
+            } else if (downloadPercent == 100) {
+                loadingLayoutCl?.visibility = View.GONE
+                mediaList[position].isLoadingStopped = true
+            }
+
+        } else {
+            if (uploadPercent in 0 until 100) {
+                loadingLayoutProgressIndicator?.progress = uploadPercent
+                loadingLayoutCl?.visibility = View.VISIBLE
+                val imageId = R.drawable.close_new
+
+                loadingLayoutIv?.apply {
+                    setImageResource(imageId)
+                    setOnClickListener {
+                        onCancelUploading.invoke(mediaList[position])
+                    }
+                }
+            } else if (uploadPercent == 100) {
+                loadingLayoutCl?.visibility = View.GONE
+                mediaList[position].isLoadingStopped = true
+            }
+        }
+
+
+
+
+        viewToSetOnClickListener?.setOnClickListener {
+            if (mediaList[position].downloadPercent == 100 && mediaList[position].uploadPercent == 100) {
+                onItemClicked.invoke(mediaList[position])
+            }
         }
 
         selectionView?.isVisible = isSelecting
@@ -272,32 +365,36 @@ class MediaAdapter(
         if (isSelecting) {
 
             releasePlayer()
-            if (selectedNotes.contains(mediaList[position])) {
-                checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
-                holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
+            if(uploadPercent == 100) {
+                if (selectedNotes.contains(mediaList[position])) {
+                    checkBox?.setImageResource(R.drawable.checkbox_to_unchecked)
+                    holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
 
-            } else {
-                checkBox?.setImageResource(R.drawable.checkbox_to_checked)
-                holder.itemView.setBackgroundColor(Color.TRANSPARENT)
-            }
-            contentView?.apply {
-                animate().x(dpToPx(48)).duration = 0
-            }
-            checkBox?.apply {
-                animate().x(dpToPx(12)).duration = 0
+                } else {
+                    checkBox?.setImageResource(R.drawable.checkbox_to_checked)
+                    holder.itemView.setBackgroundColor(Color.TRANSPARENT)
+                }
+                contentView?.apply {
+                    animate().x(dpToPx(48)).duration = 0
+                }
+
+                checkBox?.apply {
+                    animate().x(dpToPx(12)).duration = 0
+                }
             }
         } else {
             holder.itemView.setBackgroundColor(Color.TRANSPARENT)
             contentView?.apply {
                 animate().x(dpToPx(12)).duration = 0
             }
+
             checkBox?.apply {
                 animate().x(dpToPx(-24)).duration = 0
             }
         }
-        if (contentView == holder.itemView.visualizer_view) {
+        if (contentView == holder.itemView.voiceNoteCl) {
             holder.itemView.visualizer_view.setOnLongClickCallback {
-                if (!isSelecting) {
+                if (!isSelecting && mediaList[position].uploadPercent == 100) {
                     onSelecting(true)
                     holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
                     selectedNotes.add(mediaList[position])
@@ -308,7 +405,7 @@ class MediaAdapter(
         } else {
 
             contentView?.setOnLongClickListener {
-                if (!isSelecting) {
+                if (!isSelecting && mediaList[position].uploadPercent == 100) {
                     onSelecting(true)
                     holder.itemView.setBackgroundColor(Color.parseColor("#E3F5FF"))
                     selectedNotes.add(mediaList[position])
@@ -321,7 +418,7 @@ class MediaAdapter(
         }
 
        selectionView?.setOnClickListener {
-           if (isSelecting) {
+           if (isSelecting &&  mediaList[position].uploadPercent == 100) {
                if (selectedNotes.contains(mediaList[position])) {
                    selectedNotes.remove(mediaList[position])
                    checkBox?.setImageResource(R.drawable.checkbox_to_checked)
@@ -364,10 +461,9 @@ class MediaAdapter(
                 Handler(Looper.getMainLooper()).postDelayed({
                     oldList.onEach {
                         val ind = mediaList.indexOf(it)
-                        if (!newData.contains(it)) {
+                        if (!newData.contains(it) && !newData.map{it.id}.contains(it.id) && ind>=0) {
                             mediaList.removeAt(ind)
                             notifyItemRemoved(ind)
-                            notifyItemRangeChanged(ind, itemCount)
                         }
                     }
 
@@ -380,30 +476,35 @@ class MediaAdapter(
                 mediaList.clear()
                 mediaList.addAll(newData)
                 newData.onEach {
-                    if(!oldList.contains(it))
+                    val ind = newData.indexOf(it)
+                    if (!oldList.contains(it) && !oldList.map{it.id}.contains(it.id) && ind>=0)
                         notifyItemInserted(newData.indexOf(it))
                 }
                 parentRecyclerView.scrollToPosition(mediaList.lastIndex)
+
             }
             newData.size == oldList.size -> {
                 Handler(Looper.getMainLooper()).postDelayed({
                     newData.onEach {
-                        if(!oldList.contains(it))
+                        if (!oldList.contains(it)) {
+
+                            if(it.downloadPercent == 100) {
+                                Log.v("Zhoppa", "new = $it , old = ${mediaList[newData.indexOf(it)]}")
+                            }
                             mediaList[newData.indexOf(it)].apply {
                                 value = it.value
                                 recognizedSpeechText = it.recognizedSpeechText
-                                loadPercent = it.loadPercent
+                                downloadPercent = it.downloadPercent
+                                uploadPercent = it.uploadPercent
                             }
+
                             notifyItemChanged(newData.indexOf(it))
+                        }
                     }
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        notifyItemRangeChanged(0, itemCount)
-                    },100)
                 },200)
 
             }
         }
-        notifyItemRangeChanged(0,itemCount)
         releasePlayer()
 
     }
@@ -441,37 +542,40 @@ class MediaAdapter(
             val contentViewM: View?
             val selectionViewM: View?
             parentRecyclerView.findViewHolderForAdapterPosition(i)?.itemView?.let {
-                when (mediaList[i].mediaType) {
-                    MediaRecyclerView.MediaItemTypes.TYPE_SKETCH -> {
-                        checkBoxM = it.note_checkbox_sketch
-                        contentViewM = it.item_media_note_sketch_cv
-                        selectionViewM = it.selection_view_sketch
-                    }
-                    MediaRecyclerView.MediaItemTypes.TYPE_VOICE -> {
-                        checkBoxM = it.note_checkbox_voice
-                        contentViewM = it.visualizer_view
-                        selectionViewM = it.selection_view_voice
-                    }
-                    MediaRecyclerView.MediaItemTypes.TYPE_PHOTO -> {
-                        checkBoxM = it.note_checkbox_photo
-                        contentViewM = it.item_media_note_photo_cv
-                        selectionViewM = it.selection_view_photo
-                    }
+                if (mediaList[i].uploadPercent == 100) {
+                    when (mediaList[i].mediaType) {
+                        MediaRecyclerView.MediaItemTypes.TYPE_SKETCH -> {
+                            checkBoxM = it.note_checkbox_sketch
+                            contentViewM = it.item_media_note_sketch_cv
+                            selectionViewM = it.selection_view_sketch
+                        }
+                        MediaRecyclerView.MediaItemTypes.TYPE_VOICE -> {
+                            checkBoxM = it.note_checkbox_voice
+                            contentViewM = it.voiceNoteCl
+                            selectionViewM = it.selection_view_voice
+                        }
+                        MediaRecyclerView.MediaItemTypes.TYPE_PHOTO -> {
+                            checkBoxM = it.note_checkbox_photo
+                            contentViewM = it.item_media_note_photo_cv
+                            selectionViewM = it.selection_view_photo
+                        }
 
-                    MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> {
-                        checkBoxM = it.note_checkbox_text
-                        contentViewM = it.note_text_cv
-                        selectionViewM = it.selection_view_text
+                        MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> {
+                            checkBoxM = it.note_checkbox_text
+                            contentViewM = it.note_text_cv
+                            selectionViewM = it.selection_view_text
+                        }
+
+
                     }
-
-
+                    if (!isSelecting) {
+                        it.setBackgroundColor(Color.TRANSPARENT)
+                    }
+                    listOfViews.add(Triple(checkBoxM, contentViewM, selectionViewM))
                 }
-                if(!isSelecting){
-                    it.setBackgroundColor(Color.TRANSPARENT)
-                }
-                listOfViews.add(Triple(checkBoxM,contentViewM,selectionViewM))
             }
         }
+
         listOfViews.onEach {
             val contentOffset: Int
             val checkBoxOffset: Int

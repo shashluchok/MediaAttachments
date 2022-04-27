@@ -17,7 +17,6 @@ import ru.leadfrog.ui.media_attachments.media_notes.toDbMediaNote
 import ru.leadfrog.ui.media_attachments.media_notes.toMediaNote
 
 
-
 class MediaImageViewerFragment : BaseFragment() {
 
     override val layoutResId: Int
@@ -64,14 +63,15 @@ class MediaImageViewerFragment : BaseFragment() {
         clickedMediaNote?.let{
             val dbNote = it.toDbMediaNote()
             viewModel.getMediaUrisByType(shardId, dbNote.mediaType)?.observe(viewLifecycleOwner, Observer {
-                if(it.isEmpty()) {
+                val downloadedList =
+                    it.filter { it.uploadPercent == 100 && it.downloadPercent == 100 }
+                if(downloadedList.isEmpty()) {
                     findNavController().popBackStack()
                     return@Observer
-                }
-                else {
-                    currentIndex = it.indexOfFirst { it.id == dbNote.id }
+                } else {
+                    currentIndex = downloadedList.indexOfFirst { it.id == dbNote.id }
 
-                    mediaViewer.setMediaNotes(it.map { it.toMediaNote() },currentIndex?:0)
+                    mediaViewer.setMediaNotes(downloadedList.map { it.toMediaNote() },currentIndex?:0)
                 }
 
             })

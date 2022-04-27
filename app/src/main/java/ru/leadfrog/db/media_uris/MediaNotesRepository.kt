@@ -15,7 +15,11 @@ class MediaNotesRepository(
         return storage.mediaUrisDao().getAllMediaNotesByShardId(shardId)
     }
 
-    fun getAllMediaNotes(): LiveData<List<DbMediaNotes>> {
+    fun getAllMediaNotesLiveData(): LiveData<List<DbMediaNotes>> {
+        return storage.mediaUrisDao().getAllMediaNotesLiveData()
+    }
+
+    fun getAllMediaNotes(): List<DbMediaNotes> {
         return storage.mediaUrisDao().getAllMediaNotes()
     }
 

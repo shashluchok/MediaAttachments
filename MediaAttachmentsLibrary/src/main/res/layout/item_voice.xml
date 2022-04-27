@@ -17,18 +17,56 @@
         android:background="@drawable/checkbox_to_checked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/item_media_note_sketch_cv"
-        app:layout_constraintEnd_toStartOf="@+id/visualizer_view"
+        app:layout_constraintEnd_toStartOf="@+id/voiceNoteCl"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
-        android:id="@+id/visualizer_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/voiceNoteCl"
         android:layout_width="0dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        >
+
+        <ru.scheduled.mediaattachmentslibrary.VoiceNoteView
+            android:id="@+id/visualizer_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/loadingLayoutVoiceCl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/visualizer_view"
+            app:layout_constraintEnd_toEndOf="@+id/visualizer_view"
+            app:layout_constraintStart_toStartOf="@+id/visualizer_view"
+            app:layout_constraintTop_toTopOf="@+id/visualizer_view">
+
+            <include
+                android:id="@+id/loadingLayoutVoice"
+                layout="@layout/layout_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <FrameLayout
         android:id="@+id/selection_view_voice"

@@ -43,12 +43,17 @@ class MediaRecyclerView : RecyclerView {
     fun initRecycler(
         mediaPlayer: MediaPlayer,
         onItemsSelected: (List<MediaNote>) -> Unit,
-        onItemClicked: (MediaNote) -> Unit
-
+        onItemClicked: (MediaNote) -> Unit,
+        onCancelDownloading: (MediaNote) -> Unit,
+        onCancelUploading: (MediaNote) -> Unit,
+        onStartDownloading: (MediaNote) -> Unit
     ) {
         this.adapter = MediaAdapter(
             onItemsSelected = onItemsSelected,
-            onItemClicked = onItemClicked
+            onItemClicked = onItemClicked,
+            onCancelDownloading = onCancelDownloading ,
+            onCancelUploading = onCancelUploading,
+            onStartDownloading = onStartDownloading
         ).also {
             it.setMediaPlayer(mediaPlayer)
         }
@@ -78,14 +83,16 @@ class MediaRecyclerView : RecyclerView {
     @Parcelize
     data class MediaNote(
         val id:String,
-        val mediaType: MediaItemTypes,
+        val mediaType: MediaRecyclerView.MediaItemTypes,
         var value: String,
         var recognizedSpeechText: String,
         val voiceAmplitudesList: List<Int>,
         val imageNoteText: String,
         val timeStamp:Long,
         var isChosen:Boolean = false,
-        var loadPercent:Int = 0
+        var downloadPercent:Int,
+        var uploadPercent:Int,
+        var isLoadingStopped:Boolean = true
 
     ):Parcelable
 }

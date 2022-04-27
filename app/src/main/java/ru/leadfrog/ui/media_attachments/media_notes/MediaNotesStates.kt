@@ -9,4 +9,5 @@ sealed class MediaNotesStates {
     object MediaNoteSavedState: MediaNotesStates()
     object MediaNoteUpdatedState: MediaNotesStates()
     data class MediaNoteLoadedState(val dbMediaNotes: DbMediaNotes): MediaNotesStates()
+    object DownloadingStatesReset: MediaNotesStates()
 }

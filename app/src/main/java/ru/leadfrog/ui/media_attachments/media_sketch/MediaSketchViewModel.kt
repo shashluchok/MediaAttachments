@@ -137,7 +137,9 @@ class MediaSketchViewModel(private val mediaNotesInteractor: MediaNotesRepositor
                     shardId = shardId,
                     value = fileName,
                     mediaType = mediaType,
-                    order = System.currentTimeMillis()
+                    order = System.currentTimeMillis(),
+                    downloadPercent = 100,
+                    uploadPercent = 0
                 )
                 saveDbMediaNotes(dbMediaUri)
 

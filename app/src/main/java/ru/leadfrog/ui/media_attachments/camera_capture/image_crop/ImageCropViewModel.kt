@@ -123,7 +123,9 @@ class ImageCropViewModel(
                                 value = url.toString(),
                                 mediaType = "photo",
                                 imageNoteText = imageNote ?: "",
-                                order = System.currentTimeMillis()
+                                order = System.currentTimeMillis(),
+                                downloadPercent = 100,
+                                uploadPercent = 0
                             )
                             saveDbMediaNotes(
                                 dbMediaUri
@@ -184,7 +186,9 @@ class ImageCropViewModel(
                             value = fileName.toString(),
                             mediaType = "photo",
                             imageNoteText = imageNote ?: "",
-                            order = System.currentTimeMillis()
+                            order = System.currentTimeMillis(),
+                            downloadPercent = 100,
+                            uploadPercent = 0
                         )
                         saveDbMediaNotes(
                             dbMediaUri

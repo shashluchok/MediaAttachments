@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_media_note_text_cl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="6dp"
-    android:paddingBottom="6dp"
-    >
+    android:paddingBottom="6dp">
 
         <ImageView
             android:id="@+id/note_checkbox_text"
@@ -39,8 +37,7 @@
             android:id="@+id/note_text_cl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="14dp"
-            android:paddingTop="14dp"
+
             >
 
                 <TextView
@@ -50,11 +47,25 @@
                     android:textColor="@color/defaultText"
                     android:textSize="@dimen/default_15sp"
                     android:gravity="start"
-                    android:paddingEnd="12dp"
-                    android:paddingStart="12dp"
+                            android:layout_marginEnd="12dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/textUploadingIv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/text_loader"
+                    android:layout_marginEnd="6dp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

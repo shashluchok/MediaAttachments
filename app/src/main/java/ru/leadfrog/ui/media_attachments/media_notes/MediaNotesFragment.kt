@@ -31,13 +31,11 @@ import kotlinx.android.synthetic.main.layout_toolbar_default.view.*
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import ru.leadfrog.ActivityRequestCodes.Companion.ACTIVITY_REQUEST_CODE_PICK_PHOTO
+import ru.leadfrog.MainActivity
 import ru.leadfrog.PermissionRequestCodes.Companion.PERMISSION_REQUEST_CODE_CAMERA
 import ru.leadfrog.PermissionRequestCodes.Companion.PERMISSION_REQUEST_CODE_STORAGE
-import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
-import ru.leadfrog.MainActivity
 import ru.leadfrog.R
 import ru.leadfrog.db.media_uris.DbMediaNotes
-import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 import ru.leadfrog.isVisible
 import ru.leadfrog.ui.base.BaseFragment
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_ID
@@ -45,6 +43,8 @@ import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_DB_MED
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_PHOTO_PATH
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.IS_NEED_TO_SAVE_TO_GALLERY
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.MEDIA_NOTE
+import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
+import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
 import java.util.*
 
 const val SHARD_ID = "123"
@@ -56,6 +56,8 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
     private var currentTextNoteToEdit: DbMediaNotes? = null
     private val viewModel by inject<MediaNotesViewModel>()
     private lateinit var shardId: String
+
+    private var isFirstTime = true
 
     private var mediaPlayer: MediaPlayer? = null
     private var isListEmpty = false
@@ -158,6 +160,15 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                         it.putString(CURRENT_SHARD_ID, shardId)
                     }
                     findNavController().navigate(R.id.action_mediaNotesFragment_to_mediaImageViewerFragment,bundle)
+                },
+                onCancelUploading = {note->
+                    viewModel.deleteMediaNotes(listOf(note.toDbMediaNote()))
+                },
+                onStartDownloading = {
+                    viewModel.downloadMediaNote(it.id)
+                },
+                onCancelDownloading = {
+                    viewModel.stopDownloading(it.id)
                 }
 
             )
@@ -289,7 +300,9 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                             shardId = shardId,
                             value = text,
                             mediaType = "text",
-                            order = System.currentTimeMillis()
+                            order = System.currentTimeMillis(),
+                            downloadPercent = 100,
+                            uploadPercent = 0
                         )
                         viewModel.saveDbMediaNotes(dbMediaNote)
                     }
@@ -347,7 +360,9 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                     mediaType = "voice",
                     order = System.currentTimeMillis(),
                     recognizedSpeechText = "",
-                    voiceAmplitudesList = amplitudesList
+                    voiceAmplitudesList = amplitudesList,
+                    downloadPercent = 100,
+                    uploadPercent = 0
                 )
                 currentRecordedVoiceNoteId = dbMediaNote.id
                 viewModel.saveDbMediaNotes(dbMediaNote)
@@ -374,20 +389,50 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
             viewModel.saveDbMediaNotes(dbMediaNote)
         }*/
 
-        viewModel.getAllDbMediaNotesByShardId(shardId)?.observe(
-            viewLifecycleOwner
-        , androidx.lifecycle.Observer{
-            isListEmpty = it.isEmpty()
-            (requireParentFragment()).no_media_notes_tv.visibility =
-                if (it.isEmpty()) View.VISIBLE else View.GONE
-            val sortedList = it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
-            media_notes_recycler_view.setData(sortedList.map {
-                it.toMediaNote()
-            })
-        })
+        viewModel.state.observe(viewLifecycleOwner){
+            when(it){
+                MediaNotesStates.DownloadingStatesReset -> {
+                    viewModel.getAllDbMediaNotesByShardId(shardId)?.observe(
+                        viewLifecycleOwner
+                        , androidx.lifecycle.Observer{
+                            isListEmpty = it.isEmpty()
+                            (requireParentFragment()).no_media_notes_tv.visibility =
+                                if (it.isEmpty()) View.VISIBLE else View.GONE
+                            val sortedList = it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
+
+                            media_notes_recycler_view.setData(sortedList.map {
+                                it.toMediaNote().also { it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id) }
+                            })
+                            sortedList.onEach { if(it.uploadPercent != 100) viewModel.uploadMediaNote(it.id) }
+                        })
+                }
+            }
+        }
+
+        if(isFirstTime){
+            isFirstTime = false
+            viewModel.resetDownloadPercentTest()
+        }
+        else {
+            viewModel.getAllDbMediaNotesByShardId(shardId)?.observe(
+                viewLifecycleOwner
+                , androidx.lifecycle.Observer{
+                    isListEmpty = it.isEmpty()
+                    (requireParentFragment()).no_media_notes_tv.visibility =
+                        if (it.isEmpty()) View.VISIBLE else View.GONE
+                    val sortedList = it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
+
+                    media_notes_recycler_view.setData(sortedList.map {
+                        it.toMediaNote().also { it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id) }
+                    })
+                    sortedList.onEach { if(it.uploadPercent != 100) viewModel.uploadMediaNote(it.id) }
+                })
+        }
+
 
 
     }
+
 
     private fun onTextMediaCopied(text: String) {
         animationJob?.cancel()
@@ -653,8 +698,9 @@ fun ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote.toDbMediaNo
         order = timeStamp,
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
-        voiceAmplitudesList = voiceAmplitudesList
-
+        voiceAmplitudesList = voiceAmplitudesList,
+                uploadPercent = uploadPercent,
+        downloadPercent = downloadPercent
     )
 }
 
@@ -672,7 +718,9 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
         timeStamp = order,
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
-        voiceAmplitudesList = voiceAmplitudesList ?: listOf()
+        voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
+        uploadPercent = uploadPercent,
+        downloadPercent = downloadPercent
 
     )
 }
