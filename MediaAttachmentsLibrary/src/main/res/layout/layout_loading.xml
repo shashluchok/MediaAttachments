@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="false"
-            app:indicatorColor="@color/white"
+            app:indicatorColor="@color/lib_white"
             android:minWidth="0dp"
             android:minHeight="0dp"
             app:indicatorSize="32dp"

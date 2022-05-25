@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/lib_white"
     tools:context=".features.detail.media_attachments.media_sketch.MediaSketchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

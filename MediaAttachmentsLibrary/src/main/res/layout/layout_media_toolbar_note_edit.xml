@@ -9,7 +9,7 @@
     android:minHeight="56dp"
     android:alpha="0"
     android:id="@+id/media_toolbar_note_edit_cl"
-    android:background="@color/white"
+    android:background="@color/lib_white"
     >
 
     <View

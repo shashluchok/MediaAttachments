@@ -452,7 +452,7 @@ private class Visualizer : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawColor(resources.getColor(R.color.white), PorterDuff.Mode.MULTIPLY)
+        canvas.drawColor(resources.getColor(R.color.lib_white), PorterDuff.Mode.MULTIPLY)
 
         when(currentState){
             VisualiserStates.PLAYING -> {

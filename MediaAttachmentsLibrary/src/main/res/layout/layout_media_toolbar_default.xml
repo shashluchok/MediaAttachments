@@ -10,7 +10,7 @@
         android:id="@+id/notes_toolbar_main_cl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/lib_white"
         android:clickable="true"
         android:focusable="true"
         android:minHeight="56dp"

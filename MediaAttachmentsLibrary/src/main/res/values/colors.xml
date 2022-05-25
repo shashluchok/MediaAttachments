@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FFFFFFFF</color>
+    <color name="lib_white">#FFFFFFFF</color>
     <color name="defaultActive">#2D9CDB</color>
     <color name="defaultNotActive">#8EC6E7</color>
     <color name="defaultText">#363636</color>

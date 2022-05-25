@@ -22,7 +22,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
             android:src="@drawable/close_ico"
-            app:tint="@color/white" />
+            app:tint="@color/lib_white" />
 
     </FrameLayout>
 
@@ -43,7 +43,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
             android:src="@drawable/flashlight_off"
-            app:tint="@color/white" />
+            app:tint="@color/lib_white" />
 
     </FrameLayout>
 
@@ -104,7 +104,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/toolbar_voice_recording_voice_arrow"
-                app:tint="@color/white" />
+                app:tint="@color/lib_white" />
 
             <TextView
                 android:id="@+id/video_recording_swipe_to_cancel_tv"
@@ -113,7 +113,7 @@
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/defaultSwipeLeftToCancel"
-                android:textColor="@color/white"
+                android:textColor="@color/lib_white"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -222,7 +222,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
-            android:textColor="@color/white"
+            android:textColor="@color/lib_white"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
