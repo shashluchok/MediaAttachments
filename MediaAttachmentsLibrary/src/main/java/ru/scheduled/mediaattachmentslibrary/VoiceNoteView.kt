@@ -10,8 +10,6 @@ import android.graphics.PorterDuff
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
@@ -19,8 +17,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
-import kotlinx.android.synthetic.main.layout_media_sketch.view.*
 import kotlinx.android.synthetic.main.layout_visualizer_view.view.*
 import kotlinx.coroutines.*
 import java.io.File
