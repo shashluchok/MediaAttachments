@@ -32,7 +32,7 @@
         android:id="@+id/start_drawing_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/lib_black"
         android:clickable="false"
         android:focusable="false"
         android:text="@string/start_drawing"

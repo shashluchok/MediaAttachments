@@ -20,7 +20,7 @@
 
 
     <!-- Base -->
-    <color name="black">#FF000000</color>
+    <color name="lib_black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray_button_tint">#B2B2B2</color>
     <color name="app_green">#27AE60</color>

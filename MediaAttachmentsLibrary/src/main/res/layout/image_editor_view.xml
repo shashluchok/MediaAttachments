@@ -5,14 +5,14 @@
     android:id="@+id/editable_photo_preview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/lib_black"
     >
 
     <com.theartofdev.edmodo.cropper.CropImageView
         android:id="@+id/editable_photo_preview_civ"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/black"
+        android:background="@color/lib_black"
         app:cropBorderLineColor="@color/white"
         app:cropBorderLineThickness="1dp"
         app:cropScaleType="fitCenter"
@@ -27,7 +27,7 @@
         android:id="@+id/image_note_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:background="@color/lib_black"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/roboto_regular"

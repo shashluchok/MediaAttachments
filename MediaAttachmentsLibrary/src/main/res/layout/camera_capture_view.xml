@@ -4,7 +4,7 @@
     android:id="@+id/camera_fragment_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/lib_black">
 
     <FrameLayout
         android:id="@+id/close_container"
@@ -78,7 +78,7 @@
         android:id="@+id/camera_bottom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@color/black"
+        android:background="@color/lib_black"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -198,7 +198,7 @@
         android:id="@+id/video_recording_timer_cl"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:background="@color/black"
+        android:background="@color/lib_black"
         android:elevation="3dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
