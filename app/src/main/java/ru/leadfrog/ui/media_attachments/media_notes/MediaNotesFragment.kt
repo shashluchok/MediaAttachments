@@ -707,6 +707,7 @@ fun ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote.toDbMediaNo
 fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote {
     return ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote(
         id = id,
+        parentId = shardId,
         value = value,
         mediaType = when (mediaType) {
             "sketch" -> ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_SKETCH

@@ -83,6 +83,7 @@ class MediaRecyclerView : RecyclerView {
     @Parcelize
     data class MediaNote(
         val id:String,
+        val parentId:String,
         val mediaType: MediaRecyclerView.MediaItemTypes,
         var value: String,
         var recognizedSpeechText: String,
