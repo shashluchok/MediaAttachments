@@ -1,20 +1,12 @@
 package ru.scheduled.mediaattachmentslibrary
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaRecorder
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.*
+import java.io.File
 
 
 class VoiceRecorder(private val mContext: Context) {
@@ -24,49 +16,30 @@ class VoiceRecorder(private val mContext: Context) {
     private var mMediaRecorder:MediaRecorder? = null
     private lateinit var mFileName: String
 
-    private var mSpeechRecognizer:SpeechRecognizer? = null
-
     private var amplitudeListener: Job? = null
 
     var amplitude = MutableLiveData<Int>()
 
-    var mediaNotesWithText = MutableLiveData<String>()
+    var isReady = false
 
-    private var recognizedSpeechText:String? = null
+    private var onComplete:(((fileName: String, text:String) -> Unit))? = null
 
-    private lateinit var mAudioManager: AudioManager
-    private var mStreamVolume = Pair(0,0)
-
+    private val recognizer = Recognizer(mContext){
+        if(onComplete!=null) {
+            onComplete?.invoke(mFileName, it)
+            onComplete = null
+        }
+    }.also { it.initModel{
+        isReady = true
+    } }
 
     fun startRecord() {
         try {
-            mAudioManager = mContext.getSystemService(AppCompatActivity.AUDIO_SERVICE) as AudioManager
-            mStreamVolume = Pair(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC),mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
-            try {
-                mAudioManager.setStreamVolume(
-                        AudioManager.STREAM_NOTIFICATION,
-                        0,
-                        0
-                )
-                mAudioManager.setStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    0,
-                    0
-                )
-            }
-            catch (e:java.lang.Exception){
-               e.printStackTrace()
-            }
-
-            recognizedSpeechText = ""
             createRecordFile()
             mMediaRecorder = MediaRecorder()
-            mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext)
             prepareMediaRecorder()
             mMediaRecorder?.start()
-
-            startSpeechRecognizer(mContext.packageName)
-
+            recognizer.recognizeMicrophone()
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -76,115 +49,10 @@ class VoiceRecorder(private val mContext: Context) {
     }
 
 
-    fun releaseSpeechRecognizer(){
-        recognizedSpeechText = ""
-        mSpeechRecognizer?.cancel()
-        mSpeechRecognizer = null
-    }
-
-
-    fun startSpeechRecognizer(
-            appName: String,
-    ) {
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, appName)
-        intent.putExtra("android.speech.extra.DICTATION_MODE", true)
-        intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false)
-        Log.v("MediaToolbar", "VoiceRecorder startSpeechRecognizer")
-        mSpeechRecognizer?.setRecognitionListener(object : RecognitionListener {
-            override fun onResults(results: Bundle) {
-                Log.v("MediaToolbar", "VoiceRecorder onResults")
-                val resultsList = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                recognizedSpeechText += " " + (resultsList as MutableList<String>).joinToString()
-
-                if (mMediaRecorder != null) {
-                    startSpeechRecognizer(appName = mContext.packageName)
-                } else {
-                    mediaNotesWithText.value = recognizedSpeechText ?: ""
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(400)
-                        try {
-                            mAudioManager.setStreamVolume(
-                                    AudioManager.STREAM_MUSIC,
-                                    mStreamVolume.first,
-                                    0
-                            )
-                            mAudioManager.setStreamVolume(
-                                AudioManager.STREAM_NOTIFICATION,
-                                mStreamVolume.second,
-                                0
-                            )
-                        }
-                        catch (e:java.lang.Exception){
-                            e.printStackTrace()
-                        }
-
-                    }
-
-                }
-                Log.v("VoiceRecRec","onResults. result = ${recognizedSpeechText}")
-            }
-
-            override fun onReadyForSpeech(params: Bundle) {
-                Log.v("MediaToolbar", "VoiceRecorder onReadyForSpeech")
-            }
-
-            override fun onError(error: Int) {
-                Log.v("MediaToolbar", "VoiceRecorder onError $error")
-                if(error == SpeechRecognizer.ERROR_NO_MATCH && mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0 ) {
-                    startSpeechRecognizer(appName = mContext.packageName)
-                }
-                if (mMediaRecorder == null) {
-                    mediaNotesWithText.value = recognizedSpeechText ?: ""
-                }
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(400)
-                    try {
-                        mAudioManager.setStreamVolume(
-                            AudioManager.STREAM_MUSIC,
-                            mStreamVolume.first,
-                            0
-                        )
-                        mAudioManager.setStreamVolume(
-                            AudioManager.STREAM_NOTIFICATION,
-                            mStreamVolume.second,
-                            0
-                        )
-                    }
-                    catch (e:java.lang.Exception){
-                        e.printStackTrace()
-                    }
-
-                }
-            }
-
-            override fun onBeginningOfSpeech() {
-                Log.v("MediaToolbar", "VoiceRecorder onBeginningOfSpeech")
-            }
-
-            override fun onBufferReceived(buffer: ByteArray) {
-
-            }
-
-            override fun onEndOfSpeech() {
-                Log.v("MediaToolbar", "VoiceRecorder onEndOfSpeech")
-            }
-
-            override fun onEvent(eventType: Int, params: Bundle) {
-                Log.v("MediaToolbar", "VoiceRecorder onEvent")
-            }
-            override fun onPartialResults(partialResults: Bundle) {}
-            override fun onRmsChanged(rmsdB: Float) {}
-        })
-        mSpeechRecognizer?.startListening(intent)
-    }
-
     private fun prepareMediaRecorder() {
         mMediaRecorder?.apply{
             reset()
-            setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+            setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setOutputFile(mFileName)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
@@ -209,17 +77,15 @@ class VoiceRecorder(private val mContext: Context) {
 
     }
 
-    fun stopRecord(onSuccess: (fileName: String) -> Unit) {
+    fun stopRecord(onSuccess: (fileName: String, text:String) -> Unit) {
         try {
             Log.v("MediaToolbar", "VoiceRecorder stopRecord")
             amplitudeListener?.cancel()
             amplitudeListener=null
             mMediaRecorder?.stop()
+            recognizer.release()
             releaseRecorder()
-            mSpeechRecognizer?.stopListening()
-            onSuccess.invoke(mFileName)
-
-
+            onComplete = onSuccess
         } catch (e: Exception) {
             amplitudeListener?.cancel()
             amplitudeListener=null

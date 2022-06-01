@@ -71,8 +71,6 @@ class MediaToolbarView : ConstraintLayout {
     private var onCancelEditting: (() -> Unit)? = null
     private var onStartRecording: (() -> Unit)? = null
 
-    private var onRecognizedSpeech: ((String) -> Unit)? = null
-
     private var onMediaEditingCancel: (() -> Unit)? = null
     private var onMediaCopy: (() -> Unit)? = null
     private var onMediaEdit: (() -> Unit)? = null
@@ -83,7 +81,7 @@ class MediaToolbarView : ConstraintLayout {
     private var onOpenCamera: (() -> Unit)? = null
     private var onOpenSketch: (() -> Unit)? = null
 
-    private var onCompleteRecording: ((amplitudesList: List<Int>, filePath: String) -> Unit)? =
+    private var onCompleteRecording: ((amplitudesList: List<Int>, filePath: String, text:String) -> Unit)? =
         null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
@@ -112,10 +110,6 @@ class MediaToolbarView : ConstraintLayout {
         edit_iv.setOnClickListener {
             callback.invoke()
         }
-    }
-
-    fun setOnSpeechRecognizedCallback(callback: (recognizedSpeech:String) -> Unit) {
-        onRecognizedSpeech = callback
     }
 
     fun setOnMediaDeleteClickedCallback(callback: () -> Unit) {
@@ -284,7 +278,7 @@ class MediaToolbarView : ConstraintLayout {
         onStartRecording = callback
     }
 
-    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, filePath: String) -> Unit) {
+    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, filePath: String,text:String) -> Unit) {
         onCompleteRecording = callback
     }
 
@@ -466,7 +460,9 @@ class MediaToolbarView : ConstraintLayout {
         }
 
         notes_voice_iv.setOnTouchListener { v, event ->
-
+            if(!voiceRecorder.isReady){
+                return@setOnTouchListener false
+            }
             when (event.action and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
                     isPointerOn = true
@@ -546,7 +542,7 @@ class MediaToolbarView : ConstraintLayout {
                                 .scaleY(0f)
                                 .duration = 50
                         }
-                        voiceRecorder.stopRecord { file ->
+                        voiceRecorder.stopRecord { file, text ->
                             Log.v("MediaToolbar", "Stopped recording, File = $file")
 
                             val recordDuration =
@@ -568,7 +564,8 @@ class MediaToolbarView : ConstraintLayout {
                                 amplitudesList.add(Pair(tempList, file))
                                 onCompleteRecording?.invoke(
                                     amplitudesList[0].first,
-                                    amplitudesList[0].second
+                                    amplitudesList[0].second,
+                                    text
                                 )
 
                                 amplitudesList.removeAt(0)
@@ -582,7 +579,6 @@ class MediaToolbarView : ConstraintLayout {
                         setEdittingViewsVisibility(areVisible = false)
                         setNotesToolbarViewsVisibility(areVisible = true)
                         stopChronometer()
-
                     }
                 }
 
@@ -613,22 +609,6 @@ class MediaToolbarView : ConstraintLayout {
         setVoiceRecordingViewsVisibility(areVisible = true)
         setNotesToolbarViewsVisibility(areVisible = false)
         setToolbarsLayoutListeners()
-
-
-        voiceRecorder.mediaNotesWithText.observe(
-            (context as AppCompatActivity),
-            androidx.lifecycle.Observer {
-                onRecognizedSpeech?.invoke(it)
-               /* if (amplitudesList.isNotEmpty()) {
-                    onCompleteRecording?.invoke(
-                        amplitudesList[0].first,
-                        it,
-                        amplitudesList[0].second
-                    )
-                    amplitudesList.removeAt(0)
-                }*/
-
-            })
 
         voiceRecorder.amplitude.observe(
             (context as AppCompatActivity),

@@ -351,7 +351,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                 )
             }
 
-            setOnCompleteRecordingCallback { amplitudesList, filePath ->
+            setOnCompleteRecordingCallback { amplitudesList, filePath,text ->
 
                 val dbMediaNote = DbMediaNotes(
                     id = UUID.randomUUID().toString(),
@@ -359,7 +359,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                     value = filePath,
                     mediaType = "voice",
                     order = System.currentTimeMillis(),
-                    recognizedSpeechText = "",
+                    recognizedSpeechText = text,
                     voiceAmplitudesList = amplitudesList,
                     downloadPercent = 100,
                     uploadPercent = 0
@@ -368,12 +368,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                 viewModel.saveDbMediaNotes(dbMediaNote)
             }
 
-            setOnSpeechRecognizedCallback { text ->
-                if(currentRecordedVoiceNoteId!=null && !text.isEmpty()){
-                    viewModel.updateVoiceNoteWithRecognizedSpeech(text = text, noteId = currentRecordedVoiceNoteId!!)
-                    currentRecordedVoiceNoteId = null
-                }
-            }
+
 
         }
         /*for(i in 0..10){
