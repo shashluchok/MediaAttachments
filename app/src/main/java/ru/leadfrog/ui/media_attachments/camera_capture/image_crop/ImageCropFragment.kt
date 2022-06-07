@@ -1,5 +1,6 @@
 package ru.leadfrog.ui.media_attachments.camera_capture.image_crop
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -18,6 +19,7 @@ import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_I
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_DB_MEDIA_NOTE_ID
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_PHOTO_PATH
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.IS_NEED_TO_SAVE_TO_GALLERY
+import java.io.File
 
 
 class ImageCropFragment : BaseFragment() {
@@ -90,10 +92,14 @@ class ImageCropFragment : BaseFragment() {
 
             if (currentPhotoPath != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val bitmap =
+                    var mSaveBit: File // Your image file
+
+                    val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+//                    mImageView.setImageBitmap(bitmap)
+                  /*  val bitmap =
                         Glide.with(this@ImageCropFragment).asBitmap().load(currentPhotoPath)
                             .submit()
-                            .get()
+                            .get()*/
                     withContext(Dispatchers.Main) {
                         setImageBitmap(bitmap)
                         (requireActivity() as MainActivity).hideLoader()
