@@ -240,16 +240,15 @@ class CameraCaptureView: ConstraintLayout {
 
     }
 
-    private fun setViewToBitmapImage(v: View): Bitmap? {
-        val b = Bitmap.createBitmap(
-            v.layoutParams.width,
-            v.layoutParams.height,
-            Bitmap.Config.ARGB_8888
-        )
-        val c = Canvas(b)
-        v.layout(v.left, v.top, v.right, v.bottom)
-        v.draw(c)
-        return b
+    private fun setViewToBitmapImage(view: View): Bitmap? {
+        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas) else
+            canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return returnedBitmap
     }
 
     private fun simulateMoves(animatedView: View) {
