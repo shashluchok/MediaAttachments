@@ -398,8 +398,7 @@ class MediaToolbarView : ConstraintLayout {
             )
             .setUpDuration(3000)
             .setMargin(4.toPx())
-            .setUpText("Удерживайте для записи,\n" +
-                    "отпустите для отправки ")
+            .setUpText(context.getString(R.string.voice_hint))
             .setUpArrowPosition(arrowPosition = ToolTip.ArrowPosition.BOTTOM_RIGHT).build()
 
         bottom_notes_add_text_note_et.setUpOnKeyPreImePressedCallback {
