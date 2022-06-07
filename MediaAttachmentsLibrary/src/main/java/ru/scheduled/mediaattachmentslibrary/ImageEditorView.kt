@@ -14,13 +14,11 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.image_editor_view.view.*
-import kotlinx.android.synthetic.main.item_media_notes.view.*
 import kotlinx.android.synthetic.main.layout_media_sketch.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -49,7 +47,7 @@ class ImageEditorView : ConstraintLayout {
     }
 
     fun setImageBitmap(bitmap: Bitmap){
-        editable_photo_preview_civ.setImageBitmap(imageView13.getBi)
+        editable_photo_preview_civ.setImageBitmap(bitmap)
     }
 
     fun setOnCompleteCallback(callback:(edittedImage:Bitmap, textNote:String)->Unit){
