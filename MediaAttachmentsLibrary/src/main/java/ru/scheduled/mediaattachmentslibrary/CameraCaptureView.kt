@@ -197,34 +197,47 @@ class CameraCaptureView: ConstraintLayout {
 
     private fun takeEmulatedPhoto() {
         flash()
-        val bitmap = setViewToBitmapImage(mockedCl)
 
-        val mydir = context?.getDir("photos", Context.MODE_PRIVATE)
 
-        if (!(mydir?.exists() ?: false)) {
-            mydir?.mkdirs()
-        }
+        mockedCl.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (mockedCl.height != 0 && mockedCl.width !=0) {
+                    mockedCl.viewTreeObserver.removeOnGlobalLayoutListener(
+                        this
+                    )
+                    val bitmap = setViewToBitmapImage(mockedCl)
+                    val mydir = context?.getDir("photos", Context.MODE_PRIVATE)
 
-        val photoFile = File(
-            mydir,
-            SimpleDateFormat(
-                "HHmmssddMMyyyy",
-                Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg")
+                    if (!(mydir?.exists() ?: false)) {
+                        mydir?.mkdirs()
+                    }
 
-        GlobalScope.launch(Dispatchers.IO) {
-            if (photoFile.exists()) photoFile.delete()
-            photoFile.createNewFile()
-            val fos = FileOutputStream(photoFile)
-            val stream = ByteArrayOutputStream()
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-            val image = stream.toByteArray()
-            fos.write(image)
-            fos.flush()
-            fos.close()
-        }
+                    val photoFile = File(
+                        mydir,
+                        SimpleDateFormat(
+                            "HHmmssddMMyyyy",
+                            Locale.US
+                        ).format(System.currentTimeMillis()) + ".jpg")
 
-        onImageSaved?.invoke(Uri.fromFile(photoFile))
+                    GlobalScope.launch(Dispatchers.IO) {
+                        if (photoFile.exists()) photoFile.delete()
+                        photoFile.createNewFile()
+                        val fos = FileOutputStream(photoFile)
+                        val stream = ByteArrayOutputStream()
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                        val image = stream.toByteArray()
+                        fos.write(image)
+                        fos.flush()
+                        fos.close()
+                    }
+
+                    onImageSaved?.invoke(Uri.fromFile(photoFile))
+                }
+            }
+        })
+
+
     }
 
     private fun setViewToBitmapImage(v: View): Bitmap? {
