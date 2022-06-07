@@ -73,10 +73,7 @@ class ImageCropFragment : BaseFragment() {
                 }
                 is ImageCropStates.ExistingMediaNoteLoadedState -> {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val bitmap =
-                            Glide.with(this@ImageCropFragment).asBitmap().load(it.mediaNote.value)
-                                .submit()
-                                .get()
+                        val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                         withContext(Dispatchers.Main) {
                             imageEditorView.apply {
                                 setImageBitmap(bitmap)
