@@ -230,9 +230,9 @@ class CameraCaptureView: ConstraintLayout {
                         fos.write(image)
                         fos.flush()
                         fos.close()
+                        onImageSaved?.invoke(Uri.fromFile(photoFile))
                     }
 
-                    onImageSaved?.invoke(Uri.fromFile(photoFile))
                 }
             }
         })
