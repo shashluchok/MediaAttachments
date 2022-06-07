@@ -113,6 +113,7 @@ class CameraCaptureView: ConstraintLayout {
             change_camera_iv.isVisible = false
             preview_view2.isVisible = false
             mockedCl.isVisible = true
+            notClickableFilterView.visibility = View.VISIBLE
             mockedDataIv.viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
