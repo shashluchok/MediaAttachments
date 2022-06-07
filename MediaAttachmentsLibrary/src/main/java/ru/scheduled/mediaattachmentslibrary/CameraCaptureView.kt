@@ -8,25 +8,35 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.util.AttributeSet
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.camera_capture_view.view.*
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 
 class CameraCaptureView: ConstraintLayout {
@@ -52,6 +62,13 @@ class CameraCaptureView: ConstraintLayout {
     private var mOrientationListener: OrientationEventListener? = null
     private var initialIconX: Float = 0f
 
+    private var animJob: Job? = null
+
+
+    private var initCenterX = 0f
+    private var initCenterY = 0f
+    private var initScale = 0f
+
     private var currentSavedVideoUri: Uri? = null
 
     private var onVideoSaved: ((Uri) -> Unit)? = null
@@ -65,26 +82,314 @@ class CameraCaptureView: ConstraintLayout {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-            context,
-            attrs,
-            defStyle
+        context,
+        attrs,
+        defStyle
     )
 
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 
-    init {
-        View.inflate(context, R.layout.camera_capture_view, this)
-
-        setLastGalleryImage()
-        setUpOrientationChangeListener()
-        setUpCamera()
+    private fun stopMoves() {
+        animJob?.cancel()
+        animJob = null
+    }
+    private fun flash(){
+            photoFlashView.visibility = View.VISIBLE
+            photoFlashView.apply {
+                alpha = 1f
+                animate().alpha(0f).setDuration(900)
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                photoFlashView.visibility = View.GONE
+            }, 900)
     }
 
-    fun setOnPhotoSavedCallback(callback: (uri: Uri) -> Unit){
+
+    init {
+        View.inflate(context, R.layout.camera_capture_view, this)
+        if (isEmulator()) {
+            flashlight_container.isVisible = false
+            previous_photo_container.isVisible = false
+            change_camera_iv.isVisible = false
+            preview_view2.isVisible = false
+            mockedCl.isVisible = true
+            mockedDataIv.viewTreeObserver.addOnGlobalLayoutListener(object :
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    if (mockedCl.width > 0 && mockedCl.height > 0) {
+                        initCenterX = mockedCl.x + mockedCl.width / 2
+                        initCenterY = mockedCl.y + mockedCl.height / 2
+                        initScale = 1f
+                        simulateMoves(mockedDataIv)
+                        mockedDataIv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    }
+                }
+
+            })
+            initEmulatedCamera()
+
+            photo_video_capture_icon.setOnClickListener {
+                stopMoves()
+                notClickableFilterView.visibility = View.VISIBLE
+                GlobalScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
+                        blurView.visibility = View.VISIBLE
+                        blurView.alpha = 1f
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        mockedDataIv.apply {
+                            animate()
+                                .scaleX(1.15f)
+                                .scaleY(1.15f)
+                                .duration = 400
+                        }
+
+                        for (i in 1..4) {
+                            delay(100)
+                            withContext(Dispatchers.Main) {
+                                blurView.setBlurEnabled(false)
+                                blurView.setBlurRadius((1 + i).toFloat())
+                                blurView.setBlurEnabled(true)
+
+                            }
+                        }
+
+                    }
+                    withContext(Dispatchers.Main) {
+                        mockedDataIv.apply {
+                            animate()
+                                .scaleX(1.08f)
+                                .scaleY(1.08f)
+                                .duration = 250
+                        }
+                        for (i in 1..9) {
+                            delay(30)
+                            withContext(Dispatchers.Main) {
+                                blurView.setBlurEnabled(false)
+                                blurView.setBlurRadius((10 - i).toFloat())
+                                blurView.setBlurEnabled(true)
+                            }
+                        }
+                    }
+                    blurView.setBlurEnabled(false)
+                    delay(300)
+
+                    withContext(Dispatchers.Main) {
+//                showLoader()
+                        takeEmulatedPhoto()
+                        blurView.visibility = View.GONE
+                        notClickableFilterView.visibility = View.GONE
+                    }
+
+                }
+
+            }
+
+        } else {
+            setUpOrientationChangeListener()
+            setUpCamera()
+            setLastGalleryImage()
+        }
+
+
+    }
+
+    private fun takeEmulatedPhoto() {
+        flash()
+        val bitmap = setViewToBitmapImage(mockedCl)
+
+        val mydir = context?.getDir("photos", Context.MODE_PRIVATE)
+
+        if (!(mydir?.exists() ?: false)) {
+            mydir?.mkdirs()
+        }
+
+        val photoFile = File(
+            mydir,
+            SimpleDateFormat(
+                "HHmmssddMMyyyy",
+                Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg")
+
+        GlobalScope.launch(Dispatchers.IO) {
+            if (photoFile.exists()) photoFile.delete()
+            photoFile.createNewFile()
+            val fos = FileOutputStream(photoFile)
+            val stream = ByteArrayOutputStream()
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+            val image = stream.toByteArray()
+            fos.write(image)
+            fos.flush()
+            fos.close()
+        }
+
+        onImageSaved?.invoke(Uri.fromFile(photoFile))
+    }
+
+    private fun setViewToBitmapImage(view: View): Bitmap? {
+        val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(returnedBitmap)
+        val bgDrawable = view.background
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas) else
+            canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return returnedBitmap
+    }
+
+    private fun simulateMoves(animatedView: View) {
+        val constraint = 70
+        val scaleConstraint = 0.2
+        val delayMin = 1000
+        val delayMax = 1500
+        animJob = GlobalScope.launch(Dispatchers.IO) {
+            while (isActive) {
+
+                val currentCenterX = animatedView.x + animatedView.width / 2
+                val currentCenterY = animatedView.y + animatedView.height / 2
+                val currentScale = animatedView.scaleX
+
+                val currentDiffX = currentCenterX - initCenterX
+                val currentDiffY = currentCenterY - initCenterY
+                val currentDiffScale = currentScale - initScale
+
+                val delayRand = kotlin.random.Random.nextInt(delayMin, delayMax)
+
+                var isDownScale = Random().nextBoolean()
+                if (currentDiffScale <= initScale - constraint)
+                    isDownScale = false
+                if (currentDiffScale >= constraint + initScale)
+                    isDownScale = true
+
+
+                var isHorizontalLeft = Random().nextBoolean()
+                if (currentDiffX <= -constraint)
+                    isHorizontalLeft = false
+                if (currentDiffX >= constraint)
+                    isHorizontalLeft = true
+
+                var isVerticalTop = Random().nextBoolean()
+
+                if (currentDiffY <= -constraint)
+                    isVerticalTop = false
+
+                if (currentDiffY >= constraint)
+                    isVerticalTop = true
+
+                var scaleMove = kotlin.random.Random.nextDouble(0.0, 0.01)
+                if (scaleConstraint - abs(currentDiffScale.toDouble()).toInt() < scaleMove) {
+                    scaleMove = scaleConstraint - abs(currentDiffScale.toDouble()).toInt()
+                }
+
+                if (isDownScale) scaleMove *= -1
+
+
+                var moveVertical = kotlin.random.Random.nextInt(2, 3)
+                if (constraint - abs(currentDiffY.toDouble()).toInt() < moveVertical) {
+                    moveVertical = constraint - abs(currentDiffY.toDouble()).toInt()
+                }
+                if (isVerticalTop) moveVertical *= -1
+
+                var moveHorizontal = kotlin.random.Random.nextInt(2, 3)
+                if (constraint - abs(currentDiffX.toDouble()).toInt() < moveHorizontal) {
+                    moveHorizontal = constraint - abs(currentDiffX.toDouble()).toInt()
+                }
+                if (isHorizontalLeft) moveHorizontal *= -1
+
+                withContext(Dispatchers.Main) {
+                    animatedView.apply {
+                        animate()
+                            .setInterpolator(AccelerateDecelerateInterpolator())
+                            .x(moveHorizontal.toFloat())
+                            .y(moveVertical.toFloat())
+                            .scaleX(initScale + scaleMove.toFloat())
+                            .scaleY(initScale + scaleMove.toFloat())
+                            .duration = delayRand.toLong()
+                    }
+                }
+                delay((delayRand / 1.15).toLong())
+
+            }
+        }
+    }
+
+    private fun initEmulatedCamera() {
+
+        val decorView = camera_fragment_main_layout
+        val rootView =
+            (mockedCl as ViewGroup)
+        val windowBackground = decorView.background
+        val radius = 10f
+        blurView.setupWith(rootView)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(context))
+            .setBlurRadius(radius)
+            .setBlurAutoUpdate(true)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(1100)
+            for (i in 1..9) {
+                delay(7)
+                withContext(Dispatchers.Main) {
+                    blurView.setBlurEnabled(false)
+                    blurView.setBlurRadius((10 - i).toFloat())
+                    blurView.setBlurEnabled(true)
+                }
+
+            }
+            withContext(Dispatchers.Main) {
+                blurView.apply {
+                    animate().alpha(0f).duration = 50
+                }
+            }
+            delay(60)
+            withContext(Dispatchers.Main) {
+                blurView.visibility = View.GONE
+                blurView.alpha = 1f
+                blurView.setBlurEnabled(true)
+                blurView.setBlurRadius((1).toFloat())
+            }
+
+            delay(200)
+
+            withContext(Dispatchers.Main) {
+                blurView.setBlurEnabled(false)
+
+            }
+            delay(1000)
+            withContext(Dispatchers.Main) {
+                notClickableFilterView.visibility = View.GONE
+            }
+        }
+
+    }
+
+    private fun isEmulator(): Boolean {
+        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.HARDWARE.contains("goldfish")
+                || Build.HARDWARE.contains("ranchu")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.PRODUCT.contains("sdk_google")
+                || Build.PRODUCT.contains("google_sdk")
+                || Build.PRODUCT.contains("sdk")
+                || Build.PRODUCT.contains("sdk_x86")
+                || Build.PRODUCT.contains("sdk_gphone64_arm64")
+                || Build.PRODUCT.contains("vbox86p")
+                || Build.PRODUCT.contains("emulator")
+                || Build.PRODUCT.contains("simulator"))
+    }
+
+    fun setOnPhotoSavedCallback(callback: (uri: Uri) -> Unit) {
         onImageSaved = callback
     }
 
-    fun setOnPhotoClickedCallback(callback: () -> Unit){
+    fun setOnPhotoClickedCallback(callback: () -> Unit) {
         onPhotoClicked = callback
     }
 
@@ -240,94 +545,99 @@ class CameraCaptureView: ConstraintLayout {
         }
 
 
+        if (!isEmulator()) {
+            if (isVideoCaptureEnabled) {
+                photo_video_capture_icon.setOnTouchListener { v, event ->
+                    if (checkCameraPermissionGranted() && checkStoragePermission() && checkRecordAudioPermission()) {
 
-        if(isVideoCaptureEnabled){
-            photo_video_capture_icon.setOnTouchListener { v, event ->
-                if (checkCameraPermissionGranted() && checkStoragePermission() && checkRecordAudioPermission()) {
-
-                    when (event.action and MotionEvent.ACTION_MASK) {
-                        MotionEvent.ACTION_DOWN -> {
-                            isLessThanLongClick = true
-                            isPointerOn = true
-                            initTimeInMillis = System.currentTimeMillis()
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                isLessThanLongClick = false
-                                if (isPointerOn) {
-                                    vibrate()
-                                    isDraggingBlocked = false
-                                    Glide.with(this).load(R.drawable.capture_video_button).into(photo_video_capture_icon)
-                                    startRecording()
-                                    startChronometer()
-                                    changeInterfaceOnVideoRecording(recording = true)
-                                }
-                            }, 1000)
-                        }
-
-                        MotionEvent.ACTION_UP -> {
-                            if (isLessThanLongClick) {
-                               onPhotoClicked?.invoke()
-                                disableUserInteraction()
-                                takePhoto()
-                            }
-                            if (isPointerOn) {
-                                stopRecording()
-                                stopChronometer()
-                                changeInterfaceOnVideoRecording(recording = false)
-                                resetVideoCaptureButtonPositions()
-                                Glide.with(this).load(R.drawable.capture_photo_button).into(photo_video_capture_icon)
-                                if (isDraggingBlocked) {
-                                    currentSavedVideoUri?.let {
-                                        deleteFile(it.toString())
+                        when (event.action and MotionEvent.ACTION_MASK) {
+                            MotionEvent.ACTION_DOWN -> {
+                                isLessThanLongClick = true
+                                isPointerOn = true
+                                initTimeInMillis = System.currentTimeMillis()
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    isLessThanLongClick = false
+                                    if (isPointerOn) {
+                                        vibrate()
+                                        isDraggingBlocked = false
+                                        Glide.with(this).load(R.drawable.capture_video_button)
+                                            .into(photo_video_capture_icon)
+                                        startRecording()
+                                        startChronometer()
+                                        changeInterfaceOnVideoRecording(recording = true)
                                     }
-                                } else {
+                                }, 1000)
+                            }
+
+                            MotionEvent.ACTION_UP -> {
+                                if (isLessThanLongClick) {
+                                    onPhotoClicked?.invoke()
                                     disableUserInteraction()
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        while (currentSavedVideoUri == null) {
-                                            delay(100)
+                                    takePhoto()
+                                }
+                                if (isPointerOn) {
+                                    stopRecording()
+                                    stopChronometer()
+                                    changeInterfaceOnVideoRecording(recording = false)
+                                    resetVideoCaptureButtonPositions()
+                                    Glide.with(this).load(R.drawable.capture_photo_button)
+                                        .into(photo_video_capture_icon)
+                                    if (isDraggingBlocked) {
+                                        currentSavedVideoUri?.let {
+                                            deleteFile(it.toString())
                                         }
-                                        withContext(Dispatchers.Main) {
-                                            currentSavedVideoUri?.let {
-                                                onVideoSaved?.invoke(it)
-//                                                viewModel.saveVideoToCache(it,shardId)
-                                                currentSavedVideoUri = null
+                                    } else {
+                                        disableUserInteraction()
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            while (currentSavedVideoUri == null) {
+                                                delay(100)
                                             }
+                                            withContext(Dispatchers.Main) {
+                                                currentSavedVideoUri?.let {
+                                                    onVideoSaved?.invoke(it)
+//                                                viewModel.saveVideoToCache(it,shardId)
+                                                    currentSavedVideoUri = null
+                                                }
 
+                                            }
                                         }
                                     }
+
                                 }
-
+                                isPointerOn = false
+                                isLessThanLongClick = false
+                                resetVideoCaptureButtonPositions()
+                                isDraggingBlocked = true
                             }
-                            isPointerOn = false
-                            isLessThanLongClick = false
-                            resetVideoCaptureButtonPositions()
-                            isDraggingBlocked = true
-                        }
 
-                        MotionEvent.ACTION_MOVE -> {
-                            if (!isDraggingBlocked) {
+                            MotionEvent.ACTION_MOVE -> {
+                                if (!isDraggingBlocked) {
 
-                                if (!setPhotoVideoCaptureButtonPositionOnMoveEvent(event.rawX)) {
-                                    isDraggingBlocked = true
-                                    dispatchTouchEvents(
-                                        v,
-                                        listOf(MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP)
-                                    )
+                                    if (!setPhotoVideoCaptureButtonPositionOnMoveEvent(event.rawX)) {
+                                        isDraggingBlocked = true
+                                        dispatchTouchEvents(
+                                            v,
+                                            listOf(
+                                                MotionEvent.ACTION_UP,
+                                                MotionEvent.ACTION_POINTER_UP
+                                            )
+                                        )
+                                    }
+
                                 }
-
                             }
-                        }
 
+                        }
                     }
-                }
 
-                true
-            }
-        }
-        else {
-            photo_video_capture_icon.setOnClickListener {
-                onPhotoClicked?.invoke()
-                disableUserInteraction()
-                takePhoto()
+                    true
+                }
+            } else {
+                photo_video_capture_icon.setOnClickListener {
+                    onPhotoClicked?.invoke()
+                    disableUserInteraction()
+                    takePhoto()
+                }
             }
         }
     }

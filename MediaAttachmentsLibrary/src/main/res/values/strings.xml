@@ -8,4 +8,5 @@
     <string name="defaultSwipeTopToCancel">Вверх — отмена</string>
     <string name="defaultSwipeRightToCancel">Вправо — отмена</string>
     <string name="defaultSignHint">Добавить подпись...</string>
+    <string name="voice_hint">Удерживайте для записи,\nотпустите для отправки</string>
 </resources>

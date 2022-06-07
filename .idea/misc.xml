@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/camera_capture_view.xml" value="0.390625" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/item_media_note_sketch.xml" value="0.43125" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/item_pager_image_viewer.xml" value="0.43125" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/layout_image_viewer_view.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/layout_loading.xml" value="0.42291666666666666" />
+        <entry key="..\:/AndroidStudioProjects/MediaAttachments/app/src/main/res/layout/fragment_camera.xml" value="0.390625" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/app/src/main/res/layout/fragment_media_notes.xml" value="0.42291666666666666" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/drawable/close_new.xml" value="0.3535" />
         <entry key="..\:/Users/Professional/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/drawable/edits_remove.xml" value="0.44" />

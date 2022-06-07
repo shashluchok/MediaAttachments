@@ -73,6 +73,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mockedCl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/defaultDivider"
+        android:scaleX="1.18"
+        android:scaleY="1.18"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/camera_bottom_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/mockedDataTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/mockedDataIv"
+            app:layout_constraintEnd_toEndOf="@+id/mockedDataIv"
+            app:layout_constraintStart_toStartOf="@+id/mockedDataIv" />
+
+        <ImageView
+            android:id="@+id/mockedDataIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="60dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/emulated_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#20EFEFF4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/camera_bottom_toolbar"
@@ -232,4 +279,26 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/notClickableFilterView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="13dp"
+        android:visibility="gone"
+        />
+    <View
+        android:id="@+id/photoFlashView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/lib_white"
+        android:elevation="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
