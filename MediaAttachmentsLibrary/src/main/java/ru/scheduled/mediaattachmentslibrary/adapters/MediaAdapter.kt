@@ -488,17 +488,18 @@ class MediaAdapter(
                     newData.onEach {
                         if (!oldList.contains(it)) {
 
-                            if(it.downloadPercent == 100) {
-                                Log.v("Zhoppa", "new = $it , old = ${mediaList[newData.indexOf(it)]}")
-                            }
-                            mediaList[newData.indexOf(it)].apply {
-                                value = it.value
-                                recognizedSpeechText = it.recognizedSpeechText
-                                downloadPercent = it.downloadPercent
-                                uploadPercent = it.uploadPercent
-                            }
+                          /*  if(it.downloadPercent == 100) {
+                            }*/
+                            if(mediaList.isNotEmpty()) {
+                                mediaList[newData.indexOf(it)].apply {
+                                    value = it.value
+                                    recognizedSpeechText = it.recognizedSpeechText
+                                    downloadPercent = it.downloadPercent
+                                    uploadPercent = it.uploadPercent
+                                }
 
-                            notifyItemChanged(newData.indexOf(it))
+                                notifyItemChanged(newData.indexOf(it))
+                            }
                         }
                     }
                 },200)
