@@ -37,6 +37,7 @@ import ru.leadfrog.PermissionRequestCodes.Companion.PERMISSION_REQUEST_CODE_STOR
 import ru.leadfrog.R
 import ru.leadfrog.db.media_uris.DbMediaNotes
 import ru.leadfrog.isVisible
+import ru.leadfrog.toPx
 import ru.leadfrog.ui.base.BaseFragment
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_ID
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_DB_MEDIA_NOTE_ID
@@ -45,6 +46,7 @@ import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.IS_NEED_TO_SAVE
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.MEDIA_NOTE
 import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
+import ru.scheduled.mediaattachmentslibrary.ToolTip
 import java.util.*
 
 const val SHARD_ID = "123"
@@ -721,7 +723,8 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
         uploadPercent = uploadPercent,
-        downloadPercent = downloadPercent
+        downloadPercent = downloadPercent,
+        updatedAtTimeStamp = 0
 
     )
 }

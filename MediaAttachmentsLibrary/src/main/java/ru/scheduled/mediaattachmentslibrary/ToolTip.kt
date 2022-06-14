@@ -261,7 +261,7 @@ class ToolTip(builder: Builder) {
                                             it.bottom + margin
                                         }
                                         else -> {
-                                            anchorViewLocation[1] - margin - toolTipMainCl.height
+                                            it.top - margin - toolTipMainCl.height
                                         }
                                     }
 

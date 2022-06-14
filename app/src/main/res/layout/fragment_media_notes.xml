@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/bg_primary">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/testCv"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/app_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container_cl" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar_container_cl"
         android:layout_width="0dp"
