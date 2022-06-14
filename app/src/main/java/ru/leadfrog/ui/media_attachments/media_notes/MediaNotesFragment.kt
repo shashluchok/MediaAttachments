@@ -695,7 +695,7 @@ fun ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote.toDbMediaNo
             MediaRecyclerView.MediaItemTypes.TYPE_PHOTO -> "photo"
             MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> "text"
         },
-        order = timeStamp,
+        order = createdAtTimeStamp,
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList,
@@ -716,7 +716,7 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
             "text" -> ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT
             else -> ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT
         },
-        timeStamp = order,
+        createdAtTimeStamp = order,
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
