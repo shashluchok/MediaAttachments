@@ -261,11 +261,11 @@ class ToolTip(builder: Builder) {
                                             it.bottom + margin
                                         }
                                         else -> {
-                                            it.top - margin - toolTipMainCl.height
+                                            anchorViewLocation[1] - margin - toolTipMainCl.height
                                         }
                                     }
 
-                                    y = rootY.toFloat()
+                                    y = rootY
                                     x =
                                         (anchorCenterX.toFloat() - (toolTipMainCl.x + tooltipArrowIv.x + tooltipArrowIv.width / 2))
                                 }

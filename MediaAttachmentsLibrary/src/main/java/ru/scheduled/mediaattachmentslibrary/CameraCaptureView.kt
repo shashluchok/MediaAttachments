@@ -561,7 +561,9 @@ class CameraCaptureView: ConstraintLayout {
         }
 
 
-        if (!isEmulator()&&isDebug) {
+        if (isEmulator() && isDebug) {
+
+        } else {
             if (isVideoCaptureEnabled) {
                 photo_video_capture_icon.setOnTouchListener { v, event ->
                     if (checkCameraPermissionGranted() && checkStoragePermission() && checkRecordAudioPermission()) {
