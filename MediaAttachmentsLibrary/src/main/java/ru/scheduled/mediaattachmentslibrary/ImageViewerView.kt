@@ -316,7 +316,7 @@ class ImageViewerView : ConstraintLayout {
                     false
             )
             itemView.tag = position
-            itemView.pager_media_image_cl.setBackgroundColor(Color.parseColor("#ffffff"))
+            itemView.setBackgroundColor(Color.parseColor("#ffffff"))
             Glide.with(mContext).load(listOfMediaNotes[position].value).listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     return false
