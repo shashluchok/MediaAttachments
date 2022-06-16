@@ -316,7 +316,9 @@ class ImageViewerView : ConstraintLayout {
                     false
             )
             itemView.tag = position
-            itemView.setBackgroundColor(Color.parseColor("#ffffff"))
+            if(listOfMediaNotes[position].mediaType == MediaRecyclerView.MediaItemTypes.TYPE_SKETCH ){
+                itemView.setBackgroundColor(Color.parseColor("#ffffff"))
+            }
             Glide.with(mContext).load(listOfMediaNotes[position].value).listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     return false
@@ -489,7 +491,9 @@ class ImageViewerView : ConstraintLayout {
                     .setDuration(0)
 
         }
-        media_image_viewer_view_pager.setPageTransformer(true, DepthPageTransformer())
+        media_image_viewer_view_pager.setPageTransformer(true,
+            ImageViewerView.DepthPageTransformer()
+        )
         media_image_viewer_view_pager.addOnPageChangeListener(PageListener())
 
         initIndex = currentIndex?:0
