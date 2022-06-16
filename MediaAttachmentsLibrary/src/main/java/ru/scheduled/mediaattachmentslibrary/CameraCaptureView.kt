@@ -63,6 +63,7 @@ class CameraCaptureView: ConstraintLayout {
 
     private var animJob: Job? = null
 
+    var isDebug = false
 
     private var initCenterX = 0f
     private var initCenterY = 0f
@@ -106,7 +107,7 @@ class CameraCaptureView: ConstraintLayout {
 
     init {
         View.inflate(context, R.layout.camera_capture_view, this)
-        if (isEmulator()) {
+        if (isEmulator() && isDebug) {
             flashlight_container.isVisible = false
             previous_photo_container.isVisible = false
             change_camera_iv.isVisible = false
@@ -560,7 +561,7 @@ class CameraCaptureView: ConstraintLayout {
         }
 
 
-        if (!isEmulator()) {
+        if (!isEmulator()&&isDebug) {
             if (isVideoCaptureEnabled) {
                 photo_video_capture_icon.setOnTouchListener { v, event ->
                     if (checkCameraPermissionGranted() && checkStoragePermission() && checkRecordAudioPermission()) {
