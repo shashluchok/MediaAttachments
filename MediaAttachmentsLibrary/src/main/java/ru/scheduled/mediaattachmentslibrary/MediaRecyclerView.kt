@@ -94,7 +94,19 @@ class MediaRecyclerView : RecyclerView {
         var isChosen:Boolean = false,
         var downloadPercent:Int,
         var uploadPercent:Int,
-        var isLoadingStopped:Boolean = true
+        var isLoadingStopped:Boolean = true,
+        var status: MediaNoteStatus
 
     ):Parcelable
+
+    enum class MediaNoteStatus {
+        waiting_upload,
+        uploading,
+        waiting_download,
+        downloading,
+        waiting_delete,
+        deleting,
+        synchronized,
+        error
+    }
 }
