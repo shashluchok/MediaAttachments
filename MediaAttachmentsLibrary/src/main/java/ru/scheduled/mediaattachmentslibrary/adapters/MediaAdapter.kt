@@ -9,7 +9,6 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -488,17 +487,26 @@ class MediaAdapter(
                     newData.onEach {
                         if (!oldList.contains(it)) {
 
-                          /*  if(it.downloadPercent == 100) {
-                            }*/
+
+                            /*  if(it.downloadPercent == 100) {
+                              }*/
+                            var wasChanged = false
                             if(mediaList.isNotEmpty()) {
                                 mediaList[newData.indexOf(it)].apply {
+
+                                    if (it.value != value
+                                        || it.downloadPercent != downloadPercent
+                                        || it.uploadPercent != uploadPercent
+                                        || it.recognizedSpeechText != recognizedSpeechText
+                                    ) wasChanged = true
+
                                     value = it.value
+                                    status = it.status
                                     recognizedSpeechText = it.recognizedSpeechText
                                     downloadPercent = it.downloadPercent
                                     uploadPercent = it.uploadPercent
                                 }
-
-                                notifyItemChanged(newData.indexOf(it))
+                               if(wasChanged) notifyItemChanged(newData.indexOf(it))
                             }
                         }
                     }
