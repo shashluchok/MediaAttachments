@@ -177,6 +177,10 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
+                    holder.itemView.media_note_sketch_shimmer.apply {
+                        stopShimmer()
+                        isVisible = false
+                    }
                     Glide.with(mContext)
                         .load(mediaList[position].value)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -184,7 +188,11 @@ class MediaAdapter(
                         .transition(DrawableTransitionOptions.withCrossFade(300))
                         .into(holder.itemView.media_note_sketch_iv)
                 } else if (downloadPercent < 100) {
-                    holder.itemView.media_note_sketch_iv.setImageResource(R.drawable.image_test)
+                    holder.itemView.media_note_sketch_shimmer.apply {
+                        startShimmer()
+                        isVisible = true
+                    }
+
                 }
 
             }
@@ -257,13 +265,20 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_photo
 
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
+                    holder.itemView.media_note_photo_shimmer.apply {
+                        stopShimmer()
+                        isVisible = false
+                    }
                     Glide.with(mContext).load(mediaList[position].value)
                         .transition(DrawableTransitionOptions.withCrossFade(300))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(holder.itemView.media_note_photo_iv)
                 } else if (downloadPercent < 100) {
-                    holder.itemView.media_note_photo_iv.setImageResource(R.drawable.image_test)
+                    holder.itemView.media_note_photo_shimmer.apply {
+                        startShimmer()
+                        isVisible = true
+                    }
                 }
 
                 if (!mediaList[position].imageNoteText.isNullOrEmpty()) {
