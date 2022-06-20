@@ -43,7 +43,7 @@
                 android:id="@+id/lf_shimmer_image_photo"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/media_note_photo_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
