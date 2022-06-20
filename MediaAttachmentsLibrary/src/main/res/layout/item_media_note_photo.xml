@@ -39,15 +39,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/media_note_photo_iv"
-                android:layout_width="match_parent"
+            <ru.scheduled.mediaattachmentslibrary.LFShimmerImage
+                android:id="@+id/lf_shimmer_image_photo"
+                android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toTopOf="@+id/media_note_photo_tv"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/media_note_photo_tv"
@@ -61,17 +61,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/media_note_photo_shimmer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
 
             <include
                 android:id="@+id/loadingLayout"

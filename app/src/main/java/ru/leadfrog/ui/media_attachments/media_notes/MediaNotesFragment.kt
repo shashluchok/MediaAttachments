@@ -724,8 +724,8 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
         voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
         uploadPercent = uploadPercent,
         downloadPercent = downloadPercent,
-        updatedAtTimeStamp = 0
-
+        updatedAtTimeStamp = 0,
+        status = MediaRecyclerView.MediaNoteStatus.waiting_download
     )
 }
 

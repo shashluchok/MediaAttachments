@@ -24,10 +24,12 @@ import kotlinx.android.synthetic.main.item_media_note_photo.view.*
 import kotlinx.android.synthetic.main.item_media_note_sketch.view.*
 import kotlinx.android.synthetic.main.item_media_note_text.view.*
 import kotlinx.android.synthetic.main.item_voice.view.*
+import kotlinx.android.synthetic.main.layout_lf_shimmer_image.view.*
 import kotlinx.android.synthetic.main.layout_loading.view.*
-import ru.scheduled.mediaattachmentslibrary.CustomLinearLayoutManager
-import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
-import ru.scheduled.mediaattachmentslibrary.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import ru.scheduled.mediaattachmentslibrary.*
 import java.io.File
 
 
@@ -36,7 +38,8 @@ class MediaAdapter(
     private val onItemClicked: (MediaRecyclerView.MediaNote) -> Unit,
     private val onStartDownloading: (MediaRecyclerView.MediaNote) -> Unit,
     private val onCancelDownloading: (MediaRecyclerView.MediaNote) -> Unit,
-    private val onCancelUploading: (MediaRecyclerView.MediaNote) -> Unit
+    private val onCancelUploading: (MediaRecyclerView.MediaNote) -> Unit,
+    private val previewApi: PreviewApi?
 ) : RecyclerView.Adapter<MediaAdapter.NotesViewHolder>() {
 
 
@@ -177,7 +180,13 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
-                    holder.itemView.media_note_sketch_shimmer.apply {
+
+                    holder.itemView.lf_shimmer_image.apply {
+                        removeAfterEffects()
+                        loadImage(mediaList[position].value)
+                    }
+
+                    /*holder.itemView.media_note_sketch_shimmer.apply {
                         stopShimmer()
                         isVisible = false
                     }
@@ -186,13 +195,20 @@ class MediaAdapter(
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .transition(DrawableTransitionOptions.withCrossFade(300))
-                        .into(holder.itemView.media_note_sketch_iv)
+                        .into(holder.itemView.media_note_sketch_iv)*/
                 } else if (downloadPercent < 100) {
-                    holder.itemView.media_note_sketch_shimmer.apply {
-                        startShimmer()
-                        isVisible = true
-                    }
+                    holder.itemView.lf_shimmer_image.apply {
+                        previewApi?.let {
+                            mediaList[position].previewKey?.let{ key->
+                                loadPreview(
+                                    it, key
+                                )
+                            }
+                        }
 
+                        setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
+
+                    }
                 }
 
             }
@@ -265,19 +281,22 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_photo
 
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
-                    holder.itemView.media_note_photo_shimmer.apply {
-                        stopShimmer()
-                        isVisible = false
+
+                    holder.itemView.lf_shimmer_image_photo.apply {
+                        removeAfterEffects()
+                        loadImage(mediaList[position].value)
                     }
-                    Glide.with(mContext).load(mediaList[position].value)
-                        .transition(DrawableTransitionOptions.withCrossFade(300))
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .into(holder.itemView.media_note_photo_iv)
+
                 } else if (downloadPercent < 100) {
-                    holder.itemView.media_note_photo_shimmer.apply {
-                        startShimmer()
-                        isVisible = true
+                    holder.itemView.lf_shimmer_image_photo.apply {
+                        previewApi?.let {
+                            mediaList[position].previewKey?.let{ key->
+                                loadPreview(
+                                    it, key
+                                )
+                            }
+                        }
+                        setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
                     }
                 }
 
@@ -320,22 +339,22 @@ class MediaAdapter(
                 if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
                 else loadingLayoutProgressIndicator?.progress = downloadPercent
 
-                val imageId = if (mediaList[position].isLoadingStopped) {
+                val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                     R.drawable.download
                 } else R.drawable.close_new
 
                 loadingLayoutIv?.apply {
                     setImageResource(imageId)
                     setOnClickListener {
-                        if (mediaList[position].isLoadingStopped) {
+                        if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                             onStartDownloading.invoke(mediaList[position])
-                            mediaList[position].isLoadingStopped = false
+//                            mediaList[position].isLoadingStopped = false
 
                         } else {
                             onCancelDownloading.invoke(mediaList[position])
                             mediaList[position].isLoadingStopped = true
                         }
-                        val imageId = if (mediaList[position].isLoadingStopped) {
+                        val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                             R.drawable.download
                         } else R.drawable.close_new
                         setImageResource(imageId)

@@ -46,14 +46,16 @@ class MediaRecyclerView : RecyclerView {
         onItemClicked: (MediaNote) -> Unit,
         onCancelDownloading: (MediaNote) -> Unit,
         onCancelUploading: (MediaNote) -> Unit,
-        onStartDownloading: (MediaNote) -> Unit
+        onStartDownloading: (MediaNote) -> Unit,
+        previewApi:PreviewApi? = null
     ) {
         this.adapter = MediaAdapter(
             onItemsSelected = onItemsSelected,
             onItemClicked = onItemClicked,
             onCancelDownloading = onCancelDownloading ,
             onCancelUploading = onCancelUploading,
-            onStartDownloading = onStartDownloading
+            onStartDownloading = onStartDownloading,
+            previewApi = previewApi
         ).also {
             it.setMediaPlayer(mediaPlayer)
         }
@@ -95,7 +97,8 @@ class MediaRecyclerView : RecyclerView {
         var downloadPercent:Int,
         var uploadPercent:Int,
         var isLoadingStopped:Boolean = true,
-        var status: MediaNoteStatus
+        var status: MediaNoteStatus,
+        var previewKey:String? = null
 
     ):Parcelable
 

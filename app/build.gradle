@@ -98,4 +98,6 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
 
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
+
+
 }
