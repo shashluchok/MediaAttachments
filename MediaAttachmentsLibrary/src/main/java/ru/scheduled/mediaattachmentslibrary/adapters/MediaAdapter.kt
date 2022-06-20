@@ -558,6 +558,7 @@ class MediaAdapter(
                                         || it.downloadPercent != downloadPercent
                                         || it.uploadPercent != uploadPercent
                                         || it.recognizedSpeechText != recognizedSpeechText
+                                        || it.status != status
                                     ) wasChanged = true
 
                                     value = it.value
