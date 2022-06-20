@@ -7,6 +7,17 @@
     android:clickable="true"
     android:focusable="true">
 
+    <ImageView
+        android:id="@+id/lf_shimmer_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        android:background="#E6E4EA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/lf_shimmer_fl"
         android:layout_width="0dp"
@@ -25,19 +36,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/defaultText"
             android:visibility="visible" />
     </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <ImageView
-        android:id="@+id/lf_shimmer_iv"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/lf_shimmer_blur_view"

@@ -362,6 +362,7 @@ class MediaAdapter(
                         } else {
                             onCancelDownloading.invoke(mediaList[position])
                             mediaList[position].isLoadingStopped = true
+
                         }
                         val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                             R.drawable.download

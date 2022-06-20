@@ -94,10 +94,10 @@ class LFShimmerImage : ConstraintLayout {
                 try {
                     val inputStream = it.bytes()
                     withContext(Dispatchers.Main) {
+                        Glide.with(context).load(inputStream).into(lf_shimmer_iv)
                         lf_shimmer_fl.stopShimmer()
                         lf_shimmer_fl.visibility = View.GONE
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                        Glide.with(context).load(inputStream).into(lf_shimmer_iv)
                     }
                 }
                 catch (e:Exception){
