@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.layout_lf_shimmer_image.view.*
@@ -115,67 +114,105 @@ class LFShimmerImage : ConstraintLayout {
         }
     }
 
-    fun loadImage(bitmap: Bitmap?){
-        bitmap?.let {
+    fun startShimmer(){
+        lf_shimmer_fl.visibility = View.VISIBLE
+        lf_shimmer_fl.startShimmer()
+    }
 
+    fun stopShimmer(){
         lf_shimmer_fl.stopShimmer()
         lf_shimmer_fl.visibility = View.GONE
-        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-        Glide.with(context)
-            .load(bitmap)
-            .transition(
-                DrawableTransitionOptions.withCrossFade(150)
-            )
-            /*.diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)*/
-            .into(lf_shimmer_iv)
+    }
 
+    fun loadImage(image: Bitmap?){
+        image?.let {
+
+
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(150)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
-    fun loadImage(path: String?){
-        path?.let{
-            lf_shimmer_fl.stopShimmer()
-            lf_shimmer_fl.visibility = View.GONE
-            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-            Glide.with(context)
-                .load(path)
-                .transition(
-                    DrawableTransitionOptions.withCrossFade(150)
-                )
-                .into(lf_shimmer_iv)
-        }
+    fun loadImage(image: File?){
+        image?.let {
 
+
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(150)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun loadImage(image: Uri?){
+        image?.let {
+
+
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(150)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun loadImage(image: String?){
+        image?.let {
+
+
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(150)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    fun loadImage(uri: Uri?){
-        uri?.let {
-            lf_shimmer_fl.stopShimmer()
-            lf_shimmer_fl.visibility = View.GONE
-            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-            Glide.with(context)
-                .load(uri)
-                .transition(
-                    DrawableTransitionOptions.withCrossFade(150)
-                )
-                .into(lf_shimmer_iv)
-        }
-
-    }
-
-    fun loadImage(file: File?){
-        file?.let{
-            lf_shimmer_fl.stopShimmer()
-            lf_shimmer_fl.visibility = View.GONE
-            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-            Glide.with(context)
-                .load(file)
-                .transition(
-                    DrawableTransitionOptions.withCrossFade(150)
-                )
-                .into(lf_shimmer_iv)
-        }
-
-    }
 
 }
