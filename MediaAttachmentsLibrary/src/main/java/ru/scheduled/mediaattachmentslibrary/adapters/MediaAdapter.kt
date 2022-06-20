@@ -340,8 +340,15 @@ class MediaAdapter(
 
 
                 if(downloadPercent == 0) {
-                    loadingLayoutProgressIndicator?.isIndeterminate = true
-                    loadingLayoutProgressIndicator?.progress = 5
+                    if(mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized){
+                        loadingLayoutProgressIndicator?.isIndeterminate = true
+                        loadingLayoutProgressIndicator?.progress = 0
+                    }
+                    else {
+                        loadingLayoutProgressIndicator?.isIndeterminate = true
+                        loadingLayoutProgressIndicator?.progress = 5
+                    }
+
                 } else {
                     loadingLayoutProgressIndicator?.isIndeterminate = false
                     if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
