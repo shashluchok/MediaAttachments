@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import ru.scheduled.mediaattachmentslibrary.*
 import java.io.File
 
+// Если статус w8ing down , бесконечная крутилка , как только ding то норм проценты
 
 class MediaAdapter(
     private val onItemsSelected: (List<MediaRecyclerView.MediaNote>) -> Unit,
@@ -197,6 +198,7 @@ class MediaAdapter(
                         .transition(DrawableTransitionOptions.withCrossFade(300))
                         .into(holder.itemView.media_note_sketch_iv)*/
                 } else if (downloadPercent < 100) {
+
                     holder.itemView.lf_shimmer_image.apply {
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
@@ -336,8 +338,15 @@ class MediaAdapter(
 
                 loadingLayoutCl?.visibility = View.VISIBLE
 
-                if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
-                else loadingLayoutProgressIndicator?.progress = downloadPercent
+
+                if(downloadPercent == 0) {
+                    loadingLayoutProgressIndicator?.isIndeterminate = true
+                    loadingLayoutProgressIndicator?.progress = 5
+                } else {
+                    loadingLayoutProgressIndicator?.isIndeterminate = false
+                    if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
+                    else loadingLayoutProgressIndicator?.progress = downloadPercent
+                }
 
                 val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                     R.drawable.download
@@ -368,7 +377,16 @@ class MediaAdapter(
 
         } else {
             if (uploadPercent in 0 until 100) {
-                loadingLayoutProgressIndicator?.progress = uploadPercent
+
+                if(uploadPercent == 0) {
+                    loadingLayoutProgressIndicator?.isIndeterminate = true
+                    loadingLayoutProgressIndicator?.progress = 5
+                } else {
+                    loadingLayoutProgressIndicator?.isIndeterminate = false
+                    loadingLayoutProgressIndicator?.progress = uploadPercent
+                }
+
+
                 loadingLayoutCl?.visibility = View.VISIBLE
                 val imageId = R.drawable.close_new
 

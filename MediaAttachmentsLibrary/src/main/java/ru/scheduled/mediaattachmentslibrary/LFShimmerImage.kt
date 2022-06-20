@@ -3,6 +3,7 @@ package ru.scheduled.mediaattachmentslibrary
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
@@ -95,10 +96,17 @@ class LFShimmerImage : ConstraintLayout {
                     withContext(Dispatchers.Main) {
                         lf_shimmer_fl.stopShimmer()
                         lf_shimmer_fl.visibility = View.GONE
+                        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
                         Glide.with(context).load(inputStream).into(lf_shimmer_iv)
                     }
                 }
                 catch (e:Exception){
+                    withContext(Dispatchers.Main) {
+                        lf_shimmer_fl.stopShimmer()
+                        lf_shimmer_fl.visibility = View.GONE
+                        lf_shimmer_iv.setImageDrawable(null)
+                        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
+                    }
                     e.printStackTrace()
                 }
 
@@ -110,6 +118,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(bitmap: Bitmap?){
         lf_shimmer_fl.stopShimmer()
         lf_shimmer_fl.visibility = View.GONE
+        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
         Glide.with(context)
             .load(bitmap)
             .transition(
@@ -123,6 +132,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(path: String?){
         lf_shimmer_fl.stopShimmer()
         lf_shimmer_fl.visibility = View.GONE
+        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
         Glide.with(context)
             .load(path)
             .transition(
@@ -134,6 +144,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(uri: Uri?){
         lf_shimmer_fl.stopShimmer()
         lf_shimmer_fl.visibility = View.GONE
+        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
         Glide.with(context)
             .load(uri)
             .transition(
@@ -145,6 +156,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(file: File?){
         lf_shimmer_fl.stopShimmer()
         lf_shimmer_fl.visibility = View.GONE
+        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
         Glide.with(context)
             .load(file)
             .transition(
