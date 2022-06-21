@@ -165,7 +165,9 @@ class VoiceNoteView : ConstraintLayout {
                 if(duration!=0){
                     media.release()
                     currentTotalTime = (duration.toLong()* 1000)
-                    media_duration.text = getFormatTimerString(currentTotalTime)
+                    withContext(Dispatchers.Main) {
+                        media_duration.text = getFormatTimerString(currentTotalTime)
+                    }
                 }
                 else {
                     media.setOnPreparedListener { mp ->
