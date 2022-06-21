@@ -6,15 +6,11 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface PreviewApi  {
-
-    abstract val defaultUrl:String
-
-    @GET("{Path}")
+interface PreviewApi {
     abstract fun loadPreview(
-        @Query("bucket") bucket: String = "media",
-        @Query("key") key: String,
-        @Query("resize") resize: String? = null,
-        @Path("Path") path:String = defaultUrl
+        bucket: String = "media",
+        key: String,
+        resize: String? = null,
     ): Call<ResponseBody>
 }
+
