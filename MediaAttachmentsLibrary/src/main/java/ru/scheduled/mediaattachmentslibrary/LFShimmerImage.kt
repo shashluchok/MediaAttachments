@@ -68,11 +68,12 @@ class LFShimmerImage : ConstraintLayout {
         when(afterEffect){
             AfterEffect.BLUR -> {
                (context as? Activity)?.let {
+                   lf_shimmer_blur_view.isVisible = true
                    val decorView = it.window.decorView
                    val rootView =
                        (lf_shimmer_main_cl as ViewGroup)
                    val windowBackground = decorView.background
-                   val radius = 2f
+                   val radius = 3f
                    lf_shimmer_blur_view.setupWith(rootView)
                        .setFrameClearDrawable(windowBackground)
                        .setBlurAlgorithm(RenderScriptBlur(it))
@@ -140,7 +141,7 @@ class LFShimmerImage : ConstraintLayout {
                 Glide.with(context)
                     .load(image)
                     .transition(
-                        DrawableTransitionOptions.withCrossFade(150)
+                        DrawableTransitionOptions.withCrossFade(300)
                     )
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
@@ -163,7 +164,7 @@ class LFShimmerImage : ConstraintLayout {
                 Glide.with(context)
                     .load(image)
                     .transition(
-                        DrawableTransitionOptions.withCrossFade(150)
+                        DrawableTransitionOptions.withCrossFade(300)
                     )
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
@@ -185,7 +186,7 @@ class LFShimmerImage : ConstraintLayout {
                 Glide.with(context)
                     .load(image)
                     .transition(
-                        DrawableTransitionOptions.withCrossFade(150)
+                        DrawableTransitionOptions.withCrossFade(300)
                     )
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
@@ -207,7 +208,7 @@ class LFShimmerImage : ConstraintLayout {
                 Glide.with(context)
                     .load(image)
                     .transition(
-                        DrawableTransitionOptions.withCrossFade(150)
+                        DrawableTransitionOptions.withCrossFade(300)
                     )
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
