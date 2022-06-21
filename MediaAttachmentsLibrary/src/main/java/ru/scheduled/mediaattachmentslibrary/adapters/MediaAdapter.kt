@@ -180,26 +180,18 @@ class MediaAdapter(
                 selectionView = holder.itemView.selection_view_sketch
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
+
+
+
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
 
-                    holder.itemView.lf_shimmer_image.apply {
-                        removeAfterEffects()
-                        loadImage(mediaList[position].value)
-                    }
+                        holder.itemView.lf_shimmer_image.apply {
+                            removeAfterEffects()
+                            stopShimmer()
+                            loadImage(mediaList[position].value)
+                        }
 
-                    /*holder.itemView.media_note_sketch_shimmer.apply {
-                        stopShimmer()
-                        isVisible = false
-                    }
-                    Glide.with(mContext)
-                        .load(mediaList[position].value)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .transition(DrawableTransitionOptions.withCrossFade(300))
-                        .into(holder.itemView.media_note_sketch_iv)*/
                 } else if (downloadPercent < 100) {
-
-
 
                     holder.itemView.lf_shimmer_image.apply {
                         if(mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized){
@@ -292,7 +284,11 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_photo
 
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
-
+                        holder.itemView.lf_shimmer_image_photo.apply {
+                            stopShimmer()
+                            removeAfterEffects()
+                            loadImage(mediaList[position].value)
+                        }
                     holder.itemView.lf_shimmer_image_photo.apply {
                         removeAfterEffects()
                         loadImage(mediaList[position].value)
