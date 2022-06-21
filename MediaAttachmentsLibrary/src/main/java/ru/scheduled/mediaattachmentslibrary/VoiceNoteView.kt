@@ -161,9 +161,26 @@ class VoiceNoteView : ConstraintLayout {
 
 
                 }
-                media.release()
-                currentTotalTime = (duration.toLong()* 1000)
-                media_duration.text = getFormatTimerString(currentTotalTime)
+
+                if(duration!=0){
+                    media.release()
+                    currentTotalTime = (duration.toLong()* 1000)
+                    media_duration.text = getFormatTimerString(currentTotalTime)
+                }
+                else {
+                    media.setOnPreparedListener { mp ->
+                        val duration = abs(mp.duration.toLong())
+                        CoroutineScope(Dispatchers.IO).launch {
+                            withContext(Dispatchers.Main) {
+                                currentTotalTime = duration
+                                media_duration.text = getFormatTimerString(duration)
+
+                            }
+                        }
+
+                        media.release()
+                    }
+                }
             }
         }
     }

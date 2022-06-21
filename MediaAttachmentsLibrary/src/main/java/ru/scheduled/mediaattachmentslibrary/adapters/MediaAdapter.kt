@@ -239,7 +239,8 @@ class MediaAdapter(
                                 player = player,
                                 amplitudes = mediaList[position].voiceAmplitudesList,
                                 file = File(mediaList[position].value),
-                                isCurrentVisualizer = currentVoice == position
+                                isCurrentVisualizer = currentVoice == position,
+                            duration = mediaList[position].audioDuration?:0
                         )
                     }
 
