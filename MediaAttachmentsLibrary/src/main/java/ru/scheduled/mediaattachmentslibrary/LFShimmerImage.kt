@@ -96,7 +96,7 @@ class LFShimmerImage : ConstraintLayout {
 
     fun loadPreview(previewApi: PreviewApi, key: String){
         GlobalScope.launch(Dispatchers.IO){
-            val preview =  previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
+            val preview =  previewApi.loadPreview(key = key, resize = defaultSize,).execute().body()
             preview?.let {
                 try {
                     val inputStream = it.bytes()
