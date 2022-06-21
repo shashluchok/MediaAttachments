@@ -22,6 +22,8 @@ import java.io.File
 
 class LFShimmerImage : ConstraintLayout {
 
+    private var wasPreviewLoaded = false
+
     enum class AfterEffect {
         BLUR, BLACK_OUT
     }
@@ -107,6 +109,7 @@ class LFShimmerImage : ConstraintLayout {
                         lf_shimmer_fl.visibility = View.GONE
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
                     }
+                    wasPreviewLoaded = true
                 }
                 catch (e:Exception){
                     withContext(Dispatchers.Main) {
@@ -115,6 +118,7 @@ class LFShimmerImage : ConstraintLayout {
                         lf_shimmer_iv.setImageDrawable(null)
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
                     }
+                    wasPreviewLoaded = false
                     e.printStackTrace()
                 }
 
@@ -124,8 +128,10 @@ class LFShimmerImage : ConstraintLayout {
     }
 
     fun startShimmer(){
-        lf_shimmer_fl.visibility = View.VISIBLE
-        lf_shimmer_fl.startShimmer()
+        if(wasPreviewLoaded) {
+            lf_shimmer_fl.visibility = View.VISIBLE
+            lf_shimmer_fl.startShimmer()
+        }
     }
 
     fun stopShimmer(){
