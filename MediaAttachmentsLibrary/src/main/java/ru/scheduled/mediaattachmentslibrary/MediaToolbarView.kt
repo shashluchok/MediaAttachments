@@ -83,7 +83,7 @@ class MediaToolbarView : ConstraintLayout {
     private var onOpenCamera: (() -> Unit)? = null
     private var onOpenSketch: (() -> Unit)? = null
 
-    private var onCompleteRecording: ((amplitudesList: List<Int>, filePath: String) -> Unit)? =
+    private var onCompleteRecording: ((amplitudesList: List<Int>, filePath: String, duration:Int) -> Unit)? =
         null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
@@ -284,7 +284,7 @@ class MediaToolbarView : ConstraintLayout {
         onStartRecording = callback
     }
 
-    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, filePath: String) -> Unit) {
+    fun setOnCompleteRecordingCallback(callback: (amplitudesList: List<Int>, filePath: String, duration:Int) -> Unit) {
         onCompleteRecording = callback
     }
 
@@ -545,7 +545,7 @@ class MediaToolbarView : ConstraintLayout {
                                 .scaleY(0f)
                                 .duration = 50
                         }
-                        voiceRecorder.stopRecord { file ->
+                        voiceRecorder.stopRecord { file, duration ->
                             Log.v("MediaToolbar", "Stopped recording, File = $file")
 
                             val recordDuration =
@@ -567,7 +567,8 @@ class MediaToolbarView : ConstraintLayout {
                                 amplitudesList.add(Pair(tempList, file))
                                 onCompleteRecording?.invoke(
                                     amplitudesList[0].first,
-                                    amplitudesList[0].second
+                                    amplitudesList[0].second,
+                                    duration
                                 )
 
                                 amplitudesList.removeAt(0)

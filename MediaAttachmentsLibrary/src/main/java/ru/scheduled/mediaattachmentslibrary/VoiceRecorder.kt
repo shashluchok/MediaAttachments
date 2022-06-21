@@ -37,6 +37,7 @@ class VoiceRecorder(private val mContext: Context) {
     private lateinit var mAudioManager: AudioManager
     private var mStreamVolume = Pair(0,0)
 
+    private var audioDuration = 0
 
     fun startRecord() {
         try {
@@ -64,7 +65,7 @@ class VoiceRecorder(private val mContext: Context) {
             mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext)
             prepareMediaRecorder()
             mMediaRecorder?.start()
-
+            audioDuration = (System.currentTimeMillis()/1000).toInt()
             startSpeechRecognizer(mContext.packageName)
 
 
@@ -209,15 +210,17 @@ class VoiceRecorder(private val mContext: Context) {
 
     }
 
-    fun stopRecord(onSuccess: (fileName: String) -> Unit) {
+    fun stopRecord(onSuccess: (fileName: String, duration:Int) -> Unit) {
         try {
             Log.v("MediaToolbar", "VoiceRecorder stopRecord")
             amplitudeListener?.cancel()
             amplitudeListener=null
             mMediaRecorder?.stop()
+            audioDuration = (System.currentTimeMillis()/1000).toInt() - audioDuration
             releaseRecorder()
             mSpeechRecognizer?.stopListening()
-            onSuccess.invoke(mFileName)
+            onSuccess.invoke(mFileName, audioDuration)
+            audioDuration = 0
 
 
         } catch (e: Exception) {

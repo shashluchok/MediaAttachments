@@ -98,7 +98,8 @@ class MediaRecyclerView : RecyclerView {
         var uploadPercent:Int,
         var isLoadingStopped:Boolean = true,
         var status: MediaNoteStatus,
-        var previewKey:String? = null
+        var previewKey:String? = null,
+        var audioDuration:Int? = null
 
     ):Parcelable
 

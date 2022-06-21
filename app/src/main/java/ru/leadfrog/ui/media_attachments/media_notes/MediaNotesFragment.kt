@@ -353,7 +353,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                 )
             }
 
-            setOnCompleteRecordingCallback { amplitudesList, filePath ->
+            setOnCompleteRecordingCallback { amplitudesList, filePath, duration ->
 
                 val dbMediaNote = DbMediaNotes(
                     id = UUID.randomUUID().toString(),
