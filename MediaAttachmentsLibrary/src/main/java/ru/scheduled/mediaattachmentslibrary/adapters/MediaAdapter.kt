@@ -181,7 +181,11 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
 
-
+                if(downloadPercent == 100){
+                    holder.itemView.lf_shimmer_image.apply {
+                        stopShimmer()
+                    }
+                }
 
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
 
@@ -282,6 +286,12 @@ class MediaAdapter(
                 selectionView = holder.itemView.selection_view_photo
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo
+
+                if(downloadPercent == 100){
+                    holder.itemView.lf_shimmer_image_photo.apply {
+                        stopShimmer()
+                    }
+                }
 
                 if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
                         holder.itemView.lf_shimmer_image_photo.apply {
