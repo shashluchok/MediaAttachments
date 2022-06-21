@@ -73,7 +73,7 @@ class LFShimmerImage : ConstraintLayout {
                    val rootView =
                        (lf_shimmer_main_cl as ViewGroup)
                    val windowBackground = decorView.background
-                   val radius = 3f
+                   val radius = 7f
                    lf_shimmer_blur_view.setupWith(rootView)
                        .setFrameClearDrawable(windowBackground)
                        .setBlurAlgorithm(RenderScriptBlur(it))
