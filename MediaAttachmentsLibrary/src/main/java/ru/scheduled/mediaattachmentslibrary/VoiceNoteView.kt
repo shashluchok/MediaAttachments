@@ -114,7 +114,8 @@ class VoiceNoteView : ConstraintLayout {
             player: MediaPlayer,
             amplitudes: List<Int>?,
             file: File,
-            isCurrentVisualizer: Boolean
+            isCurrentVisualizer: Boolean,
+            duration: Int
     ) {
         val amplitudesList = mutableListOf<Int>().also { list->
             amplitudes?.let{
@@ -160,19 +161,9 @@ class VoiceNoteView : ConstraintLayout {
 
 
                 }
-                media.setOnPreparedListener { mp ->
-                    val duration = abs(mp.duration.toLong())
-                    CoroutineScope(Dispatchers.IO).launch {
-                        withContext(Dispatchers.Main) {
-                            currentTotalTime = duration
-                            media_duration.text = getFormatTimerString(duration)
-
-                        }
-                    }
-
-                    media.release()
-                }
-
+                media.release()
+                currentTotalTime = (duration.toLong()* 1000)
+                media_duration.text = getFormatTimerString(currentTotalTime)
             }
         }
     }
