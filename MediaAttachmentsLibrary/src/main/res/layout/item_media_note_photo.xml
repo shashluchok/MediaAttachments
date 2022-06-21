@@ -16,7 +16,7 @@
         android:layout_marginEnd="12dp"
         android:background="@drawable/checkbox_to_checked"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/item_media_note_sketch_cv"
+        app:layout_constraintEnd_toEndOf="@+id/item_media_note_photo_cv"
         app:layout_constraintEnd_toStartOf="@+id/item_media_note_photo_cv"
         app:layout_constraintTop_toTopOf="parent" />
 

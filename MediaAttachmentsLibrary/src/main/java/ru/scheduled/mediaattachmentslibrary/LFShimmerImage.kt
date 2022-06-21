@@ -28,15 +28,18 @@ class LFShimmerImage : ConstraintLayout {
 
     private var defaultSize = "320"
 
-    private var onImageClicked: (() -> Unit)? = null
-    private var onImageLongClicked: (() -> Unit)? = null
 
     fun setOnImageClickedCallback(callback:()->Unit){
-        onImageClicked = callback
+        lf_shimmer_iv.setOnClickListener {
+            callback.invoke()
+        }
     }
 
     fun setOnLongClickListener(callback: () -> Unit){
-        onImageLongClicked = callback
+        lf_shimmer_iv.setOnLongClickListener {
+            callback.invoke()
+            true
+        }
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
@@ -51,13 +54,6 @@ class LFShimmerImage : ConstraintLayout {
 
     init {
         View.inflate(context, R.layout.layout_lf_shimmer_image, this)
-        lf_shimmer_iv.setOnClickListener {
-            onImageClicked?.invoke()
-        }
-        lf_shimmer_iv.setOnLongClickListener {
-            onImageLongClicked?.invoke()
-            true
-        }
         lf_shimmer_fl.startShimmer()
 
     }
