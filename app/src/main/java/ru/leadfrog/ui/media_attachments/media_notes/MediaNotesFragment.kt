@@ -29,15 +29,19 @@ import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_media_notes.*
 import kotlinx.android.synthetic.main.layout_toolbar_default.view.*
 import kotlinx.coroutines.*
+import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import org.koin.android.ext.android.inject
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
+import ru.leadfrog.*
 import ru.leadfrog.ActivityRequestCodes.Companion.ACTIVITY_REQUEST_CODE_PICK_PHOTO
-import ru.leadfrog.MainActivity
 import ru.leadfrog.PermissionRequestCodes.Companion.PERMISSION_REQUEST_CODE_CAMERA
 import ru.leadfrog.PermissionRequestCodes.Companion.PERMISSION_REQUEST_CODE_STORAGE
-import ru.leadfrog.R
 import ru.leadfrog.db.media_uris.DbMediaNotes
-import ru.leadfrog.isVisible
-import ru.leadfrog.toPx
 import ru.leadfrog.ui.base.BaseFragment
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_ID
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_DB_MEDIA_NOTE_ID
@@ -46,8 +50,10 @@ import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.IS_NEED_TO_SAVE
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.MEDIA_NOTE
 import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
 import ru.scheduled.mediaattachmentslibrary.MediaRecyclerView
+import ru.scheduled.mediaattachmentslibrary.PreviewApi
 import ru.scheduled.mediaattachmentslibrary.ToolTip
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 const val SHARD_ID = "123"
 
@@ -171,7 +177,20 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                 },
                 onCancelDownloading = {
                     viewModel.stopDownloading(it.id)
-                }
+                },
+                previewApi =  Retrofit.Builder()
+                    .baseUrl("https://stage.lfs.rest/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(
+                        OkHttpClient.Builder()
+                            .connectTimeout(60, TimeUnit.SECONDS)
+                            .writeTimeout(60, TimeUnit.SECONDS)
+                            .readTimeout(60, TimeUnit.SECONDS)
+                            //.authenticator(get())
+                            .build()
+                    )
+                    .build()
+                    .create(ImagePreviewApi::class.java)
 
             )
         }
@@ -723,9 +742,19 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
         uploadPercent = 100,
-        downloadPercent = 100,
+        downloadPercent = 0,
         updatedAtTimeStamp = 0,
-        status = MediaRecyclerView.MediaNoteStatus.waiting_download
+        status = MediaRecyclerView.MediaNoteStatus.synchronized,
+        previewKey = "32123213123123"
     )
 }
 
+
+interface ImagePreviewApi : PreviewApi {
+    @GET("api/v4/media")
+    override fun loadPreview(
+        @Query("bucket") bucket: String,
+        @Query("key") key: String,
+        @Query("resize") resize: String?
+    ): Call<ResponseBody>
+}

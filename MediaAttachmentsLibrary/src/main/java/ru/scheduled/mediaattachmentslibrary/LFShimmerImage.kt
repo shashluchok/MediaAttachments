@@ -97,29 +97,32 @@ class LFShimmerImage : ConstraintLayout {
         lf_shimmer_black_out_view.isVisible = false
     }
 
+
     fun loadPreview(previewApi: PreviewApi, key: String, isMainFileDownloadingNow: Boolean) {
         GlobalScope.launch(Dispatchers.IO) {
-            val preview = previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
-            preview?.let {
-                try {
+            try {
+                val preview =
+                    previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
+                preview?.let {
+
                     val inputStream = it.bytes()
                     withContext(Dispatchers.Main) {
                         Glide.with(context).load(inputStream).into(lf_shimmer_iv)
                         stopShimmer()
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
                     }
-                }
-                catch (e:Exception){
-                    withContext(Dispatchers.Main) {
-                        if (!isMainFileDownloadingNow) {
-                            stopShimmer()
-                        }
-                        lf_shimmer_iv.setImageDrawable(null)
-                        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
-                    }
-                    e.printStackTrace()
-                }
 
+
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    if (!isMainFileDownloadingNow) {
+                        stopShimmer()
+                    }
+                    lf_shimmer_iv.setImageDrawable(null)
+                    lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
+                }
+                e.printStackTrace()
             }
 
         }
