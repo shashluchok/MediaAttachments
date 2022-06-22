@@ -225,9 +225,7 @@ class MediaAdapter(
 
                 holder.itemView.visualizer_view.apply {
 
-                    if(uploadPercent == 100) {
-                        setActive(downloadPercent == 100)
-                    }
+
 
                     mediaPlayer?.let { player ->
                         initVisualizer(
@@ -238,7 +236,12 @@ class MediaAdapter(
                             duration = mediaList[position].audioDuration?:0
                         )
                     }
+                    if(uploadPercent == 100) {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            setActive(downloadPercent == 100)
+                        },50)
 
+                    }
 
                     setOnSeekBarPointerOnCallback { isPointerOn ->
                         setParentRecyclerDraggability(!isPointerOn)
