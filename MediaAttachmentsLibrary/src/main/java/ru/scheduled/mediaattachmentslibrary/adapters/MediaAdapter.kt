@@ -198,16 +198,11 @@ class MediaAdapter(
                 } else if (downloadPercent < 100) {
 
                     holder.itemView.lf_shimmer_image.apply {
-                        if(mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized){
-                            stopShimmer()
-                        }
-                        else {
-                            startShimmer()
-                        }
+
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
                                 loadPreview(
-                                    it, key
+                                    it, key, isMainFileDownloadingNow = mediaList[position].status != MediaRecyclerView.MediaNoteStatus.synchronized
                                 )
                             }
                         }
@@ -310,16 +305,11 @@ class MediaAdapter(
 
                 } else if (downloadPercent < 100) {
                     holder.itemView.lf_shimmer_image_photo.apply {
-                        if(mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized){
-                            stopShimmer()
-                        }
-                        else {
-                            startShimmer()
-                        }
+
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
                                 loadPreview(
-                                    it, key
+                                    it, key, isMainFileDownloadingNow = mediaList[position].status != MediaRecyclerView.MediaNoteStatus.synchronized
                                 )
                             }
                         }
