@@ -100,7 +100,8 @@ class LFShimmerImage : ConstraintLayout {
     fun loadPreview(
         previewApi: PreviewApi, key: String,
         onPreviewImageByteArrayLoaded: ((ByteArray) -> Unit)? = null,
-        previousPreview: ByteArray? = null
+        previousPreview: ByteArray? = null,
+        isShimmerActive: Boolean
     ) {
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -129,7 +130,9 @@ class LFShimmerImage : ConstraintLayout {
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        startShimmer()
+                        if (isShimmerActive) {
+                            startShimmer()
+                        } else stopShimmer()
                         lf_shimmer_iv.setImageDrawable(null)
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
                     }
