@@ -177,13 +177,13 @@ class MediaAdapter(
 
                 when (mediaList[position].status) {
                     MediaRecyclerView.MediaNoteStatus.uploading -> {
-                        holder.itemView.lf_shimmer_image_photo.apply {
+                        holder.itemView.lf_shimmer_image.apply {
                             stopShimmer()
                             loadImage(mediaList[position].value)
                         }
                     }
                     MediaRecyclerView.MediaNoteStatus.downloading -> {
-                        holder.itemView.lf_shimmer_image_photo.apply {
+                        holder.itemView.lf_shimmer_image.apply {
 
                             if(previews.get(mediaList[position].id)!=null){
                                 stopShimmer()
@@ -206,7 +206,7 @@ class MediaAdapter(
                         }
                     }
                     MediaRecyclerView.MediaNoteStatus.synchronized -> {
-                        holder.itemView.lf_shimmer_image_photo.apply {
+                        holder.itemView.lf_shimmer_image.apply {
 
                             if (downloadPercent == 100 && uploadPercent == 100) {
                                 stopShimmer()
