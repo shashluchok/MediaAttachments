@@ -300,13 +300,13 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_photo
 
                 when (mediaList[position].status) {
-                    MediaRecyclerView.MediaNoteStatus.uploading -> {
+                    MediaRecyclerView.MediaNoteStatus.uploading, MediaRecyclerView.MediaNoteStatus.waiting_upload -> {
                         holder.itemView.lf_shimmer_image_photo.apply {
                             stopShimmer()
                             loadImage(mediaList[position].value)
                         }
                     }
-                    MediaRecyclerView.MediaNoteStatus.downloading -> {
+                    MediaRecyclerView.MediaNoteStatus.downloading,MediaRecyclerView.MediaNoteStatus.waiting_download -> {
                         holder.itemView.lf_shimmer_image_photo.apply {
 
                             if(previews.get(mediaList[position].id)!=null){
