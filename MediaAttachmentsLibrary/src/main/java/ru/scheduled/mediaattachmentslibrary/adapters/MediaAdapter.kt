@@ -182,7 +182,7 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
 
-                if(downloadPercent == 100){
+                if(downloadPercent == 100 || (downloadPercent == 0 && mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized)){
                     holder.itemView.lf_shimmer_image.apply {
                         stopShimmer()
                     }
@@ -294,7 +294,7 @@ class MediaAdapter(
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo
 
-                if(downloadPercent == 100){
+                if(downloadPercent == 100 || (downloadPercent == 0 && mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized)){
                     holder.itemView.lf_shimmer_image_photo.apply {
                         stopShimmer()
                     }
