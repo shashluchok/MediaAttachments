@@ -105,8 +105,10 @@ class LFShimmerImage : ConstraintLayout {
         GlobalScope.launch(Dispatchers.IO) {
 
             if (previousPreview != null) {
-                Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
-                stopShimmer()
+                withContext(Dispatchers.Main){
+                    Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
+                    stopShimmer()
+                }
             } else {
 
                 try {
