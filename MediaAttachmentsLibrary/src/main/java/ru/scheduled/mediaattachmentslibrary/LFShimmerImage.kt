@@ -103,33 +103,39 @@ class LFShimmerImage : ConstraintLayout {
         previousPreview: ByteArray? = null
     ) {
         GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val preview =
-                    previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
-                preview?.let {
 
-                    val byteArray = it.bytes()
+            if (previousPreview != null) {
+                Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
+                stopShimmer()
+            } else {
+
+                try {
+
+                    val preview =
+                        previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
+                    preview?.let {
+
+                        val byteArray = it.bytes()
+                        withContext(Dispatchers.Main) {
+                            onPreviewImageByteArrayLoaded?.invoke(byteArray)
+                            Glide.with(context).load(byteArray).into(lf_shimmer_iv)
+                            stopShimmer()
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+                        }
+
+                    }
+                } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        onPreviewImageByteArrayLoaded?.invoke(byteArray)
-                        Glide.with(context).load(byteArray).into(lf_shimmer_iv)
-                        stopShimmer()
-                        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+                        startShimmer()
+                        lf_shimmer_iv.setImageDrawable(null)
+                        lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
                     }
+                    e.printStackTrace()
+                }
 
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    if(previousPreview!=null){
-                        Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
-                        stopShimmer()
-                    }
-                    else startShimmer()
-                    lf_shimmer_iv.setImageDrawable(null)
-                    lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
-                }
-                e.printStackTrace()
             }
+
 
         }
     }
