@@ -84,6 +84,10 @@ class VoiceNoteView : ConstraintLayout {
         setOnPlayingState(STOPPED)
     }
 
+    fun setActive(isActive:Boolean){
+        media_on_play_visualizer.setActiveState(isActive)
+    }
+
     fun setRecognizedSpeech(text: String) {
         if (!text.isNullOrEmpty()) {
             media_speech_recognize.visibility = View.VISIBLE
@@ -420,6 +424,20 @@ private class Visualizer : View {
         initView()
     }
 
+    fun setActiveState(isActive:Boolean){
+        if(isActive){
+            playingPaint?.apply {
+                color = resources.getColor(R.color.defaultActiveVoice)
+            }
+        }
+        else {
+            playingPaint?.apply {
+                color = resources.getColor(R.color.defaultNotActiveVoice)
+            }
+        }
+        invalidate()
+    }
+
 
     fun initView() {
 
@@ -437,7 +455,7 @@ private class Visualizer : View {
         playingPaint = Paint().apply {
             isAntiAlias = true
             isDither = true
-            color = resources.getColor(R.color.defaultActive)
+            color = resources.getColor(R.color.defaultActiveVoice)
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
             strokeWidth = dpToPx(2)
@@ -445,7 +463,7 @@ private class Visualizer : View {
         mPaint = Paint().apply {
             isAntiAlias = true
             isDither = true
-            color = resources.getColor(R.color.defaultNotActive)
+            color = resources.getColor(R.color.defaultNotActiveVoice)
             style = Paint.Style.STROKE
             strokeCap = Paint.Cap.ROUND
             strokeWidth = dpToPx(2)

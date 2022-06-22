@@ -230,6 +230,10 @@ class MediaAdapter(
 
                 holder.itemView.visualizer_view.apply {
 
+                    if(uploadPercent == 100) {
+                        setActive(downloadPercent == 100)
+                    }
+
                     mediaPlayer?.let { player ->
                         initVisualizer(
                                 player = player,

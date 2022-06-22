@@ -3,6 +3,8 @@
     <color name="lib_white">#FFFFFFFF</color>
     <color name="defaultActive">#2D9CDB</color>
     <color name="defaultNotActive">#8EC6E7</color>
+    <color name="defaultActiveVoice">#8EC6E7</color>
+    <color name="defaultNotActiveVoice">#E6E4EA</color>
     <color name="defaultText">#363636</color>
     <color name="defaultTextLight">#9A99A2</color>
     <color name="defaultDivider">#A3BDBDBD</color>
