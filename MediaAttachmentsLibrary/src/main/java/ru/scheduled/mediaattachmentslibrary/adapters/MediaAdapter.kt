@@ -15,20 +15,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
 import kotlinx.android.synthetic.main.item_media_note_sketch.view.*
 import kotlinx.android.synthetic.main.item_media_note_text.view.*
 import kotlinx.android.synthetic.main.item_voice.view.*
-import kotlinx.android.synthetic.main.layout_lf_shimmer_image.view.*
 import kotlinx.android.synthetic.main.layout_loading.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import ru.scheduled.mediaattachmentslibrary.*
 import java.io.File
 
@@ -182,38 +175,49 @@ class MediaAdapter(
                 checkBox = holder.itemView.note_checkbox_sketch
                 contentView = holder.itemView.item_media_note_sketch_cv
 
-                if(downloadPercent == 100 ){
-                    holder.itemView.lf_shimmer_image.apply {
-                        stopShimmer()
-                    }
-                }
-
-                if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
-
-                        holder.itemView.lf_shimmer_image.apply {
-                            removeAfterEffects()
+                when (mediaList[position].status) {
+                    MediaRecyclerView.MediaNoteStatus.uploading -> {
+                        holder.itemView.lf_shimmer_image_photo.apply {
                             stopShimmer()
                             loadImage(mediaList[position].value)
                         }
+                    }
+                    MediaRecyclerView.MediaNoteStatus.downloading -> {
+                        holder.itemView.lf_shimmer_image_photo.apply {
 
-                } else if (downloadPercent < 100) {
-
-                    holder.itemView.lf_shimmer_image.apply {
-
-                        previewApi?.let {
-                            mediaList[position].previewKey?.let{ key->
-                                loadPreview(
-                                    it, key,
-                                    onPreviewImageByteArrayLoaded = {
-                                        previews.put(mediaList[position].id , it)
-                                    },
-                                    previousPreview = previews.get(mediaList[position].id),
-                                    isShimmerActive = !(downloadPercent == 0 && mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized)
-                                )
+                            if(previews.get(mediaList[position].id)!=null){
+                                stopShimmer()
                             }
-                        }
+                            else startShimmer()
 
-                        setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
+                            previewApi?.let {
+                                mediaList[position].previewKey?.let{ key->
+                                    loadPreview(
+                                        it, key,
+                                        onPreviewImageByteArrayLoaded = {
+                                            stopShimmer()
+                                            previews.put(mediaList[position].id , it)
+                                        },
+                                        previousPreview = previews.get(mediaList[position].id)
+                                    )
+                                }
+                            }
+                            setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
+                        }
+                    }
+                    MediaRecyclerView.MediaNoteStatus.synchronized -> {
+                        holder.itemView.lf_shimmer_image_photo.apply {
+
+                            if (downloadPercent == 100 && uploadPercent == 100) {
+                                stopShimmer()
+                                removeAfterEffects()
+                                loadImage(mediaList[position].value)
+                            } else if (uploadPercent == 100) {
+                                stopShimmer()
+                                stopLoadingPreview()
+                            }
+
+                        }
 
                     }
                 }
@@ -295,40 +299,50 @@ class MediaAdapter(
                 contentView = holder.itemView.item_media_note_photo_cv
                 checkBox = holder.itemView.note_checkbox_photo
 
-                if(downloadPercent == 100){
-                    holder.itemView.lf_shimmer_image_photo.apply {
-                        stopShimmer()
-                    }
-                }
-
-                if (downloadPercent == 100 && (uploadPercent == 0 || uploadPercent == 100)) {
+                when (mediaList[position].status) {
+                    MediaRecyclerView.MediaNoteStatus.uploading -> {
                         holder.itemView.lf_shimmer_image_photo.apply {
                             stopShimmer()
-                            removeAfterEffects()
                             loadImage(mediaList[position].value)
                         }
-                    holder.itemView.lf_shimmer_image_photo.apply {
-                        removeAfterEffects()
-                        loadImage(mediaList[position].value)
                     }
+                    MediaRecyclerView.MediaNoteStatus.downloading -> {
+                        holder.itemView.lf_shimmer_image_photo.apply {
 
-                } else if (downloadPercent < 100) {
-                    holder.itemView.lf_shimmer_image_photo.apply {
-
-                        previewApi?.let {
-                            mediaList[position].previewKey?.let{ key->
-                                loadPreview(
-                                    it, key,
-                                    onPreviewImageByteArrayLoaded = {
-                                        previews.put(mediaList[position].id , it)
-                                    },
-                                    previousPreview = previews.get(mediaList[position].id)
-                                    ,
-                                    isShimmerActive = !(downloadPercent == 0 && mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized)
-                                )
+                            if(previews.get(mediaList[position].id)!=null){
+                                stopShimmer()
                             }
+                            else startShimmer()
+
+                            previewApi?.let {
+                                mediaList[position].previewKey?.let{ key->
+                                    loadPreview(
+                                        it, key,
+                                        onPreviewImageByteArrayLoaded = {
+                                            stopShimmer()
+                                            previews.put(mediaList[position].id , it)
+                                        },
+                                        previousPreview = previews.get(mediaList[position].id)
+                                    )
+                                }
+                            }
+                            setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
                         }
-                        setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
+                    }
+                    MediaRecyclerView.MediaNoteStatus.synchronized -> {
+                        holder.itemView.lf_shimmer_image_photo.apply {
+
+                            if (downloadPercent == 100 && uploadPercent == 100) {
+                                stopShimmer()
+                                removeAfterEffects()
+                                loadImage(mediaList[position].value)
+                            } else if (uploadPercent == 100) {
+                                stopShimmer()
+                                stopLoadingPreview()
+                            }
+
+                        }
+
                     }
                 }
 

@@ -29,6 +29,7 @@ class LFShimmerImage : ConstraintLayout {
 
     private var defaultSize = "320"
 
+    private var isPreviewOkToShow = false
 
     fun setOnImageClickedCallback(callback: () -> Unit) {
         lf_shimmer_iv.setOnClickListener {
@@ -96,53 +97,52 @@ class LFShimmerImage : ConstraintLayout {
         lf_shimmer_black_out_view.isVisible = false
     }
 
+    fun stopLoadingPreview(){
+        isPreviewOkToShow = false
+    }
+
 
     fun loadPreview(
         previewApi: PreviewApi, key: String,
         onPreviewImageByteArrayLoaded: ((ByteArray) -> Unit)? = null,
-        previousPreview: ByteArray? = null,
-        isShimmerActive: Boolean
+        previousPreview: ByteArray? = null
     ) {
-        GlobalScope.launch(Dispatchers.IO) {
 
-            if (previousPreview != null && !isShimmerActive) {
-                withContext(Dispatchers.Main){
-                    Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
-                    stopShimmer()
-                }
-            } else {
 
+        if (previousPreview != null) {
+            Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
+        } else {
+            GlobalScope.launch(Dispatchers.IO) {
                 try {
 
+                    isPreviewOkToShow =true
                     val preview =
                         previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
                     preview?.let {
 
                         val byteArray = it.bytes()
                         withContext(Dispatchers.Main) {
-                            onPreviewImageByteArrayLoaded?.invoke(byteArray)
-                            Glide.with(context).load(byteArray).into(lf_shimmer_iv)
-                            stopShimmer()
-                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-
+                            if(isPreviewOkToShow) {
+                                onPreviewImageByteArrayLoaded?.invoke(byteArray)
+                                Glide.with(context).load(byteArray).into(lf_shimmer_iv)
+                                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            }
                         }
 
                     }
                 } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        if (isShimmerActive) {
-                            startShimmer()
-                        } else stopShimmer()
+                    /*withContext(Dispatchers.Main) {
+
                         lf_shimmer_iv.setImageDrawable(null)
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
-                    }
+                    }*/
                     e.printStackTrace()
                 }
 
+
             }
-
-
         }
+
     }
 
     fun startShimmer(){
