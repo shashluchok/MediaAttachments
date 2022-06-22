@@ -245,7 +245,7 @@ class VoiceRecorder(private val mContext: Context) {
             if (!mydir.exists()) {
                 mydir.mkdirs()
             }
-            mFileName = "$mydir/${System.currentTimeMillis()}"
+            mFileName = "$mydir/${System.currentTimeMillis()}.mp3"
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
