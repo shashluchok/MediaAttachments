@@ -43,6 +43,7 @@ class MediaAdapter(
     private val previewApi: PreviewApi?
 ) : RecyclerView.Adapter<MediaAdapter.NotesViewHolder>() {
 
+    private val previews = mutableMapOf<String,ByteArray>()
 
    inner class NotesViewHolder(v: View) : RecyclerView.ViewHolder(v), AnimateViewHolder {
         override fun animateAddImpl(
@@ -202,7 +203,11 @@ class MediaAdapter(
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
                                 loadPreview(
-                                    it, key, isMainFileDownloadingNow = mediaList[position].status != MediaRecyclerView.MediaNoteStatus.synchronized
+                                    it, key,
+                                    onPreviewImageByteArrayLoaded = {
+                                        previews.put(mediaList[position].id , it)
+                                    },
+                                    previousPreview = previews.get(mediaList[position].id)
                                 )
                             }
                         }
@@ -312,7 +317,11 @@ class MediaAdapter(
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
                                 loadPreview(
-                                    it, key, isMainFileDownloadingNow = mediaList[position].status != MediaRecyclerView.MediaNoteStatus.synchronized
+                                    it, key,
+                                    onPreviewImageByteArrayLoaded = {
+                                        previews.put(mediaList[position].id , it)
+                                    },
+                                    previousPreview = previews.get(mediaList[position].id)
                                 )
                             }
                         }

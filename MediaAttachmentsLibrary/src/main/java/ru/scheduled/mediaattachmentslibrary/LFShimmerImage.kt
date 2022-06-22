@@ -22,7 +22,6 @@ import java.io.File
 
 class LFShimmerImage : ConstraintLayout {
 
-    private var wasPreviewLoaded = false
 
     enum class AfterEffect {
         BLUR, BLACK_OUT
@@ -31,13 +30,13 @@ class LFShimmerImage : ConstraintLayout {
     private var defaultSize = "320"
 
 
-    fun setOnImageClickedCallback(callback:()->Unit){
+    fun setOnImageClickedCallback(callback: () -> Unit) {
         lf_shimmer_iv.setOnClickListener {
             callback.invoke()
         }
     }
 
-    fun setOnLongClickListener(callback: () -> Unit){
+    fun setOnLongClickListener(callback: () -> Unit) {
         lf_shimmer_iv.setOnLongClickListener {
             callback.invoke()
             true
@@ -91,34 +90,41 @@ class LFShimmerImage : ConstraintLayout {
         }
     }
 
-    fun removeAfterEffects(){
+    fun removeAfterEffects() {
         lf_shimmer_blur_view.setBlurEnabled(false)
         lf_shimmer_blur_view.isVisible = false
         lf_shimmer_black_out_view.isVisible = false
     }
 
 
-    fun loadPreview(previewApi: PreviewApi, key: String, isMainFileDownloadingNow: Boolean) {
+    fun loadPreview(
+        previewApi: PreviewApi, key: String,
+        onPreviewImageByteArrayLoaded: ((ByteArray) -> Unit)? = null,
+        previousPreview: ByteArray? = null
+    ) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val preview =
                     previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
                 preview?.let {
 
-                    val inputStream = it.bytes()
+                    val byteArray = it.bytes()
                     withContext(Dispatchers.Main) {
-                        Glide.with(context).load(inputStream).into(lf_shimmer_iv)
+                        onPreviewImageByteArrayLoaded?.invoke(byteArray)
+                        Glide.with(context).load(byteArray).into(lf_shimmer_iv)
                         stopShimmer()
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
-                    }
 
+                    }
 
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    if (!isMainFileDownloadingNow) {
+                    if(previousPreview!=null){
+                        Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
                         stopShimmer()
                     }
+                    else startShimmer()
                     lf_shimmer_iv.setImageDrawable(null)
                     lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
                 }
