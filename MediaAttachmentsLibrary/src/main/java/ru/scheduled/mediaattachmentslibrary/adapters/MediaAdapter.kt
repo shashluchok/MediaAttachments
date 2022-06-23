@@ -300,21 +300,21 @@ class MediaAdapter(
 
                     if(previews.get(mediaList[position].id)!=null){
                         stopShimmer()
+                        previewApi?.let {
+                            mediaList[position].previewKey?.let{ key->
+                                loadPreview(
+                                    it, key,
+                                    onPreviewImageByteArrayLoaded = {
+                                        stopShimmer()
+                                        previews.put(mediaList[position].id , it)
+                                    },
+                                    previousPreview = previews.get(mediaList[position].id)
+                                )
+                            }
+                        }
                     }
                     else startShimmer()
 
-                    previewApi?.let {
-                        mediaList[position].previewKey?.let{ key->
-                            loadPreview(
-                                it, key,
-                                onPreviewImageByteArrayLoaded = {
-                                    stopShimmer()
-                                    previews.put(mediaList[position].id , it)
-                                },
-                                previousPreview = previews.get(mediaList[position].id)
-                            )
-                        }
-                    }
                     setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
                 }
             }
@@ -341,7 +341,6 @@ class MediaAdapter(
 
                 loadingLayoutCl?.visibility = View.VISIBLE
 
-
                 if(downloadPercent == 0) {
                     if(mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized){
                         loadingLayoutProgressIndicator?.isIndeterminate = false
@@ -354,8 +353,7 @@ class MediaAdapter(
 
                 } else {
                     loadingLayoutProgressIndicator?.isIndeterminate = false
-                    if(mediaList[position].isLoadingStopped) loadingLayoutProgressIndicator?.progress = 0
-                    else loadingLayoutProgressIndicator?.progress = downloadPercent
+                    loadingLayoutProgressIndicator?.progress = downloadPercent
                 }
 
                 val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
