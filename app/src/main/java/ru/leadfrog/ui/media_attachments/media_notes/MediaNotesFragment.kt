@@ -741,10 +741,10 @@ fun DbMediaNotes.toMediaNote(): ru.scheduled.mediaattachmentslibrary.MediaRecycl
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList ?: listOf(),
-        uploadPercent = 5,
+        uploadPercent = 100,
         downloadPercent = 100,
         updatedAtTimeStamp = 0,
-        status = MediaRecyclerView.MediaNoteStatus.uploading,
+        status = MediaRecyclerView.MediaNoteStatus.synchronized,
         previewKey = "32123213123123"
     )
 }

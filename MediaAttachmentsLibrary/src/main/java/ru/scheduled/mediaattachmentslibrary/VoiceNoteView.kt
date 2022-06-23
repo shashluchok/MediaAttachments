@@ -84,9 +84,6 @@ class VoiceNoteView : ConstraintLayout {
         setOnPlayingState(STOPPED)
     }
 
-    fun setActive(isActive:Boolean){
-        media_on_play_visualizer.setActiveState(isActive)
-    }
 
     fun setRecognizedSpeech(text: String) {
         if (!text.isNullOrEmpty()) {
@@ -119,7 +116,8 @@ class VoiceNoteView : ConstraintLayout {
             amplitudes: List<Int>?,
             file: File,
             isCurrentVisualizer: Boolean,
-            duration: Int
+            duration: Int,
+            isActive: Boolean
     ) {
         val amplitudesList = mutableListOf<Int>().also { list->
             amplitudes?.let{
@@ -144,7 +142,7 @@ class VoiceNoteView : ConstraintLayout {
             media_duration.text = getFormatTimerString((duration - duration * percentage).toLong())
             media_on_play_visualizer.visualize(amplitudesList = amplitudesList, mCurrentPercentage = percentage)
         } else {
-            media_on_play_visualizer.visualize(amplitudesList = amplitudesList)
+            media_on_play_visualizer.visualize(amplitudesList = amplitudesList, isActive = isActive)
             CoroutineScope(Dispatchers.IO).launch {
                 val media = MediaPlayer().apply {
 
@@ -424,21 +422,6 @@ private class Visualizer : View {
         initView()
     }
 
-    fun setActiveState(isActive:Boolean){
-        if(isActive){
-            playingPaint?.apply {
-                color = resources.getColor(R.color.defaultActiveVoice)
-            }
-        }
-        else {
-            playingPaint?.apply {
-                color = resources.getColor(R.color.defaultNotActiveVoice)
-            }
-        }
-        invalidate()
-    }
-
-
     fun initView() {
 
         mX = dpToPx(3)
@@ -528,13 +511,23 @@ private class Visualizer : View {
         invalidate()
     }
 
-    fun visualize(amplitudesList: List<Int>, mCurrentPercentage: Float = 0f) {
+    fun visualize(amplitudesList: List<Int>, mCurrentPercentage: Float = 0f, isActive: Boolean = true) {
         try {
             viewTreeObserver.addOnGlobalLayoutListener(
                     object :
                             ViewTreeObserver.OnGlobalLayoutListener {
                         override fun onGlobalLayout() {
                             initView()
+                            if(isActive){
+                                playingPaint?.apply {
+                                    color = resources.getColor(R.color.defaultActiveVoice)
+                                }
+                            }
+                            else {
+                                playingPaint?.apply {
+                                    color = resources.getColor(R.color.defaultNotActiveVoice)
+                                }
+                            }
                             val mWidth = width
                             val mHeight = height
 

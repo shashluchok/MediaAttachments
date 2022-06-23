@@ -197,15 +197,19 @@ class MediaAdapter(
                                 amplitudes = mediaList[position].voiceAmplitudesList,
                                 file = File(mediaList[position].value),
                                 isCurrentVisualizer = currentVoice == position,
-                            duration = mediaList[position].audioDuration?:0
+                            duration = mediaList[position].audioDuration?:0,
+                           isActive =  when(mediaList[position].status){
+                                MediaRecyclerView.MediaNoteStatus.synchronized -> {
+                                    downloadPercent == 100
+                                }
+                                else -> {
+                                    false
+                                }
+
+                            }
                         )
                     }
-                    if(uploadPercent == 100) {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            setActive(downloadPercent == 100)
-                        },50)
 
-                    }
 
                     setOnSeekBarPointerOnCallback { isPointerOn ->
                         setParentRecyclerDraggability(!isPointerOn)
