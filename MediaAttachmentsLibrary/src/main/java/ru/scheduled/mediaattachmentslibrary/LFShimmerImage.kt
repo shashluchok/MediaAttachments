@@ -28,7 +28,7 @@ class LFShimmerImage : ConstraintLayout {
     }
 
     private var defaultSize = "320"
-
+    private var isLoading = false
     private var isPreviewOkToShow = false
 
     fun setOnImageClickedCallback(callback: () -> Unit) {
@@ -107,15 +107,15 @@ class LFShimmerImage : ConstraintLayout {
         onPreviewImageByteArrayLoaded: ((ByteArray) -> Unit)? = null,
         previousPreview: ByteArray? = null
     ) {
-
+        if(isLoading)return
 
         if (previousPreview != null) {
             Glide.with(context).load(previousPreview).into(lf_shimmer_iv)
         } else {
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-
                     isPreviewOkToShow =true
+                    isLoading = true
                     val preview =
                         previewApi.loadPreview(key = key, resize = defaultSize).execute().body()
                     preview?.let {
@@ -126,6 +126,7 @@ class LFShimmerImage : ConstraintLayout {
                                 onPreviewImageByteArrayLoaded?.invoke(byteArray)
                                 Glide.with(context).load(byteArray).into(lf_shimmer_iv)
                                 lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                                isLoading = false
                             }
                         }
 
@@ -136,6 +137,7 @@ class LFShimmerImage : ConstraintLayout {
                         lf_shimmer_iv.setImageDrawable(null)
                         lf_shimmer_iv.setBackgroundColor(Color.parseColor("#E6E4EA"))
                     }*/
+                    isLoading = false
                     e.printStackTrace()
                 }
 

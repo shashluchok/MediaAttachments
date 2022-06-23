@@ -300,6 +300,9 @@ class MediaAdapter(
 
                     if(previews.get(mediaList[position].id)!=null){
                         stopShimmer()
+
+                    }
+                    else {
                         previewApi?.let {
                             mediaList[position].previewKey?.let{ key->
                                 loadPreview(
@@ -312,8 +315,8 @@ class MediaAdapter(
                                 )
                             }
                         }
+                        startShimmer()
                     }
-                    else startShimmer()
 
                     setAfterEffect(afterEffect = LFShimmerImage.AfterEffect.BLUR)
                 }
