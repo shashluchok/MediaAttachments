@@ -46,11 +46,11 @@ class ImageViewerView : ConstraintLayout {
 
     private var initIndex = 0
 
-    private val listOfMedia = mutableListOf<MediaRecyclerView.MediaNote>()
+    private val listOfMedia = mutableListOf<ImageItem>()
 
     //callbacks
     private var onToolBarBackClicked: (() -> Unit)? = null
-    private var onDeleteClicked: ((MediaRecyclerView.MediaNote) -> Unit)? = null
+    private var onDeleteClicked: ((ImageItem) -> Unit)? = null
 
     @SuppressLint("ClickableViewAccessibility")
     fun setOnTryToLeaveCallback(callback:()->Unit){
@@ -187,12 +187,12 @@ class ImageViewerView : ConstraintLayout {
 
     }
 
-    fun setOnDeleteClickedCallback(callback:(MediaRecyclerView.MediaNote)->Unit){
+    fun setOnDeleteClickedCallback(callback:(ImageItem)->Unit){
         media_image_viewer_delete_iv.visibility = View.VISIBLE
         onDeleteClicked = callback
     }
 
-    fun setMediaNotes(listOfMediaNotes: List<MediaRecyclerView.MediaNote>, index: Int) {
+    fun setMediaNotes(listOfMediaNotes: List<ImageItem>, index: Int) {
         listOfMedia.clear()
         listOfMedia.addAll(listOfMediaNotes)
         setUpViewPagerAdapter(listOfMedia)
@@ -257,7 +257,7 @@ class ImageViewerView : ConstraintLayout {
         })
     }
 
-    private fun setUpViewPagerAdapter(listOfMediaNotes: List<MediaRecyclerView.MediaNote>) {
+    private fun setUpViewPagerAdapter(listOfMediaNotes: List<ImageItem>) {
         if (listOfMediaNotes.isNotEmpty()) {
             media_image_viewer_view_pager.adapter =
                     ImageViewPagerAdapter(context, listOfMediaNotes)
@@ -301,7 +301,7 @@ class ImageViewerView : ConstraintLayout {
 
     inner class ImageViewPagerAdapter(
         private val mContext: Context,
-        private val listOfMediaNotes: List<MediaRecyclerView.MediaNote>,
+        private val listOfMediaNotes: List<ImageItem>,
     ) : PagerAdapter() {
 
         override fun getCount(): Int {
@@ -316,10 +316,10 @@ class ImageViewerView : ConstraintLayout {
                     false
             )
             itemView.tag = position
-            if(listOfMediaNotes[position].mediaType == MediaRecyclerView.MediaItemTypes.TYPE_SKETCH ){
+            if(listOfMediaNotes[position].type == ImageItemTypes.SKETCH ){
                 itemView.setBackgroundColor(Color.parseColor("#ffffff"))
             }
-            Glide.with(mContext).load(listOfMediaNotes[position].value).listener(object : RequestListener<Drawable> {
+            Glide.with(mContext).load(listOfMediaNotes[position].filePath).listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     return false
                 }
@@ -509,4 +509,15 @@ class ImageViewerView : ConstraintLayout {
     }
 
 
+}
+
+data class ImageItem(
+    val id: String,
+    val type:ImageItemTypes,
+    val filePath: String,
+    val imageText: String
+)
+
+enum class ImageItemTypes {
+    PHOTO,SKETCH
 }

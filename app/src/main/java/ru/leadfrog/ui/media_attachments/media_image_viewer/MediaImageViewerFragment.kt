@@ -71,7 +71,7 @@ class MediaImageViewerFragment : BaseFragment() {
                 } else {
                     currentIndex = downloadedList.indexOfFirst { it.id == dbNote.id }
 
-                    mediaViewer.setMediaNotes(downloadedList.map { it.toMediaNote() },currentIndex?:0)
+//                    mediaViewer.setMediaNotes(downloadedList.map { it.toMediaNote() },currentIndex?:0)
                 }
 
             })
