@@ -249,7 +249,28 @@ class LFShimmerImage : ConstraintLayout {
             }
         }
     }
-    fun loadImage(image: String?, isTemplate:Boolean){
+    fun loadImage(image: String?){
+        image?.let {
+            lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(300)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun loadImage(image: Int?, isTemplate:Boolean){
         image?.let {
             if(isTemplate) {
                 val params = lf_shimmer_iv.layoutParams
@@ -276,6 +297,5 @@ class LFShimmerImage : ConstraintLayout {
             }
         }
     }
-
 
 }
