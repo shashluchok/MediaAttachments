@@ -162,6 +162,7 @@ class LFShimmerImage : ConstraintLayout {
 
 
             try {
+                lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
                 Glide.with(context)
                     .load(image)
                     .transition(
@@ -183,7 +184,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(image: File?){
         image?.let {
 
-
+            lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {
                 Glide.with(context)
                     .load(image)
@@ -206,7 +207,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(image: Int?){
         image?.let {
 
-
+            lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {
                 Glide.with(context)
                     .load(image)
@@ -229,7 +230,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(image: Uri?){
         image?.let {
 
-
+            lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {
                 Glide.with(context)
                     .load(image)
@@ -251,7 +252,7 @@ class LFShimmerImage : ConstraintLayout {
     fun loadImage(image: String?){
         image?.let {
 
-
+            lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {
                 Glide.with(context)
                     .load(image)
