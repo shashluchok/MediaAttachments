@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -277,6 +278,7 @@ class LFShimmerImage : ConstraintLayout {
                 params.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
                 params.width = LayoutParams.WRAP_CONTENT
                 lf_shimmer_iv.layoutParams = params
+                lf_shimmer_iv.scaleType = ImageView.ScaleType.CENTER
             }
             lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {

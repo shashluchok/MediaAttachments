@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/drawable/ic_image.xml" value="0.2285" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/camera_capture_view.xml" value="0.390625" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/item_media_note_photo.xml" value="0.390625" />
         <entry key="..\:/AndroidStudioProjects/MediaAttachments/MediaAttachmentsLibrary/src/main/res/layout/item_media_note_sketch.xml" value="0.43125" />
