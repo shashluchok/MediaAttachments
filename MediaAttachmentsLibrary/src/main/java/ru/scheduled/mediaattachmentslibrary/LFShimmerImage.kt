@@ -202,6 +202,30 @@ class LFShimmerImage : ConstraintLayout {
             }
         }
     }
+
+    fun loadImage(image: Int?){
+        image?.let {
+
+
+            try {
+                Glide.with(context)
+                    .load(image)
+                    .transition(
+                        DrawableTransitionOptions.withCrossFade(300)
+                    )
+                    /*.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)*/
+                    .into(lf_shimmer_iv)
+                lf_shimmer_fl.stopShimmer()
+                lf_shimmer_fl.visibility = View.GONE
+                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun loadImage(image: Uri?){
         image?.let {
 
