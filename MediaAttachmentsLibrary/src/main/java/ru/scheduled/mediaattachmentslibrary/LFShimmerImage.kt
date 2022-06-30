@@ -249,9 +249,14 @@ class LFShimmerImage : ConstraintLayout {
             }
         }
     }
-    fun loadImage(image: String?){
+    fun loadImage(image: String?, isTemplate:Boolean){
         image?.let {
-
+            if(isTemplate) {
+                val params = lf_shimmer_iv.layoutParams
+                params.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                params.width = LayoutParams.WRAP_CONTENT
+                lf_shimmer_iv.layoutParams = params
+            }
             lf_shimmer_iv.setBackgroundColor(context.resources.getColor(R.color.lib_white))
             try {
                 Glide.with(context)
