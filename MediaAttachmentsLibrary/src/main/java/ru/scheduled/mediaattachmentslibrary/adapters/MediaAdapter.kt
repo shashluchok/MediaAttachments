@@ -563,6 +563,7 @@ class MediaAdapter(
                                         || it.uploadPercent != uploadPercent
                                         || it.recognizedSpeechText != recognizedSpeechText
                                         || it.status != status
+                                        || it.imageNoteText != imageNoteText
                                     ) wasChanged = true
 
                                     value = it.value
@@ -570,6 +571,7 @@ class MediaAdapter(
                                     recognizedSpeechText = it.recognizedSpeechText
                                     downloadPercent = it.downloadPercent
                                     uploadPercent = it.uploadPercent
+                                    imageNoteText =  it.imageNoteText
                                 }
                                if(wasChanged) notifyItemChanged(newData.indexOf(it))
                             }

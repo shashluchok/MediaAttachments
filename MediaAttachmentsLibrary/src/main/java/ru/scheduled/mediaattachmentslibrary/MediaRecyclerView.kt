@@ -90,7 +90,7 @@ class MediaRecyclerView : RecyclerView {
         var value: String,
         var recognizedSpeechText: String,
         val voiceAmplitudesList: List<Int>,
-        val imageNoteText: String,
+        var imageNoteText: String,
         val createdAtTimeStamp:Long,
         var updatedAtTimeStamp:Long,
         var isChosen:Boolean = false,

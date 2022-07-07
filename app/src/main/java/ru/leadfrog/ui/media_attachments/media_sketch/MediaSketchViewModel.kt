@@ -90,7 +90,7 @@ class MediaSketchViewModel(private val mediaNotesInteractor: MediaNotesRepositor
                 }
 
                 val fileName =
-                        "${dbMediaNote.value}"
+                    "$mydir/${System.currentTimeMillis()}"
                 launch(Dispatchers.IO){
                     val f = File(fileName)
                     if (f.exists()) f.delete()
