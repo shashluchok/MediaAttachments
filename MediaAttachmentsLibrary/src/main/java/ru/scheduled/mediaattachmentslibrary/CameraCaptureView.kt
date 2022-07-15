@@ -1,6 +1,7 @@
 package ru.scheduled.mediaattachmentslibrary
 
 import android.Manifest
+import android.R.attr
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,19 +9,20 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
+import android.graphics.*
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
+import androidx.camera.core.Camera
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -660,6 +662,17 @@ class CameraCaptureView: ConstraintLayout {
         }
     }
 
+    private fun exifToDegrees(exifOrientation: Int): Int {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270
+        }
+        return 0
+    }
+
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
@@ -748,10 +761,29 @@ class CameraCaptureView: ConstraintLayout {
 
 
         }
+
         imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 enableUserInteraction()
                 if(photoFile!=null){
+                    val exif = ExifInterface(photoFile.getPath())
+                    val rotation: Int =
+                        exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                    val rotationInDegrees: Int = exifToDegrees(rotation)
+                    val mBitmap = BitmapFactory.decodeFile(photoFile.toString())
+                    if(rotationInDegrees != 0){
+                        val matrix = Matrix()
+                            matrix.postRotate(rotationInDegrees.toFloat())
+                        val adjustedBitmap =
+                            Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.width, mBitmap.height, matrix, true)
+                        val fos = FileOutputStream(photoFile)
+                        val stream = ByteArrayOutputStream()
+                        adjustedBitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                        val imageBytes = stream.toByteArray()
+                        fos.write(imageBytes)
+                        fos.flush()
+                        fos.close()
+                    }
                     onImageSaved?.invoke(Uri.fromFile(photoFile))
                 }
                 else {
