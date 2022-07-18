@@ -4,15 +4,20 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.layout_lf_shimmer_image.view.*
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import com.bumptech.glide.request.target.Target
 
 class LFShimmerImage : ConstraintLayout {
 
@@ -169,12 +175,20 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -192,12 +206,20 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -215,12 +237,20 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -238,12 +268,20 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -259,12 +297,21 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                         return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -287,12 +334,20 @@ class LFShimmerImage : ConstraintLayout {
                     .transition(
                         DrawableTransitionOptions.withCrossFade(300)
                     )
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return false
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            lf_shimmer_fl.stopShimmer()
+                            lf_shimmer_fl.visibility = View.GONE
+                            lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                            return false
+                        }
+                    })
                     /*.diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)*/
                     .into(lf_shimmer_iv)
-                lf_shimmer_fl.stopShimmer()
-                lf_shimmer_fl.visibility = View.GONE
-                lf_shimmer_iv.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
 
             } catch (e: Exception) {
                 e.printStackTrace()
