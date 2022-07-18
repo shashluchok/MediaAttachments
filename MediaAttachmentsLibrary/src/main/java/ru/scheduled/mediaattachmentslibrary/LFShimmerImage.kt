@@ -270,6 +270,7 @@ class LFShimmerImage : ConstraintLayout {
                     )
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            loadImage(image)
                             return false
                         }
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
@@ -299,7 +300,8 @@ class LFShimmerImage : ConstraintLayout {
                     )
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                         return false
+                            loadImage(image)
+                            return false
                         }
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             lf_shimmer_fl.stopShimmer()
