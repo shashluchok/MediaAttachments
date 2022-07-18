@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -270,7 +272,9 @@ class LFShimmerImage : ConstraintLayout {
                     )
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            loadImage(image)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                loadImage(image)
+                            }, 200)
                             return false
                         }
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
@@ -300,7 +304,9 @@ class LFShimmerImage : ConstraintLayout {
                     )
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            loadImage(image)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                loadImage(image)
+                            }, 200)
                             return false
                         }
                         override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
