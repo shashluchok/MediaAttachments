@@ -95,6 +95,14 @@ class MediaToolbarView : ConstraintLayout {
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
     }
 
+    fun getCurrentText():String {
+        return bottom_notes_add_text_note_et.text.toString()
+    }
+
+    fun setNewNoteText(text: String){
+        bottom_notes_add_text_note_et.setText(text)
+    }
+
     fun setOnMediaEditingCancelClickedCallback(callback: () -> Unit) {
         cancel_tv.setOnClickListener {
             callback.invoke()
