@@ -100,6 +100,7 @@ class MediaToolbarView : ConstraintLayout {
     }
 
     fun setNewNoteText(text: String){
+        setUpTextNoteCreationToolbarVisibility(isVisible = true)
         bottom_notes_add_text_note_et.setText(text)
     }
 
