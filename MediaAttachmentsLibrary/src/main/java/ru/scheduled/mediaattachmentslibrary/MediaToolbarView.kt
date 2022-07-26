@@ -382,7 +382,7 @@ class MediaToolbarView : ConstraintLayout {
         )
     }
 
-    fun clearFocus(){
+    fun clearEtFocus(){
         bottom_notes_add_text_note_et.clearFocus()
     }
 
