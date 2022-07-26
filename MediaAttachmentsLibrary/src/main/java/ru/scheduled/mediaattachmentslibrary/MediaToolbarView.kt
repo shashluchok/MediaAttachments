@@ -382,6 +382,10 @@ class MediaToolbarView : ConstraintLayout {
         )
     }
 
+    fun clearFocus(){
+        bottom_notes_add_text_note_et.clearFocus()
+    }
+
     fun stopEditing(){
         onCancelEditting?.invoke()
         setEdittingViewsVisibility(areVisible = false)
