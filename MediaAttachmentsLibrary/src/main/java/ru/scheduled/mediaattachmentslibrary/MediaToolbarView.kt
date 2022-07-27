@@ -382,25 +382,22 @@ class MediaToolbarView : ConstraintLayout {
         )
     }
 
-    fun setOnNewTextCallback(callback:(String)->Unit){
-        bottom_notes_add_text_note_et.doOnTextChanged { text, start, before, count ->
-            callback.invoke((text?:"").toString())
-        }
-    }
-
     fun clearEtFocus(){
         bottom_notes_add_text_note_et.clearFocus()
     }
 
-    fun stopEditing(){
+    fun stopEditing():String{
         onCancelEditting?.invoke()
         setEdittingViewsVisibility(areVisible = false)
+        val text = (bottom_notes_add_text_note_et?.text?:"").toString()
+        bottom_notes_add_text_note_et?.text?.clear()
         bottom_notes_add_text_note_et.clearFocus()
         setUpTextNoteCreationToolbarVisibility(isVisible = false)
         hideKeyboard()
         Handler(Looper.getMainLooper()).postDelayed({
             onNewToolbarHeight?.invoke(notes_toolbar_main_cl.height)
         }, 30)
+        return text
     }
 
     fun setOnNewToolbarHeightCallback(callback: (height: Int) -> Unit){
