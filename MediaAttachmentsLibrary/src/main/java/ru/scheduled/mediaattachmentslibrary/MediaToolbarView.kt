@@ -382,6 +382,12 @@ class MediaToolbarView : ConstraintLayout {
         )
     }
 
+    fun setOnNewTextCallback(callback:(String)->Unit){
+        bottom_notes_add_text_note_et.doOnTextChanged { text, start, before, count ->
+            callback.invoke((text?:"").toString())
+        }
+    }
+
     fun clearEtFocus(){
         bottom_notes_add_text_note_et.clearFocus()
     }
