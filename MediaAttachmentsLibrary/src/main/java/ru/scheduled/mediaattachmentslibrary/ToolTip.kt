@@ -258,6 +258,7 @@ class ToolTip(builder: Builder) {
                                 val anchorCenterX = anchorViewX + it.width / 2
 
 
+
                                 toolTipMainCl.apply {
 
                                     val rootY = when (arrowPosition) {
@@ -275,6 +276,22 @@ class ToolTip(builder: Builder) {
                                 }
                                 toolTipMainCl.animate().alpha(1f).duration = 150
 
+                                val offset = when(arrowPosition){
+                                    ArrowPosition.BOTTOM_LEFT, ArrowPosition.TOP_LEFT -> {
+                                        (it.x + (16+16+24+16+6+6).toPx().toInt()).toInt()
+                                    }
+                                    ArrowPosition.TOP_RIGHT, ArrowPosition.BOTTOM_RIGHT -> {
+                                        val side = (16+24+16+16+6+6).toPx().toInt()
+                                        val off = (rootView.width - it.x - it.width + side).toInt()
+                                        off
+                                    }
+                                    else -> {
+                                        ((abs((rootView.x + rootView.width/2) - (it.x  + it.width/2)))*2 + (12+32+40).toPx()).toInt()
+                                    }
+                                }
+
+                                val width = (rootView.width - offset)
+                                toolTipTextTv.maxWidth = width
                             }
 
 
@@ -282,26 +299,9 @@ class ToolTip(builder: Builder) {
                     })
 
                 }
-                anchorView?.let{
 
-                    val offset = when(arrowPosition){
-                        ArrowPosition.BOTTOM_LEFT, ArrowPosition.TOP_LEFT -> {
-                            (it.x + (16+16+24+16+6+6).toPx().toInt()).toInt()
-                        }
-                        ArrowPosition.TOP_RIGHT, ArrowPosition.BOTTOM_RIGHT -> {
-                            val side = (16+24+16+16+6+6).toPx().toInt()
-                            val off = (rootView.width - it.x - it.width + side).toInt()
-                            off
-                        }
-                         else -> {
-                             ((abs((rootView.x + rootView.width/2) - (it.x  + it.width/2)))*2 + (12+32+40).toPx()).toInt()
-                         }
-                    }
 
-            val width = (rootView.width - offset)
-                toolTipTextTv.maxWidth = width
 
-                }
             }
 
 
