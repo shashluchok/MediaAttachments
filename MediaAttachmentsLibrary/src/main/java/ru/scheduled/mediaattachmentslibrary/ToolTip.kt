@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import kotlinx.android.synthetic.main.layout_tooltip.view.*
 import kotlinx.coroutines.*
 import java.time.Duration
+import kotlin.math.abs
 
 
 class ToolTip(builder: Builder) {
@@ -218,11 +219,13 @@ class ToolTip(builder: Builder) {
 
                 }
                 rootView.addView(toolTipMainCl)
+
                 toolTipMainCl.also {
                     it.layoutParams.apply {
                         width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                         height =ConstraintLayout.LayoutParams.WRAP_CONTENT
                     }
+
                 }
                 toolTipMainCl.alpha = 0f
 
@@ -239,6 +242,7 @@ class ToolTip(builder: Builder) {
                 }
 
                 anchorView?.let {
+
 
                     it.viewTreeObserver?.addOnGlobalLayoutListener(object :
                         ViewTreeObserver.OnGlobalLayoutListener {
@@ -278,8 +282,26 @@ class ToolTip(builder: Builder) {
                     })
 
                 }
+                anchorView?.let{
 
+                    val offset = when(arrowPosition){
+                        ArrowPosition.BOTTOM_LEFT, ArrowPosition.TOP_LEFT -> {
+                            (it.x + (16+16+24+16+6+6).toPx().toInt()).toInt()
+                        }
+                        ArrowPosition.TOP_RIGHT, ArrowPosition.BOTTOM_RIGHT -> {
+                            val side = (16+24+16+16+6+6).toPx().toInt()
+                            val off = (rootView.width - it.x - it.width + side).toInt()
+                            off
+                        }
+                         else -> {
+                             ((abs((rootView.x + rootView.width/2) - (it.x  + it.width/2)))*2 + (12+32+40).toPx()).toInt()
+                         }
+                    }
 
+            val width = (rootView.width - offset)
+                toolTipTextTv.maxWidth = width
+
+                }
             }
 
 

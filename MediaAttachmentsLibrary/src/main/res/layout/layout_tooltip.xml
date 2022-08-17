@@ -5,7 +5,7 @@
     android:id="@+id/toolTipMainCl"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:alpha="0"
+    android:alpha="1"
     android:clickable="true"
     android:focusable="true"
     app:layout_constraintBottom_toBottomOf="parent"
