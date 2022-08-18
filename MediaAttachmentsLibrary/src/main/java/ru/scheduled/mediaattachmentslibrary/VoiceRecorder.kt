@@ -41,7 +41,7 @@ class VoiceRecorder(private val mContext: Context) {
 
     fun startRecord() {
         try {
-            mAudioManager = mContext.getSystemService(AppCompatActivity.AUDIO_SERVICE) as AudioManager
+           /* mAudioManager = mContext.getSystemService(AppCompatActivity.AUDIO_SERVICE) as AudioManager
             mStreamVolume = Pair(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC),mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION))
             try {
                 mAudioManager.setStreamVolume(
@@ -57,16 +57,16 @@ class VoiceRecorder(private val mContext: Context) {
             }
             catch (e:java.lang.Exception){
                e.printStackTrace()
-            }
+            }*/
 
             recognizedSpeechText = ""
             createRecordFile()
             mMediaRecorder = MediaRecorder()
-            mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext)
+//            mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(mContext)
             prepareMediaRecorder()
             mMediaRecorder?.start()
             audioDuration = (System.currentTimeMillis()/1000).toInt()
-            startSpeechRecognizer(mContext.packageName)
+//            startSpeechRecognizer(mContext.packageName)
 
 
         } catch (e: Exception) {
@@ -107,7 +107,7 @@ class VoiceRecorder(private val mContext: Context) {
                     CoroutineScope(Dispatchers.IO).launch {
                         delay(400)
                         try {
-                            mAudioManager.setStreamVolume(
+                           /* mAudioManager.setStreamVolume(
                                     AudioManager.STREAM_MUSIC,
                                     mStreamVolume.first,
                                     0
@@ -116,7 +116,7 @@ class VoiceRecorder(private val mContext: Context) {
                                 AudioManager.STREAM_NOTIFICATION,
                                 mStreamVolume.second,
                                 0
-                            )
+                            )*/
                         }
                         catch (e:java.lang.Exception){
                             e.printStackTrace()
@@ -134,7 +134,9 @@ class VoiceRecorder(private val mContext: Context) {
 
             override fun onError(error: Int) {
                 Log.v("MediaToolbar", "VoiceRecorder onError $error")
-                if(error == SpeechRecognizer.ERROR_NO_MATCH && mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0 ) {
+                if(error == SpeechRecognizer.ERROR_NO_MATCH
+//                    && mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION) == 0
+                ) {
                     startSpeechRecognizer(appName = mContext.packageName)
                 }
                 if (mMediaRecorder == null) {
@@ -142,7 +144,7 @@ class VoiceRecorder(private val mContext: Context) {
                 }
                 CoroutineScope(Dispatchers.IO).launch {
                     delay(400)
-                    try {
+                   /* try {
                         mAudioManager.setStreamVolume(
                             AudioManager.STREAM_MUSIC,
                             mStreamVolume.first,
@@ -156,7 +158,7 @@ class VoiceRecorder(private val mContext: Context) {
                     }
                     catch (e:java.lang.Exception){
                         e.printStackTrace()
-                    }
+                    }*/
 
                 }
             }
@@ -218,7 +220,7 @@ class VoiceRecorder(private val mContext: Context) {
             mMediaRecorder?.stop()
             audioDuration = (System.currentTimeMillis()/1000).toInt() - audioDuration
             releaseRecorder()
-            mSpeechRecognizer?.stopListening()
+//            mSpeechRecognizer?.stopListening()
             onSuccess.invoke(mFileName, audioDuration)
             audioDuration = 0
 
