@@ -1,7 +1,6 @@
 package ru.scheduled.mediaattachmentslibrary
 
 import android.Manifest
-import android.R.attr
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,6 +15,7 @@ import android.os.*
 import android.provider.MediaStore
 import android.util.AttributeSet
 import android.util.Log
+import android.util.Size
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
@@ -26,15 +26,14 @@ import androidx.camera.core.Camera
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat.animate
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.camera_capture_view.view.*
 import kotlinx.coroutines.*
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -65,6 +64,7 @@ class CameraCaptureView: ConstraintLayout {
 
     private var animJob: Job? = null
 
+    private var analyzer: AnalyzerM? = null
 
     private var initCenterX = 0f
     private var initCenterY = 0f
@@ -761,43 +761,63 @@ class CameraCaptureView: ConstraintLayout {
 
         }
 
-        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
-            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                enableUserInteraction()
-                if(photoFile!=null){
-                    val exif = ExifInterface(photoFile.getPath())
-                    val rotation: Int =
-                        exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-                    val rotationInDegrees: Int = exifToDegrees(rotation)
-                    val mBitmap = BitmapFactory.decodeFile(photoFile.toString())
-                    if(rotationInDegrees != 0){
-                        val matrix = Matrix()
-                            matrix.postRotate(rotationInDegrees.toFloat())
-                        val adjustedBitmap =
-                            Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.width, mBitmap.height, matrix, true)
+        if(!isBackCameraOn){
+            enableUserInteraction()
+            val bitmap = preview_view2.bitmap
+            val fos = FileOutputStream(photoFile)
+            val stream = ByteArrayOutputStream()
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+            val imageBytes = stream.toByteArray()
+            fos.write(imageBytes)
+            fos.flush()
+            fos.close()
+            onImageSaved?.invoke(Uri.fromFile(photoFile))
+        }
+        else {
+            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    enableUserInteraction()
+
+
+                    if(photoFile!=null){
+                        var bitmap = BitmapFactory.decodeFile(photoFile.toString())
+
+                        val rotationInDegrees = analyzer!!.getRotation()
+                        bitmap =   if (rotationInDegrees != 0) {
+                            val rotationF = if(rotationInDegrees>180) -rotationInDegrees else rotationInDegrees
+                            val matrix = Matrix()
+                            matrix.postRotate(rotationF.toFloat())
+                            val rotatedBitmap=
+                                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                            Bitmap.createScaledBitmap(rotatedBitmap, preview_view2.width, preview_view2.height,true)
+                        } else Bitmap.createScaledBitmap(bitmap, preview_view2.width, preview_view2.height,true)
+                        bitmap =  Bitmap.createScaledBitmap(bitmap, preview_view2.width, preview_view2.height,true)
                         val fos = FileOutputStream(photoFile)
                         val stream = ByteArrayOutputStream()
-                        adjustedBitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
                         val imageBytes = stream.toByteArray()
                         fos.write(imageBytes)
                         fos.flush()
                         fos.close()
-                    }
-                    onImageSaved?.invoke(Uri.fromFile(photoFile))
-                }
-                else {
-                    outputFileResults.savedUri?.let {
-                        onImageSaved?.invoke(it)
-                    }
-                }
-            }
 
-            override fun onError(exception: ImageCaptureException) {
-                enableUserInteraction()
-                exception.printStackTrace()
-            }
+                        onImageSaved?.invoke(Uri.fromFile(photoFile))
+                    }
+                    else {
+                        outputFileResults.savedUri?.let {
+                            onImageSaved?.invoke(it)
+                        }
+                    }
+                }
 
-        })
+                override fun onError(exception: ImageCaptureException) {
+                    enableUserInteraction()
+                    exception.printStackTrace()
+                }
+
+            })
+        }
+
+
 
     }
 
@@ -924,6 +944,8 @@ class CameraCaptureView: ConstraintLayout {
                 imageCapture = ImageCapture.Builder()
                         .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                         .build()
+                val executor = ContextCompat.getMainExecutor(context)
+                analyzer = AnalyzerM()
 
                 val cameraSelector = cameraSelector
 
@@ -945,9 +967,24 @@ class CameraCaptureView: ConstraintLayout {
                         )
                     }
                 } else {
-                    cam = cameraProvider!!.bindToLifecycle(
-                            context as AppCompatActivity, cameraSelector, preview, imageCapture
-                    )
+                    analyzer?.let {
+                        val imageAnalysis = ImageAnalysis.Builder()
+                            .setTargetResolution(Size(preview_view2.width, preview_view2.height))
+                            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                            .build()
+                            .also {
+                                it.setAnalyzer(
+                                    executor, analyzer!!
+                                )
+                            }
+                        cam = cameraProvider!!.bindToLifecycle(
+                            context as AppCompatActivity,
+                            cameraSelector,
+                            preview,
+                            imageAnalysis,
+                            imageCapture
+                        )
+                    }
                 }
             }
         }, ContextCompat.getMainExecutor(context))
@@ -998,7 +1035,7 @@ class CameraCaptureView: ConstraintLayout {
 
         val outputOptions: VideoCapture.OutputFileOptions
 
-        if (saveDestination == SaveLocation.GALLERY) {
+        if (saveDestination == CameraCaptureView.SaveLocation.GALLERY) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
 
                 val contentValues = ContentValues().apply {
@@ -1334,5 +1371,19 @@ class CameraCaptureView: ConstraintLayout {
         return swipeToCancelText
     }
 
+    class AnalyzerM : ImageAnalysis.Analyzer {
 
+        private var rotation: Int = 0
+
+        fun getRotation():Int{
+            return rotation
+        }
+
+        override fun analyze(imageProxy: ImageProxy) {
+            rotation = imageProxy.imageInfo.rotationDegrees
+            Log.v("AnalyzerM", "rotation = $rotation")
+        }
+
+
+    }
 }
