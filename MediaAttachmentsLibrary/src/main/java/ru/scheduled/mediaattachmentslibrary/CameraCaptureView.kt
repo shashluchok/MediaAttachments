@@ -774,39 +774,41 @@ class CameraCaptureView: ConstraintLayout {
             onImageSaved?.invoke(Uri.fromFile(photoFile))
         }
         else {
-            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    enableUserInteraction()
+
+            var flag = false
 
 
-                    if(photoFile!=null){
-                        var bitmap = BitmapFactory.decodeFile(photoFile.toString())
+                GlobalScope.launch(Dispatchers.IO){
+                    var mbitmap:Bitmap? = null
 
-                        val rotationInDegrees = analyzer!!.getRotation()
-                        bitmap =   if (rotationInDegrees != 0) {
-                            val rotationF = if(rotationInDegrees>180) -rotationInDegrees else rotationInDegrees
-                            val matrix = Matrix()
-                            matrix.postRotate(rotationF.toFloat())
-                            val rotatedBitmap=
-                                Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-                            Bitmap.createScaledBitmap(rotatedBitmap, preview_view2.width, preview_view2.height,true)
-                        } else Bitmap.createScaledBitmap(bitmap, preview_view2.width, preview_view2.height,true)
-                        bitmap =  Bitmap.createScaledBitmap(bitmap, preview_view2.width, preview_view2.height,true)
+                    delay(1000)
+                    withContext(Dispatchers.Main){
+                        mbitmap = preview_view2.bitmap
+                    }
+                   while (!flag){
+                       delay(100)
+                   }
+                    withContext(Dispatchers.Main){
+                        photoFile?.let {
+                            if(photoFile.exists())photoFile.delete()
+                        }
+
                         val fos = FileOutputStream(photoFile)
                         val stream = ByteArrayOutputStream()
-                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                        mbitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
                         val imageBytes = stream.toByteArray()
                         fos.write(imageBytes)
                         fos.flush()
                         fos.close()
-
                         onImageSaved?.invoke(Uri.fromFile(photoFile))
                     }
-                    else {
-                        outputFileResults.savedUri?.let {
-                            onImageSaved?.invoke(it)
-                        }
-                    }
+                }
+
+
+            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    enableUserInteraction()
+                    flag = true
                 }
 
                 override fun onError(exception: ImageCaptureException) {

@@ -57,10 +57,12 @@
         android:clickable="true"
         android:elevation="1dp"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/photo_preview_iv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/photo_preview_iv"
@@ -68,7 +70,7 @@
         android:layout_height="0dp"
         android:elevation="1dp"
         android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/camera_bottom_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -124,8 +126,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/camera_bottom_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/lib_black"
+        android:layout_height="120dp"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 

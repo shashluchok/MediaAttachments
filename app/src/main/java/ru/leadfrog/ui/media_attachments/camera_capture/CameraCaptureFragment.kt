@@ -50,6 +50,7 @@ class CameraCaptureFragment: BaseFragment() {
         viewModel.getLastCameraImage()
         camera_capture_view.apply {
             setOnPhotoSavedCallback {photoFile->
+
                     moveToImageCropFragment(photoFile.path.toString())
             }
             setOnCloseClickedCallback {

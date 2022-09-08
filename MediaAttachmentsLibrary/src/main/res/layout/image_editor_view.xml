@@ -26,7 +26,7 @@
     <ru.scheduled.mediaattachmentslibrary.CustomEditText
         android:id="@+id/image_note_et"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="@color/lib_black"
         android:clickable="true"
         android:focusable="true"
@@ -41,8 +41,8 @@
         android:textSize="@dimen/default_15sp"
         app:layout_constraintBottom_toTopOf="@+id/editable_photo_close"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <ImageView
         android:id="@+id/image_note_ready_iv"
