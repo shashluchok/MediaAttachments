@@ -780,8 +780,9 @@ class CameraCaptureView: ConstraintLayout {
 
                 GlobalScope.launch(Dispatchers.IO){
                     var mbitmap:Bitmap? = null
-
-                    delay(1000)
+                    if(isFlashLightOn) {
+                        delay(700)
+                    }
                     withContext(Dispatchers.Main){
                         mbitmap = preview_view2.bitmap
                     }
