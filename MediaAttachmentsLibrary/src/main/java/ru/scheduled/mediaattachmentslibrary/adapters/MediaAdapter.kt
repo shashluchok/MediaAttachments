@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Color.alpha
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
@@ -366,14 +367,18 @@ class MediaAdapter(
                 loadingLayoutIv?.apply {
                     setImageResource(imageId)
                     setOnClickListener {
-                        if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
-                            onStartDownloading.invoke(mediaList[position])
+                        try {
+                            if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
+                                onStartDownloading.invoke(mediaList[position])
 //                            mediaList[position].isLoadingStopped = false
+                            } else {
+                                onCancelDownloading.invoke(mediaList[position])
+                                mediaList[position].isLoadingStopped = true
 
-                        } else {
-                            onCancelDownloading.invoke(mediaList[position])
-                            mediaList[position].isLoadingStopped = true
 
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                         val imageId = if (mediaList[position].status == MediaRecyclerView.MediaNoteStatus.synchronized) {
                             R.drawable.download
