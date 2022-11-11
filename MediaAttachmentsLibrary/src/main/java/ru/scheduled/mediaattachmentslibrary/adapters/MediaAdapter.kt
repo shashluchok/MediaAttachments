@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 import kotlinx.android.synthetic.main.item_media_note_photo.view.*
@@ -410,7 +411,11 @@ class MediaAdapter(
                 loadingLayoutIv?.apply {
                     setImageResource(imageId)
                     setOnClickListener {
-                        onCancelUploading.invoke(mediaList[position])
+                        try {
+                            onCancelUploading.invoke(mediaList[position])
+                        }catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 }
             } else if (uploadPercent == 100) {
@@ -423,9 +428,15 @@ class MediaAdapter(
 
 
         viewToSetOnClickListener?.setOnClickListener {
-            if (mediaList[position].downloadPercent == 100 && mediaList[position].uploadPercent == 100) {
-                onItemClicked.invoke(mediaList[position])
+            try {
+                if (mediaList[position].downloadPercent == 100 && mediaList[position].uploadPercent == 100) {
+                    onItemClicked.invoke(mediaList[position])
+                }
             }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
+
         }
 
         selectionView?.isVisible = isSelecting
@@ -486,6 +497,8 @@ class MediaAdapter(
         }
 
        selectionView?.setOnClickListener {
+           try {
+
            if (isSelecting &&  mediaList[position].uploadPercent == 100) {
                if (selectedNotes.contains(mediaList[position])) {
                    selectedNotes.remove(mediaList[position])
@@ -504,6 +517,10 @@ class MediaAdapter(
                }
 
            }
+           }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
 
        }
 
