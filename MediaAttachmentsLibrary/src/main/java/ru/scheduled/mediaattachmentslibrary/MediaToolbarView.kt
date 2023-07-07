@@ -64,6 +64,7 @@ class MediaToolbarView : ConstraintLayout {
         const val MAX_AMPLITUDE = 15000
         const val MIN_AMPLITUDE = 1500
         const val MIN_DURATION = 1500L
+        private const val MAX_AUDIO_DURATION = 300000L * 3
 
     }
 
@@ -609,7 +610,7 @@ class MediaToolbarView : ConstraintLayout {
                         if (event.rawX < initialIconX) {
                             setToolbarOptionsPositionsOnMoveEvent(event.rawX)
                         }
-                        if (initialSwipeToCancelX - (initialIconX - event.rawX) / 2.2.toFloat() <= swipeLeftConstraintX || recordDuration > 300000L) {
+                        if (initialSwipeToCancelX - (initialIconX - event.rawX) / 2.2.toFloat() <= swipeLeftConstraintX || recordDuration > MAX_AUDIO_DURATION) {
                             isDraggingBlocked = true
                             dispatchTouchEvents(
                                 v,
