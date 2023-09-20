@@ -47,13 +47,6 @@ abstract class BaseFragment : Fragment() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    fun checkStoragePermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireActivity(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     open fun disableUserInteractionForAWhile(disableTimeInMillis: Long) {
         (requireActivity()).window.setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

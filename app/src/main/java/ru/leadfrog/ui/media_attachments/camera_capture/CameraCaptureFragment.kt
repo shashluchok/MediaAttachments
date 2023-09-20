@@ -27,7 +27,7 @@ import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_I
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_PHOTO_PATH
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.IS_NEED_TO_SAVE_TO_GALLERY
 
-class CameraCaptureFragment: BaseFragment() {
+class CameraCaptureFragment : BaseFragment() {
     override val layoutResId: Int
         get() = R.layout.fragment_camera
 
@@ -35,8 +35,8 @@ class CameraCaptureFragment: BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let{
-            if(it.getString(CURRENT_SHARD_ID)!=null){
+        arguments?.let {
+            if (it.getString(CURRENT_SHARD_ID) != null) {
                 shardId = it.getString(CURRENT_SHARD_ID)!!
             }
         }
@@ -49,25 +49,24 @@ class CameraCaptureFragment: BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getLastCameraImage()
         camera_capture_view.apply {
-            setOnPhotoSavedCallback {photoFile->
+            setOnPhotoSavedCallback { photoFile ->
 
-                    moveToImageCropFragment(photoFile.path.toString())
+                moveToImageCropFragment(photoFile.path.toString())
             }
             setOnCloseClickedCallback {
                 findNavController().popBackStack()
             }
             setOnGalleryClickedCallback {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(requireActivity() as MainActivity, arrayOf(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE), 100100)
-                    }
-                    else {
-                        val loadIntent = Intent(Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    val loadIntent = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
 
-                        requireActivity().startActivityForResult(loadIntent, ACTIVITY_REQUEST_CODE_PICK_PHOTO)
-                    }
+                    requireActivity().startActivityForResult(
+                        loadIntent,
+                        ACTIVITY_REQUEST_CODE_PICK_PHOTO
+                    )
                 }
             }
             setOnPhotoClickedCallback {
@@ -80,14 +79,17 @@ class CameraCaptureFragment: BaseFragment() {
     private fun checkRecordAudioPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
-                            requireActivity(),
-                            Manifest.permission.RECORD_AUDIO
-                    ) ==
-                    PackageManager.PERMISSION_GRANTED
+                    requireActivity(),
+                    Manifest.permission.RECORD_AUDIO
+                ) ==
+                PackageManager.PERMISSION_GRANTED
             ) {
                 true
             } else {
-                requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), PermissionRequestCodes.PERMISSION_REQUEST_CODE_RECORD_AUDIO)
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                    PermissionRequestCodes.PERMISSION_REQUEST_CODE_RECORD_AUDIO
+                )
                 false
             }
 
@@ -97,24 +99,35 @@ class CameraCaptureFragment: BaseFragment() {
 
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == PermissionRequestCodes.PERMISSION_REQUEST_CODE_RECORD_AUDIO){
-            if(!checkRecordAudioPermission()){
-                Toast.makeText(requireActivity(),getString(R.string.permission_request_cancelled), Toast.LENGTH_SHORT).show()
+        if (requestCode == PermissionRequestCodes.PERMISSION_REQUEST_CODE_RECORD_AUDIO) {
+            if (!checkRecordAudioPermission()) {
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.permission_request_cancelled),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     private fun moveToImageCropFragment(photoPath: String) {
         (requireActivity() as MainActivity).showLoader()
-        val navOptions = NavOptions.Builder().setPopUpTo(R.id.cameraCaptureFragment, inclusive = true).build()
+        val navOptions =
+            NavOptions.Builder().setPopUpTo(R.id.cameraCaptureFragment, inclusive = true).build()
 
-        findNavController().navigate(R.id.action_cameraCaptureFragment_to_imageCropFragment, bundleOf(
+        findNavController().navigate(
+            R.id.action_cameraCaptureFragment_to_imageCropFragment, bundleOf(
                 CURRENT_SHARD_ID to shardId,
                 EXISTING_PHOTO_PATH to photoPath,
                 IS_NEED_TO_SAVE_TO_GALLERY to false
-        ), navOptions)
+            ), navOptions
+        )
 
     }
 

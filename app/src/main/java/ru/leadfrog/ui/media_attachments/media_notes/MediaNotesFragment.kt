@@ -76,7 +76,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
 
     private var initToolbarHeight = 0
 
-    private var currentRecordedVoiceNoteId:String? = null
+    private var currentRecordedVoiceNoteId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,11 +143,12 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                     val isCopyable =
                         it.size == 1 && it.first().mediaType == ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT
 
-                    val isEditable = it.size == 1 && (listOf<ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes>(
-                        ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT,
-                        ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_PHOTO,
-                        ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_SKETCH
-                    ).contains(it.first().mediaType))
+                    val isEditable =
+                        it.size == 1 && (listOf<ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes>(
+                            ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT,
+                            ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_PHOTO,
+                            ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_SKETCH
+                        ).contains(it.first().mediaType))
 
                     toolbar_default.isVisible = !it.isNotEmpty()
                     if (it.isNotEmpty()) {
@@ -167,9 +168,12 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                         it.putParcelable(MEDIA_NOTE, note)
                         it.putString(CURRENT_SHARD_ID, shardId)
                     }
-                    findNavController().navigate(R.id.action_mediaNotesFragment_to_mediaImageViewerFragment,bundle)
+                    findNavController().navigate(
+                        R.id.action_mediaNotesFragment_to_mediaImageViewerFragment,
+                        bundle
+                    )
                 },
-                onCancelUploading = {note->
+                onCancelUploading = { note ->
                     viewModel.deleteMediaNotes(listOf(note.toDbMediaNote()))
                 },
                 onStartDownloading = {
@@ -178,7 +182,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                 onCancelDownloading = {
                     viewModel.stopDownloading(it.id)
                 },
-                previewApi =  Retrofit.Builder()
+                previewApi = Retrofit.Builder()
                     .baseUrl("https://stage.lfs.rest/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(
@@ -210,7 +214,10 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
         mediaToolbarView.apply {
 
             setOnNewToolbarHeightCallback {
-                changeRecyclerPadding (isGrowing = it>media_notes_recycler_view.paddingBottom, newHeight = it)
+                changeRecyclerPadding(
+                    isGrowing = it > media_notes_recycler_view.paddingBottom,
+                    newHeight = it
+                )
             }
 
             setOnMediaEditingCancelClickedCallback {
@@ -225,6 +232,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                         ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> {
                             onTextMediaCopied(it.value)
                         }
+
                         else -> {
 
                         }
@@ -279,6 +287,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                                 )
                             )
                         }
+
                         ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_PHOTO -> {
                             findNavController().navigate(
                                 R.id.action_mediaNotesFragment_to_imageCropFragment, bundleOf(
@@ -287,6 +296,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                                 )
                             )
                         }
+
                         ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaItemTypes.TYPE_TEXT -> {
                             cancelSelecting()
                             currentTextNoteToEdit = it.toDbMediaNote()
@@ -336,7 +346,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                             topActionText = "Удалить",
                             middleActionText = "Отмена",
                             topActionCallback = {
-                                currentTextNoteToEdit?.let{
+                                currentTextNoteToEdit?.let {
                                     viewModel.deleteMediaNotes(
                                         listOf(it)
                                     )
@@ -390,8 +400,11 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
             }
 
             setOnSpeechRecognizedCallback { text ->
-                if(currentRecordedVoiceNoteId!=null && !text.isEmpty()){
-                    viewModel.updateVoiceNoteWithRecognizedSpeech(text = text, noteId = currentRecordedVoiceNoteId!!)
+                if (currentRecordedVoiceNoteId != null && !text.isEmpty()) {
+                    viewModel.updateVoiceNoteWithRecognizedSpeech(
+                        text = text,
+                        noteId = currentRecordedVoiceNoteId!!
+                    )
                     currentRecordedVoiceNoteId = null
                 }
             }
@@ -410,46 +423,51 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
             viewModel.saveDbMediaNotes(dbMediaNote)
         }*/
 
-        viewModel.state.observe(viewLifecycleOwner){
-            when(it){
+        viewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
                 MediaNotesStates.DownloadingStatesReset -> {
                     viewModel.getAllDbMediaNotesByShardId(shardId)?.observe(
-                        viewLifecycleOwner
-                        , androidx.lifecycle.Observer{
+                        viewLifecycleOwner, androidx.lifecycle.Observer {
                             isListEmpty = it.isEmpty()
                             (requireParentFragment()).no_media_notes_tv.visibility =
                                 if (it.isEmpty()) View.VISIBLE else View.GONE
-                            val sortedList = it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
+                            val sortedList =
+                                it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
 
                             media_notes_recycler_view.setData(sortedList.map {
-                                it.toMediaNote().also { it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id) }
+                                it.toMediaNote().also {
+                                    it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id)
+                                }
                             })
-                            sortedList.onEach { if(it.uploadPercent != 100) viewModel.uploadMediaNote(it.id) }
+                            sortedList.onEach {
+                                if (it.uploadPercent != 100) viewModel.uploadMediaNote(
+                                    it.id
+                                )
+                            }
                         })
                 }
             }
         }
 
-        if(isFirstTime){
+        if (isFirstTime) {
             isFirstTime = false
             viewModel.resetDownloadPercentTest()
-        }
-        else {
+        } else {
             viewModel.getAllDbMediaNotesByShardId(shardId)?.observe(
-                viewLifecycleOwner
-                , androidx.lifecycle.Observer{
+                viewLifecycleOwner, androidx.lifecycle.Observer {
                     isListEmpty = it.isEmpty()
                     (requireParentFragment()).no_media_notes_tv.visibility =
                         if (it.isEmpty()) View.VISIBLE else View.GONE
-                    val sortedList = it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
+                    val sortedList =
+                        it.sortedByDescending { mediaNote -> mediaNote.order }.reversed()
 
                     media_notes_recycler_view.setData(sortedList.map {
-                        it.toMediaNote().also { it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id) }
+                        it.toMediaNote()
+                            .also { it.isLoadingStopped = !viewModel.isMediaNoteLoading(it.id) }
                     })
-                    sortedList.onEach { if(it.uploadPercent != 100) viewModel.uploadMediaNote(it.id) }
+                    sortedList.onEach { if (it.uploadPercent != 100) viewModel.uploadMediaNote(it.id) }
                 })
         }
-
 
 
     }
@@ -541,11 +559,11 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
 
     }
 
-    private fun changeRecyclerPadding(isGrowing: Boolean, newHeight:Int) {
+    private fun changeRecyclerPadding(isGrowing: Boolean, newHeight: Int) {
         if (isGrowing) {
             lifecycleScope.launch(Dispatchers.IO) {
                 if (media_notes_recycler_view.paddingBottom >= newHeight) return@launch
-                for (i in media_notes_recycler_view.paddingBottom ..(newHeight).toInt()) {
+                for (i in media_notes_recycler_view.paddingBottom..(newHeight).toInt()) {
                     delay(1)
                     withContext(Dispatchers.Main) {
                         media_notes_recycler_view.setPadding(0, 0, 0, i)
@@ -566,21 +584,13 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
 
     private fun onAttemptToOpenCamera() {
         if (checkCameraPermissionGranted()) {
-            if (checkStoragePermission()) {
-                findNavController().navigate(
-                    R.id.action_mediaNotesFragment_to_cameraCaptureFragment,
-                    bundleOf(
-                        CURRENT_SHARD_ID to shardId
-                    )
+            findNavController().navigate(
+                R.id.action_mediaNotesFragment_to_cameraCaptureFragment,
+                bundleOf(
+                    CURRENT_SHARD_ID to shardId
                 )
-            } else {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    requestPermissions(
-                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        PERMISSION_REQUEST_CODE_STORAGE
-                    )
-                }
-            }
+            )
+
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 requestPermissions(
@@ -653,21 +663,13 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
         when (requestCode) {
             PERMISSION_REQUEST_CODE_CAMERA -> {
                 if (checkCameraPermissionGranted()) {
-                    if (checkStoragePermission()) {
-                        findNavController().navigate(
-                            R.id.action_mediaNotesFragment_to_cameraCaptureFragment,
-                            bundleOf(
-                                CURRENT_SHARD_ID to shardId
-                            )
+                    findNavController().navigate(
+                        R.id.action_mediaNotesFragment_to_cameraCaptureFragment,
+                        bundleOf(
+                            CURRENT_SHARD_ID to shardId
                         )
-                    } else {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            requestPermissions(
-                                arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                PERMISSION_REQUEST_CODE_STORAGE
-                            )
-                        }
-                    }
+                    )
+
                 } else {
                     Toast.makeText(
                         requireActivity(),
@@ -676,8 +678,9 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
                     ).show()
                 }
             }
+
             PERMISSION_REQUEST_CODE_STORAGE -> {
-                if (checkCameraPermissionGranted() && checkStoragePermission()) {
+                if (checkCameraPermissionGranted()) {
                     findNavController().navigate(
                         R.id.action_mediaNotesFragment_to_cameraCaptureFragment,
                         bundleOf(
@@ -698,7 +701,7 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
     }
 
     override fun onBackPressed(): Boolean {
-        return if(media_notes_recycler_view.getSelectedMediaNotes().isEmpty()) true else {
+        return if (media_notes_recycler_view.getSelectedMediaNotes().isEmpty()) true else {
             cancelSelecting()
             false
         }
@@ -720,7 +723,7 @@ fun ru.scheduled.mediaattachmentslibrary.MediaRecyclerView.MediaNote.toDbMediaNo
         recognizedSpeechText = recognizedSpeechText,
         imageNoteText = imageNoteText,
         voiceAmplitudesList = voiceAmplitudesList,
-                uploadPercent = uploadPercent,
+        uploadPercent = uploadPercent,
         downloadPercent = downloadPercent
     )
 }

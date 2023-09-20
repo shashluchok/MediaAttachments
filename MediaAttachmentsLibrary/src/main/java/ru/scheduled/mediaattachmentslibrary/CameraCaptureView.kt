@@ -39,7 +39,7 @@ import java.util.*
 import kotlin.math.abs
 
 
-class CameraCaptureView: ConstraintLayout {
+class CameraCaptureView : ConstraintLayout {
 
     private val MEDIA_NOTES_INTERNAL_DIRECTORY = "media_attachments"
 
@@ -94,15 +94,16 @@ class CameraCaptureView: ConstraintLayout {
         animJob?.cancel()
         animJob = null
     }
-    private fun flash(){
-            photoFlashView.visibility = View.VISIBLE
-            photoFlashView.apply {
-                alpha = 1f
-                animate().alpha(0f).setDuration(900)
-            }
-            Handler(Looper.getMainLooper()).postDelayed({
-                photoFlashView.visibility = View.GONE
-            }, 900)
+
+    private fun flash() {
+        photoFlashView.visibility = View.VISIBLE
+        photoFlashView.apply {
+            alpha = 1f
+            animate().alpha(0f).setDuration(900)
+        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            photoFlashView.visibility = View.GONE
+        }, 900)
     }
 
 
@@ -204,7 +205,7 @@ class CameraCaptureView: ConstraintLayout {
         mockedCl.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                if (mockedCl.height != 0 && mockedCl.width !=0) {
+                if (mockedCl.height != 0 && mockedCl.width != 0) {
                     mockedCl.viewTreeObserver.removeOnGlobalLayoutListener(
                         this
                     )
@@ -220,7 +221,8 @@ class CameraCaptureView: ConstraintLayout {
                         SimpleDateFormat(
                             "HHmmssddMMyyyy",
                             Locale.US
-                        ).format(System.currentTimeMillis()) + ".jpg")
+                        ).format(System.currentTimeMillis()) + ".jpg"
+                    )
 
                     GlobalScope.launch(Dispatchers.IO) {
                         if (photoFile.exists()) photoFile.delete()
@@ -232,7 +234,7 @@ class CameraCaptureView: ConstraintLayout {
                         fos.write(image)
                         fos.flush()
                         fos.close()
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
                             onImageSaved?.invoke(Uri.fromFile(photoFile))
                         }
                     }
@@ -426,7 +428,7 @@ class CameraCaptureView: ConstraintLayout {
                     callback.invoke()
                 }
             }
-        },300)
+        }, 300)
 
     }
 
@@ -443,23 +445,23 @@ class CameraCaptureView: ConstraintLayout {
         var imageCursor: Cursor? = null
         try {
             val columns =
-                    arrayOf(MediaStore.Images.Media.DATA)
+                arrayOf(MediaStore.Images.Media.DATA)
             val orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC"
             imageCursor = context.contentResolver.query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    columns,
-                    null,
-                    null,
-                    orderBy
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                columns,
+                null,
+                null,
+                orderBy
             )
             if (imageCursor != null) {
                 if (imageCursor?.moveToNext() ?: false) {
                     lastImageUri =
-                            imageCursor!!.getString(
-                                    imageCursor!!.getColumnIndex(
-                                            MediaStore.Images.Media.DATA
-                                    )
+                        imageCursor!!.getString(
+                            imageCursor!!.getColumnIndex(
+                                MediaStore.Images.Media.DATA
                             )
+                        )
 
                 }
             }
@@ -468,8 +470,8 @@ class CameraCaptureView: ConstraintLayout {
                 previous_photo_no_photo_iv.visibility = View.GONE
                 previous_photo_iv.visibility = View.VISIBLE
                 Glide.with(this).load(lastImageUri)
-                        .transition(DrawableTransitionOptions.withCrossFade(175))
-                        .into(previous_photo_iv)
+                    .transition(DrawableTransitionOptions.withCrossFade(175))
+                    .into(previous_photo_iv)
             }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -487,10 +489,8 @@ class CameraCaptureView: ConstraintLayout {
                 initListeners()
                 setPhotoVideoCaptureButtonLayoutListener()
                 if (checkCameraPermissionGranted()) {
-                    if (checkStoragePermission()) {
-                        startCamera(backCamera)
-                        isBackCameraOn = true
-                    }
+                    startCamera(backCamera)
+                    isBackCameraOn = true
                 }
             }
         }
@@ -530,21 +530,17 @@ class CameraCaptureView: ConstraintLayout {
 
         change_camera_iv.setOnClickListener {
             if (checkCameraPermissionGranted()) {
-                if (checkStoragePermission()) {
-                    isBackCameraOn = if (isBackCameraOn) {
-                        startCamera(frontCamera)
-                        flashlight_container.visibility = View.GONE
-                        false
-                    } else {
-                        startCamera(backCamera)
-                        flashlight_container.visibility = View.VISIBLE
-                        true
-                    }
-
+                isBackCameraOn = if (isBackCameraOn) {
+                    startCamera(frontCamera)
+                    flashlight_container.visibility = View.GONE
+                    false
+                } else {
+                    startCamera(backCamera)
+                    flashlight_container.visibility = View.VISIBLE
+                    true
                 }
             }
         }
-
 
 
         val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
@@ -567,7 +563,7 @@ class CameraCaptureView: ConstraintLayout {
         } else {
             if (isVideoCaptureEnabled) {
                 photo_video_capture_icon.setOnTouchListener { v, event ->
-                    if (checkCameraPermissionGranted() && checkStoragePermission() && checkRecordAudioPermission()) {
+                    if (checkCameraPermissionGranted() && checkRecordAudioPermission()) {
 
                         when (event.action and MotionEvent.ACTION_MASK) {
                             MotionEvent.ACTION_DOWN -> {
@@ -681,8 +677,8 @@ class CameraCaptureView: ConstraintLayout {
         photo_preview_iv.visibility = View.VISIBLE
         Glide.with(context).load(bitmap).into(photo_preview_iv)
         preview_view2.visibility = View.GONE
-        var photoFile:File? = null
-            if (!isBackCameraOn) {
+        var photoFile: File? = null
+        if (!isBackCameraOn) {
             metadata.isReversedHorizontal = true
         }
         val outputOptions: ImageCapture.OutputFileOptions
@@ -693,48 +689,49 @@ class CameraCaptureView: ConstraintLayout {
 
                 val contentValues = ContentValues().apply {
                     val name = SimpleDateFormat(
-                            "HHmmssddMMyyyy",
-                            Locale.US
+                        "HHmmssddMMyyyy",
+                        Locale.US
                     ).format(System.currentTimeMillis()) + ".jpg"
                     put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, "Images/LeadFrog")
                 }
                 outputOptions = ImageCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
+                    context.contentResolver,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    contentValues
                 ).setMetadata(metadata).build()
 
 
             } else {
                 val values = ContentValues()
                 values.put(
-                        MediaStore.Images.Media.TITLE, SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
+                    MediaStore.Images.Media.TITLE,
+                    SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
                         System.currentTimeMillis()
-                )
-                )
-                values.put(
-                        MediaStore.Images.Media.DISPLAY_NAME, SimpleDateFormat(
-                        "HHmmssddMMyyyy",
-                        Locale.US
-                ).format(System.currentTimeMillis())
+                    )
                 )
                 values.put(
-                        MediaStore.Images.Media.DESCRIPTION, SimpleDateFormat(
+                    MediaStore.Images.Media.DISPLAY_NAME, SimpleDateFormat(
                         "HHmmssddMMyyyy",
                         Locale.US
-                ).format(System.currentTimeMillis())
+                    ).format(System.currentTimeMillis())
+                )
+                values.put(
+                    MediaStore.Images.Media.DESCRIPTION, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                    ).format(System.currentTimeMillis())
                 )
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
                 values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
 
                 outputOptions = ImageCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        values
+                    context.contentResolver,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    values
                 ).setMetadata(
-                        metadata
+                    metadata
                 ).build()
             }
 
@@ -746,22 +743,23 @@ class CameraCaptureView: ConstraintLayout {
             }
 
             photoFile = File(
-                    mydir,
-                    SimpleDateFormat(
-                            "HHmmssddMMyyyy",
-                            Locale.US
-                    ).format(System.currentTimeMillis()) + ".jpg")
+                mydir,
+                SimpleDateFormat(
+                    "HHmmssddMMyyyy",
+                    Locale.US
+                ).format(System.currentTimeMillis()) + ".jpg"
+            )
 
             outputOptions = ImageCapture.OutputFileOptions.Builder(
-                    photoFile
+                photoFile
             ).setMetadata(
-                    metadata
+                metadata
             ).build()
 
 
         }
 
-        if(!isBackCameraOn){
+        if (!isBackCameraOn) {
             enableUserInteraction()
             val bitmap = preview_view2.bitmap
             val fos = FileOutputStream(photoFile)
@@ -772,54 +770,55 @@ class CameraCaptureView: ConstraintLayout {
             fos.flush()
             fos.close()
             onImageSaved?.invoke(Uri.fromFile(photoFile))
-        }
-        else {
+        } else {
 
             var flag = false
 
 
-                GlobalScope.launch(Dispatchers.IO){
-                    var mbitmap:Bitmap? = null
-                    if(isFlashLightOn) {
-                        delay(700)
-                    }
-                    withContext(Dispatchers.Main){
-                        mbitmap = preview_view2.bitmap
-                    }
-                   while (!flag){
-                       delay(100)
-                   }
-                    withContext(Dispatchers.Main){
-                        photoFile?.let {
-                            if(photoFile.exists())photoFile.delete()
-                        }
-
-                        val fos = FileOutputStream(photoFile)
-                        val stream = ByteArrayOutputStream()
-                        mbitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-                        val imageBytes = stream.toByteArray()
-                        fos.write(imageBytes)
-                        fos.flush()
-                        fos.close()
-                        onImageSaved?.invoke(Uri.fromFile(photoFile))
-                    }
+            GlobalScope.launch(Dispatchers.IO) {
+                var mbitmap: Bitmap? = null
+                if (isFlashLightOn) {
+                    delay(700)
                 }
-
-
-            imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(context), object: ImageCapture.OnImageSavedCallback{
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    enableUserInteraction()
-                    flag = true
+                withContext(Dispatchers.Main) {
+                    mbitmap = preview_view2.bitmap
                 }
-
-                override fun onError(exception: ImageCaptureException) {
-                    enableUserInteraction()
-                    exception.printStackTrace()
+                while (!flag) {
+                    delay(100)
                 }
+                withContext(Dispatchers.Main) {
+                    photoFile?.let {
+                        if (photoFile.exists()) photoFile.delete()
+                    }
 
-            })
+                    val fos = FileOutputStream(photoFile)
+                    val stream = ByteArrayOutputStream()
+                    mbitmap?.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+                    val imageBytes = stream.toByteArray()
+                    fos.write(imageBytes)
+                    fos.flush()
+                    fos.close()
+                    onImageSaved?.invoke(Uri.fromFile(photoFile))
+                }
+            }
+
+
+            imageCapture.takePicture(
+                outputOptions,
+                ContextCompat.getMainExecutor(context),
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        enableUserInteraction()
+                        flag = true
+                    }
+
+                    override fun onError(exception: ImageCaptureException) {
+                        enableUserInteraction()
+                        exception.printStackTrace()
+                    }
+
+                })
         }
-
 
 
     }
@@ -875,8 +874,9 @@ class CameraCaptureView: ConstraintLayout {
 
     private fun setPhotoVideoCaptureButtonPositionOnMoveEvent(xPostion: Float): Boolean {
         if (xPostion > initialIconX / 2) {
-            val newButtonPosition: Float = if ((initialIconX) - (initialIconX - xPostion) / 1.6 > initialIconX) initialIconX
-            else (initialIconX) - (initialIconX - xPostion) / 1.5.toFloat()
+            val newButtonPosition: Float =
+                if ((initialIconX) - (initialIconX - xPostion) / 1.6 > initialIconX) initialIconX
+                else (initialIconX) - (initialIconX - xPostion) / 1.5.toFloat()
             photo_video_capture_icon.animate()
                 .x(newButtonPosition.toFloat())
                 .setDuration(0)
@@ -917,7 +917,7 @@ class CameraCaptureView: ConstraintLayout {
     }
 
     private fun disableUserInteraction() {
-        (context  as Activity).window.setFlags(
+        (context as Activity).window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
@@ -936,17 +936,17 @@ class CameraCaptureView: ConstraintLayout {
             cameraProvider = cameraProviderFuture.get()
             if (cameraProvider != null) {
                 val preview = Preview.Builder()
-                        .build()
-                        .also {
-                            it.setSurfaceProvider(preview_view2.surfaceProvider)
-                        }
+                    .build()
+                    .also {
+                        it.setSurfaceProvider(preview_view2.surfaceProvider)
+                    }
 
 
                 videoCapture = VideoCapture.Builder().build()
 
                 imageCapture = ImageCapture.Builder()
-                        .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                        .build()
+                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                    .build()
                 val executor = ContextCompat.getMainExecutor(context)
                 analyzer = AnalyzerM()
 
@@ -960,13 +960,17 @@ class CameraCaptureView: ConstraintLayout {
                 if (isVideoCaptureEnabled) {
                     try {
                         cam = cameraProvider!!.bindToLifecycle(
-                                context as AppCompatActivity, cameraSelector, preview, imageCapture, videoCapture
+                            context as AppCompatActivity,
+                            cameraSelector,
+                            preview,
+                            imageCapture,
+                            videoCapture
                         )
 
 
                     } catch (exc: Exception) {
                         cam = cameraProvider!!.bindToLifecycle(
-                                context as AppCompatActivity, cameraSelector, preview, imageCapture
+                            context as AppCompatActivity, cameraSelector, preview, imageCapture
                         )
                     }
                 } else {
@@ -993,13 +997,6 @@ class CameraCaptureView: ConstraintLayout {
         }, ContextCompat.getMainExecutor(context))
     }
 
-    private fun checkStoragePermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     private fun checkRecordAudioPermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(
@@ -1010,7 +1007,10 @@ class CameraCaptureView: ConstraintLayout {
             ) {
                 true
             } else {
-                (context as Activity).requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), 1993993399)
+                (context as Activity).requestPermissions(
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                    1993993399
+                )
                 false
             }
 
@@ -1043,48 +1043,49 @@ class CameraCaptureView: ConstraintLayout {
 
                 val contentValues = ContentValues().apply {
                     val name = SimpleDateFormat(
-                            "HHmmssddMMyyyy",
-                            Locale.US
+                        "HHmmssddMMyyyy",
+                        Locale.US
                     ).format(System.currentTimeMillis()) + ".mp4"
                     put(MediaStore.MediaColumns.DISPLAY_NAME, name)
                     put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4")
                     put(MediaStore.MediaColumns.RELATIVE_PATH, "Movies/LeadFrog")
                 }
                 outputOptions = VideoCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
+                    context.contentResolver,
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    contentValues
                 ).setMetadata(metadata).build()
 
 
             } else {
                 val values = ContentValues()
                 values.put(
-                        MediaStore.Video.Media.TITLE, SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
+                    MediaStore.Video.Media.TITLE,
+                    SimpleDateFormat("HHmmssddMMyyyy", Locale.US).format(
                         System.currentTimeMillis()
-                )
-                )
-                values.put(
-                        MediaStore.Video.Media.DISPLAY_NAME, SimpleDateFormat(
-                        "HHmmssddMMyyyy",
-                        Locale.US
-                ).format(System.currentTimeMillis())
+                    )
                 )
                 values.put(
-                        MediaStore.Video.Media.DESCRIPTION, SimpleDateFormat(
+                    MediaStore.Video.Media.DISPLAY_NAME, SimpleDateFormat(
                         "HHmmssddMMyyyy",
                         Locale.US
-                ).format(System.currentTimeMillis())
+                    ).format(System.currentTimeMillis())
+                )
+                values.put(
+                    MediaStore.Video.Media.DESCRIPTION, SimpleDateFormat(
+                        "HHmmssddMMyyyy",
+                        Locale.US
+                    ).format(System.currentTimeMillis())
                 )
                 values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
                 values.put(MediaStore.Video.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
 
                 outputOptions = VideoCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        values
+                    context.contentResolver,
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    values
                 ).setMetadata(
-                        metadata
+                    metadata
                 ).build()
             }
 
@@ -1096,30 +1097,34 @@ class CameraCaptureView: ConstraintLayout {
             }
 
             val videoFile = File(
-                    mydir,
-                    SimpleDateFormat(
-                            "HHmmssddMMyyyy",
-                            Locale.US
-                    ).format(System.currentTimeMillis()) + ".mp4")
+                mydir,
+                SimpleDateFormat(
+                    "HHmmssddMMyyyy",
+                    Locale.US
+                ).format(System.currentTimeMillis()) + ".mp4"
+            )
 
             outputOptions = VideoCapture.OutputFileOptions.Builder(
-                    videoFile
+                videoFile
             ).setMetadata(
-                    metadata
+                metadata
             ).build()
         }
 
-        videoCapture?.startRecording(outputOptions, ContextCompat.getMainExecutor(context), object : VideoCapture.OnVideoSavedCallback {
-            override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
-                enableUserInteraction()
-                cause?.printStackTrace()
-            }
+        videoCapture?.startRecording(
+            outputOptions,
+            ContextCompat.getMainExecutor(context),
+            object : VideoCapture.OnVideoSavedCallback {
+                override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
+                    enableUserInteraction()
+                    cause?.printStackTrace()
+                }
 
-            override fun onVideoSaved(outputFileResults: VideoCapture.OutputFileResults) {
-                enableUserInteraction()
-                currentSavedVideoUri = outputFileResults.savedUri
-            }
-        })
+                override fun onVideoSaved(outputFileResults: VideoCapture.OutputFileResults) {
+                    enableUserInteraction()
+                    currentSavedVideoUri = outputFileResults.savedUri
+                }
+            })
     }
 
     private fun getTransparentPercentage(num: Int): String {
@@ -1231,23 +1236,27 @@ class CameraCaptureView: ConstraintLayout {
 
     private fun setUpOrientationChangeListener() {
         val mOrientationListener: OrientationEventListener = object : OrientationEventListener(
-            context) {
+            context
+        ) {
             override fun onOrientationChanged(orientation: Int) {
 
 
                 if (camera_fragment_main_layout != null && change_camera_iv != null) {
-                    when(orientation){
+                    when (orientation) {
                         0 -> {
-                            imageCapture?.targetRotation =  Surface.ROTATION_0
+                            imageCapture?.targetRotation = Surface.ROTATION_0
                         }
+
                         90 -> {
-                            imageCapture?.targetRotation =  Surface.ROTATION_270
+                            imageCapture?.targetRotation = Surface.ROTATION_270
                         }
-                        180->{
-                            imageCapture?.targetRotation =  Surface.ROTATION_180
+
+                        180 -> {
+                            imageCapture?.targetRotation = Surface.ROTATION_180
                         }
+
                         270 -> {
-                            imageCapture?.targetRotation =  Surface.ROTATION_90
+                            imageCapture?.targetRotation = Surface.ROTATION_90
                         }
                     }
                     if (orientation == 0 || orientation == 180) {
@@ -1324,18 +1333,18 @@ class CameraCaptureView: ConstraintLayout {
     }
 
     fun deleteFile(path: String) {
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val file = File(path)
                 file.delete()
             } catch (e: java.lang.Exception) {
-               e.printStackTrace()
+                e.printStackTrace()
             }
         }
     }
 
     private fun vibrate() {
-        if(checkVibrationPermission()) {
+        if (checkVibrationPermission()) {
             val vibe =
                 context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
 
@@ -1349,19 +1358,20 @@ class CameraCaptureView: ConstraintLayout {
             } else vibe?.vibrate(100)
         }
     }
-        private fun checkVibrationPermission(): Boolean {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.VIBRATE
-                    ) ==
+
+    private fun checkVibrationPermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.VIBRATE
+            ) ==
                     PackageManager.PERMISSION_GRANTED
 
-            } else {
-                true
-            }
-
+        } else {
+            true
         }
+
+    }
 
     private fun getSwipeToCancelTextFromCurrentRotation(currentRotation: Int): String {
         val swipeToCancelText: String = when (currentRotation) {
@@ -1378,7 +1388,7 @@ class CameraCaptureView: ConstraintLayout {
 
         private var rotation: Int = 0
 
-        fun getRotation():Int{
+        fun getRotation(): Int {
             return rotation
         }
 
