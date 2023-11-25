@@ -33,29 +33,30 @@ class ImageEditorView : ConstraintLayout {
     private var currentRotation = 0
     private var fullSizeImageRect = Rect()
 
-    private var onComplete: ((Bitmap,String)->Unit)? = null
+    private var onComplete: ((Bitmap, String) -> Unit)? = null
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-            context,
-            attrs,
-            defStyle
+        context,
+        attrs,
+        defStyle
     )
+
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
     }
 
-    fun setImageText(text:String){
+    fun setImageText(text: String) {
         image_note_et.setText(text)
     }
 
-    fun setImageBitmap(bitmap: Bitmap){
+    fun setImageBitmap(bitmap: Bitmap) {
         editable_photo_preview_civ.setImageBitmap(bitmap)
     }
 
-    fun setOnCompleteCallback(callback:(edittedImage:Bitmap, textNote:String)->Unit){
+    fun setOnCompleteCallback(callback: (edittedImage: Bitmap, textNote: String) -> Unit) {
         onComplete = callback
     }
 
-    fun setOnCloseClickCallback(callback:()->Unit){
+    fun setOnCloseClickCallback(callback: () -> Unit) {
         editable_photo_close.setOnClickListener {
             callback.invoke()
         }
@@ -85,10 +86,16 @@ class ImageEditorView : ConstraintLayout {
 
         editable_photo_accept.setOnClickListener {
             if (isImageCropping) {
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"".trim())
+                onComplete?.invoke(
+                    editable_photo_preview_civ.croppedImage,
+                    image_note_et.text?.toString() ?: "".trim()
+                )
             } else {
                 editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
-                onComplete?.invoke(editable_photo_preview_civ.croppedImage,image_note_et.text?.toString()?:"".trim() )
+                onComplete?.invoke(
+                    editable_photo_preview_civ.croppedImage,
+                    image_note_et.text?.toString() ?: "".trim()
+                )
             }
         }
 
@@ -96,11 +103,17 @@ class ImageEditorView : ConstraintLayout {
             currentRotation -= 90
             if (currentRotation == -360) currentRotation = 0
             editable_photo_preview_civ.rotateImage(-90)
-            if(!editable_photo_preview_civ.isShowCropOverlay) {
-                editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
+            if (!editable_photo_preview_civ.isShowCropOverlay) {
+                editable_photo_preview_civ.apply {
+                    maxZoom = 1
+                    isAutoZoomEnabled = false
+                    cropRect = wholeImageRect
+                    isShowCropOverlay = false
+                    setFixedAspectRatio(false)
+                    scaleType = CropImageView.ScaleType.FIT_CENTER
+                }
             }
         }
-
 
 
     }
@@ -154,21 +167,20 @@ class ImageEditorView : ConstraintLayout {
             image_note_et.clearFocus()
             hideKeyboard()
             it.isEnabled = false
-            Handler(Looper.getMainLooper()).postDelayed({it.isEnabled = true},200)
+            Handler(Looper.getMainLooper()).postDelayed({ it.isEnabled = true }, 200)
 
         }
 
         image_note_et.setOnFocusChangeListener { _, isFocused ->
             image_note_ready_iv.isVisible = isFocused
-            if(!isFocused){
+            if (!isFocused) {
                 image_note_et.apply {
                     this.keyListener = null
                     setHorizontallyScrolling(true)
                     isSingleLine = true
                     ellipsize = TextUtils.TruncateAt.END
                 }
-            }
-            else {
+            } else {
                 image_note_et.apply {
                     this.keyListener = keyListener
                     isSingleLine = false
@@ -178,7 +190,8 @@ class ImageEditorView : ConstraintLayout {
                     setSelection(length())
 
                 }
-                val keyboard = (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
+                val keyboard =
+                    (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?)
                 keyboard?.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
             }
         }
