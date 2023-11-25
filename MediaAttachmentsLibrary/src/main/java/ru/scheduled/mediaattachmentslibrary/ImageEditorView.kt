@@ -96,6 +96,9 @@ class ImageEditorView : ConstraintLayout {
             currentRotation -= 90
             if (currentRotation == -360) currentRotation = 0
             editable_photo_preview_civ.rotateImage(-90)
+            if(!editable_photo_preview_civ.isShowCropOverlay) {
+                editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
+            }
         }
 
 
