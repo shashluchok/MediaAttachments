@@ -91,7 +91,6 @@ class ImageEditorView : ConstraintLayout {
                     image_note_et.text?.toString() ?: "".trim()
                 )
             } else {
-                editable_photo_preview_civ.cropRect = editable_photo_preview_civ.wholeImageRect
                 onComplete?.invoke(
                     editable_photo_preview_civ.croppedImage,
                     image_note_et.text?.toString() ?: "".trim()
@@ -100,19 +99,21 @@ class ImageEditorView : ConstraintLayout {
         }
 
         editable_photo_rotate_photo.setOnClickListener {
+            if (!isImageCropping) {
+                editable_photo_preview_civ.apply {
+                    maxZoom = 2
+                    isAutoZoomEnabled = true
+                    cropRect = wholeImageRect
+                    setFixedAspectRatio(false)
+                    scaleType = CropImageView.ScaleType.FIT_CENTER
+                    setMinCropResultSize(400, 300)
+                }
+            }
             currentRotation -= 90
             if (currentRotation == -360) currentRotation = 0
             editable_photo_preview_civ.rotateImage(-90)
-            if (!editable_photo_preview_civ.isShowCropOverlay) {
-                editable_photo_preview_civ.apply {
-                    maxZoom = 1
-                    isAutoZoomEnabled = false
-                    cropRect = wholeImageRect
-                    isShowCropOverlay = false
-                    setFixedAspectRatio(false)
-                    scaleType = CropImageView.ScaleType.FIT_CENTER
-                }
-            }
+
+
         }
 
 
