@@ -91,7 +91,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ru.scheduled.mediaattachmentslibrary.SketchView
+    <ru.scheduled.mediaattachmentslibrary.widgets.sketch.SketchView
         android:id="@+id/sketch_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

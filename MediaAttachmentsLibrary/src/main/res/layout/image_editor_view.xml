@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ru.scheduled.mediaattachmentslibrary.CustomEditText
+    <ru.scheduled.mediaattachmentslibrary.widgets.mediatoolbarview.PreImeEditText
         android:id="@+id/image_note_et"
         android:layout_width="0dp"
         android:layout_height="60dp"

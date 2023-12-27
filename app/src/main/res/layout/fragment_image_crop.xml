@@ -8,7 +8,7 @@
     android:focusableInTouchMode="true"
     >
 
-    <ru.scheduled.mediaattachmentslibrary.ImageEditorView
+    <ru.scheduled.mediaattachmentslibrary.widgets.ImageEditorView
         android:id="@+id/imageEditorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

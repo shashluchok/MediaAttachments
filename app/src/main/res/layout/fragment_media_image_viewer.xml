@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     >
 
-    <ru.scheduled.mediaattachmentslibrary.ImageViewerView
+    <ru.scheduled.mediaattachmentslibrary.widgets.imageviewer.ImageViewerView
         android:id="@+id/mediaViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

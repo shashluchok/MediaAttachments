@@ -155,7 +155,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/notes_toolbar_voice" />
 
-        <ru.scheduled.mediaattachmentslibrary.CustomEditText
+        <ru.scheduled.mediaattachmentslibrary.widgets.mediatoolbarview.PreImeEditText
             android:id="@+id/bottom_notes_add_text_note_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

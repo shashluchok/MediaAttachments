@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ru.scheduled.mediaattachmentslibrary.SketchDrawingView
+    <ru.scheduled.mediaattachmentslibrary.widgets.sketch.SketchDrawingView
         android:id="@+id/media_sketch_drawing_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

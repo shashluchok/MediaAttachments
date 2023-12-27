@@ -9,4 +9,5 @@
     <string name="defaultSwipeRightToCancel">Richtig — abbrechen</string>
     <string name="defaultSignHint">Bildunterschrift hinzufügen...</string>
     <string name="voice_hint">Halten zum Aufnehmen,\nloslassen zum Senden</string>
+    <string name="photo_viewer_count">%d von %d</string>
 </resources>

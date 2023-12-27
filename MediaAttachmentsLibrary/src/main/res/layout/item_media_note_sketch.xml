@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ru.scheduled.mediaattachmentslibrary.LFShimmerImage
+            <ru.scheduled.mediaattachmentslibrary.widgets.ShimmerImage
                 android:id="@+id/lf_shimmer_image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"

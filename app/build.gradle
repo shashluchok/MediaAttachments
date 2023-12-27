@@ -2,21 +2,24 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'kotlin-android-extensions'
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 34
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "ru.leadfrog"
+        applicationId "ru.mediaattachments"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {
@@ -59,27 +62,14 @@ dependencies {
     // Feature module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
-    // -----------navigation
-    def koin_version= "3.1.6"
-    // Database
-    implementation "androidx.room:room-runtime:2.4.0-alpha01"
+
     // Koin main features for Android
-    implementation "io.insert-koin:koin-android:$koin_version"
-// No more koin-android-viewmodel, koin-android-scope, koin-android-fragment
-
-// Java Compatibility
-    implementation "io.insert-koin:koin-android-compat:$koin_version"
-// Jetpack WorkManager
-    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
-// Navigation Graph
-    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
-// Jetpack Compose
-    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
-
-    implementation "androidx.room:room-runtime:2.4.0-alpha01"
-    kapt "androidx.room:room-compiler:2.4.0-alpha01"
-
-    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "io.insert-koin:koin-android:3.1.6"
+    // Database
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

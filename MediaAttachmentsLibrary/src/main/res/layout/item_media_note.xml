@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    >
+
+    <include
+        android:id="@+id/item_media_note_voice"
+        layout="@layout/item_voice"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/item_media_note_text"
+        layout="@layout/item_media_note_text"
+        android:visibility="gone"
+        />
+    <include
+        android:id="@+id/item_media_note_sketch"
+        layout="@layout/item_media_note_sketch"
+        android:visibility="gone"
+        />
+    <include
+        android:id="@+id/item_media_note_photo"
+        layout="@layout/item_media_note_photo"
+        android:visibility="gone"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

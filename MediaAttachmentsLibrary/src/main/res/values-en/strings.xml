@@ -9,4 +9,5 @@
     <string name="defaultSwipeRightToCancel">Right — cancel</string>
     <string name="defaultSignHint">Add caption...</string>
     <string name="voice_hint">Hold to record,\nrelease to send</string>
+    <string name="photo_viewer_count">%d out of %d</string>
 </resources>
