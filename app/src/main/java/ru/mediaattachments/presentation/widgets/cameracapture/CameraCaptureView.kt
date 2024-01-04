@@ -3,7 +3,6 @@ package ru.mediaattachments.presentation.widgets.cameracapture
 import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -36,20 +35,12 @@ import ru.mediaattachments.utils.saveBitmap
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.Random
 import kotlin.math.abs
 
-private const val dateFormat = "HHmmssddMMyyyy"
-
-private const val imageExtension = ".jpg"
-private const val imageMimeType = "image/jpeg"
-private const val imageFolderPath = "Images/MediaAttachments"
 private const val imageQuality = 90
 
 private const val mockedDataAnimationDuration = 300L
-private const val mockedImagesPath = "photos"
 
 private const val normalDelay = 300L
 private const val longDelay = 1000L
@@ -77,12 +68,6 @@ class CameraCaptureView : ConstraintLayout {
 
     private var onImageSaved: ((uri: Uri) -> Unit)? = null
     private var onPhotoClicked: (() -> Unit)? = null
-
-    private var saveDestination: SaveLocation = SaveLocation.INTERNAL_STORAGE
-
-    enum class SaveLocation {
-        GALLERY, INTERNAL_STORAGE
-    }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
         context,
@@ -188,10 +173,6 @@ class CameraCaptureView : ConstraintLayout {
 
     fun setOnPhotoClickedCallback(callback: () -> Unit) {
         onPhotoClicked = callback
-    }
-
-    fun setSaveLocation(location: SaveLocation) {
-        saveDestination = location
     }
 
     fun setOnGalleryClickedCallback(callback: () -> Unit) {
@@ -512,71 +493,13 @@ class CameraCaptureView : ConstraintLayout {
             if (!isBackCameraOn) {
                 metadata.isReversedHorizontal = true
             }
-            val outputOptions: ImageCapture.OutputFileOptions
 
-            if (saveDestination == SaveLocation.GALLERY) {
+            val outputOptions = ImageCapture.OutputFileOptions.Builder(
+                photoFile
+            ).setMetadata(
+                metadata
+            ).build()
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    val contentValues = ContentValues().apply {
-                        val name = SimpleDateFormat(
-                            dateFormat,
-                            Locale.US
-                        ).format(System.currentTimeMillis()) + imageExtension
-                        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-                        put(MediaStore.MediaColumns.MIME_TYPE, imageMimeType)
-                        put(MediaStore.MediaColumns.RELATIVE_PATH, imageFolderPath)
-                    }
-                    outputOptions = ImageCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
-                    ).setMetadata(metadata).build()
-
-
-                } else {
-                    val values = ContentValues()
-                    values.put(
-                        MediaStore.Images.Media.TITLE,
-                        SimpleDateFormat(dateFormat, Locale.US).format(
-                            System.currentTimeMillis()
-                        )
-                    )
-                    values.put(
-                        MediaStore.Images.Media.DISPLAY_NAME, SimpleDateFormat(
-                            dateFormat,
-                            Locale.US
-                        ).format(System.currentTimeMillis())
-                    )
-                    values.put(
-                        MediaStore.Images.Media.DESCRIPTION, SimpleDateFormat(
-                            dateFormat,
-                            Locale.US
-                        ).format(System.currentTimeMillis())
-                    )
-                    values.put(MediaStore.Images.Media.MIME_TYPE, imageMimeType)
-                    values.put(
-                        MediaStore.Images.Media.DATE_ADDED,
-                        System.currentTimeMillis() / 1000
-                    )
-
-                    outputOptions = ImageCapture.OutputFileOptions.Builder(
-                        context.contentResolver,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        values
-                    ).setMetadata(
-                        metadata
-                    ).build()
-                }
-
-            } else {
-                outputOptions = ImageCapture.OutputFileOptions.Builder(
-                    photoFile
-                ).setMetadata(
-                    metadata
-                ).build()
-
-            }
 
             if (!isBackCameraOn) {
                 val bitmap = previewView.bitmap
