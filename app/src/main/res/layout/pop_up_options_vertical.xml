@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/pop_up_options_vertical_main_header_tv"
+            android:id="@+id/mainHeaderTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/pop_up_options_vertical_secondary_header_tv"
+            android:id="@+id/secondaryHeaderTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -46,97 +46,93 @@
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/roboto_regular"
             android:gravity="center"
+            android:visibility="gone"
             android:lineHeight="28dp"
-            android:text="Second Header"
             android:textColor="@color/app_dark_gray"
             android:textSize="@dimen/default_16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_main_header_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/mainHeaderTv" />
 
         <View
-            android:id="@+id/pop_up_options_vertical_top_divider"
+            android:id="@+id/topDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="25dp"
             android:background="@color/default_separator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pop_up_options_vertical_secondary_header_tv" />
+            app:layout_constraintTop_toBottomOf="@id/secondaryHeaderTv" />
 
 
         <TextView
-            android:id="@+id/pop_up_options_vertical_top_action_tv"
+            android:id="@+id/actionTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center"
-
             android:paddingTop="18dp"
             android:paddingBottom="18dp"
-            android:text="Action agree"
+            android:text="@string/pop_up_top_action_text"
             android:textAllCaps="true"
-            android:textColor="@color/app_red"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/default_14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_top_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/topDivider" />
 
         <View
-            android:id="@+id/pop_up_options_vertical_middle_divider"
+            android:id="@+id/middleDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/default_separator"
             android:letterSpacing="0.1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_top_action_tv" />
-
-
-        <TextView
-            android:id="@+id/pop_up_options_vertical_middle_action_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
-            android:gravity="center"
-
-            android:paddingTop="18dp"
-            android:paddingBottom="18dp"
-            android:text="@string/cancel"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/default_14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_middle_divider" />
+            app:layout_constraintTop_toBottomOf="@+id/actionTv" />
 
         <View
-            android:id="@+id/pop_up_options_vertical_bottom_divider"
+            android:id="@+id/bottomDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/default_separator"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_middle_action_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/secondaryActionTv" />
 
         <TextView
-            android:id="@+id/pop_up_options_vertical_bottom_action_tv"
+            android:id="@+id/secondaryActionTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_medium"
+            android:fontFamily="@font/roboto_regular"
             android:gravity="center"
             android:paddingTop="18dp"
             android:paddingBottom="18dp"
             android:text="@string/cancel"
-
             android:textAllCaps="true"
             android:visibility="gone"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/default_14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pop_up_options_vertical_middle_action_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/actionTv" />
+
+        <TextView
+            android:id="@+id/dismissActionTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
+            android:text="@string/pop_up_middle_action_text"
+            android:textAllCaps="true"
+            android:textColor="@color/app_red"
+            android:textSize="@dimen/default_14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/secondaryActionTv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

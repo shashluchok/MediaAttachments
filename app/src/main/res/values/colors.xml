@@ -92,4 +92,13 @@
     <color name="notification_color_primary_light">#802D9CDB</color>
     <color name="notification_blue_label">#802D9CDB</color>
     <color name="recyclerview_background">#F9F9F9</color>
+
+    <color name="defaultActive">#2D9CDB</color>
+    <color name="defaultNotActive">#8EC6E7</color>
+    <color name="defaultActiveVoice">#8EC6E7</color>
+    <color name="defaultNotActiveVoice">#E6E4EA</color>
+    <color name="defaultText">#363636</color>
+    <color name="defaultTextLight">#9A99A2</color>
+    <color name="defaultDivider">#A3BDBDBD</color>
+    <color name="defaultBg">#EFEFF4</color>
 </resources>

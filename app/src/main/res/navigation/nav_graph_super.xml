@@ -6,7 +6,7 @@
     app:startDestination="@id/startFragment">
     <fragment
         android:id="@+id/mediaNotesFragment"
-        android:name="ru.mediaattachments.ui.media_attachments.media_notes.MediaNotesFragment"
+        android:name="ru.mediaattachments.presentation.medialist.MediaListFragment"
         android:label="MediaNotesFragment" >
         <action
             android:id="@+id/action_mediaNotesFragment_to_cameraCaptureFragment"
@@ -39,36 +39,40 @@
     </fragment>
     <fragment
         android:id="@+id/cameraCaptureFragment"
-        android:name="ru.mediaattachments.ui.media_attachments.camera_capture.CameraCaptureFragment"
+        android:name="ru.mediaattachments.presentation.camera.CameraCaptureFragment"
         android:label="CameraCaptureFragment" >
         <action
             android:id="@+id/action_cameraCaptureFragment_to_imageCropFragment"
             app:enterAnim="@anim/scale_in"
             app:exitAnim="@anim/scale_out"
+            app:popUpTo="@id/cameraCaptureFragment"
+            app:popUpToInclusive="true"
             app:popEnterAnim="@anim/pop_scale_in"
             app:popExitAnim="@anim/pop_scale_out"
             app:destination="@id/imageCropFragment" />
     </fragment>
     <fragment
         android:id="@+id/mediaSketchFragment"
-        android:name="ru.mediaattachments.ui.media_attachments.media_sketch.MediaSketchFragment"
+        android:name="ru.mediaattachments.presentation.sketch.MediaSketchFragment"
         android:label="MediaSketchFragment" />
     <fragment
         android:id="@+id/mediaImageViewerFragment"
-        android:name="ru.mediaattachments.ui.media_attachments.media_image_viewer.MediaImageViewerFragment"
+        android:name="ru.mediaattachments.presentation.imageviewer.MediaImageViewerFragment"
         android:label="MediaImageViewerFragment" />
     <fragment
         android:id="@+id/imageCropFragment"
-        android:name="ru.mediaattachments.ui.media_attachments.camera_capture.image_crop.ImageCropFragment"
+        android:name="ru.mediaattachments.presentation.imagecrop.ImageCropFragment"
         android:label="ImageCropFragment" />
     <fragment
         android:id="@+id/startFragment"
-        android:name="ru.mediaattachments.ui.StartFragment"
+        android:name="ru.mediaattachments.presentation.start.StartFragment"
         android:label="StartFragment" >
         <action
             android:id="@+id/action_startFragment_to_mediaNotesFragment"
             app:enterAnim="@anim/scale_in"
             app:exitAnim="@anim/scale_out"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/startFragment"
             app:popEnterAnim="@anim/pop_scale_in"
             app:popExitAnim="@anim/pop_scale_out"
             app:destination="@id/mediaNotesFragment" />

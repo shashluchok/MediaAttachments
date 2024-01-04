@@ -1,3 +1,2 @@
-include ':MediaAttachmentsLibrary'
 include ':app'
 rootProject.name = "MediaAttachments"

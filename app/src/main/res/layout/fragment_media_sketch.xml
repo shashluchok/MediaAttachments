@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lib_white"
-    tools:context=".ui.media_attachments.media_sketch.MediaSketchFragment">
+    tools:context=".presentation.sketch.MediaSketchFragment">
 
     <include
         android:id="@+id/toolbar_default"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ru.scheduled.mediaattachmentslibrary.widgets.sketch.SketchDrawingView
+    <ru.mediaattachments.presentation.widgets.sketch.SketchDrawingView
         android:id="@+id/media_sketch_drawing_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

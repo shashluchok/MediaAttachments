@@ -4,7 +4,7 @@
     android:id="@+id/media_notes_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_primary">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar_container_cl"
@@ -37,14 +37,13 @@
                 android:id="@+id/selection_toolbar_cancel_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:layout_marginTop="3dp"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:layout_marginTop="3dp"
                 android:src="@drawable/close"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/selected_items_count_tv"
@@ -69,17 +68,17 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ru.scheduled.mediaattachmentslibrary.medialist.MediaRecyclerView
-    android:id="@+id/media_notes_recycler_view"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:overScrollMode="never"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/toolbar_container_cl" />
+    <ru.mediaattachments.presentation.medialist.MediaListRecyclerView
+        android:id="@+id/media_notes_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container_cl" />
 
-    <ru.scheduled.mediaattachmentslibrary.widgets.mediatoolbarview.MediaToolbarView
+    <ru.mediaattachments.presentation.widgets.mediatoolbarview.MediaToolbarView
         android:id="@+id/mediaToolbarView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
