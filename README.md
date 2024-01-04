@@ -1,6 +1,5 @@
 MediaAttachments - is an app to create and store media notes such as text,voice,sketch and photos.
 
-![image](https://github.com/shashluchok/MediaAttachments/assets/53491346/a7a12122-a72a-4249-b880-f7574a360e54)
 ![image](https://github.com/shashluchok/MediaAttachments/assets/53491346/df4f87ee-182a-49b6-bfdc-d47a597e06e4)
 ![image](https://github.com/shashluchok/MediaAttachments/assets/53491346/e867aa11-d296-4d55-aad4-bf28583b6f16)
 ![image](https://github.com/shashluchok/MediaAttachments/assets/53491346/ac86a9df-6b4e-477f-b857-c46d7cce529d)
