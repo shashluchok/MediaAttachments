@@ -26,7 +26,7 @@
     <ru.mediaattachments.presentation.widgets.mediatoolbarview.PreImeEditText
         android:id="@+id/image_note_et"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/lib_black"
         android:clickable="true"
         android:focusable="true"
@@ -35,6 +35,8 @@
         android:paddingStart="12dp"
         android:paddingTop="18dp"
         android:paddingEnd="62dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:paddingBottom="18dp"
         android:textColor="@color/lib_white"
         android:textColorHint="@color/defaultTextLight"

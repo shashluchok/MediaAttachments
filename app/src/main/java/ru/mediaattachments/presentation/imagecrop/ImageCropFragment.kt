@@ -72,7 +72,9 @@ class ImageCropFragment : BaseFragment<FragmentImageCropBinding>() {
         }
         binding.imageEditorView.apply {
 
-            if (currentPhotoPath != null) {
+            if (currentMediaNoteId != null) {
+                viewModel.getMediaNote(currentMediaNoteId!!)
+            } else if (currentPhotoPath != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                     withContext(Dispatchers.Main) {
@@ -80,8 +82,6 @@ class ImageCropFragment : BaseFragment<FragmentImageCropBinding>() {
                         (requireActivity() as MainActivity).hideLoader()
                     }
                 }
-            } else if (currentMediaNoteId != null) {
-                viewModel.getMediaNote(currentMediaNoteId!!)
             }
             setOnCloseClickCallback {
                 findNavController().popBackStack()

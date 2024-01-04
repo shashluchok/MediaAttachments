@@ -41,10 +41,7 @@ class ImageEditorView : ConstraintLayout {
 
             initPhotoPreviewListeners()
 
-            imageNoteEt.setUpOnKeyPreImePressedCallback {
-                imageNoteEt.clearFocus()
-                hideKeyboard()
-            }
+
 
             imageNoteReadyIv.setOnClickListener {
                 imageNoteEt.clearFocus()
@@ -75,6 +72,17 @@ class ImageEditorView : ConstraintLayout {
                     }
                     showKeyboard()
                 }
+            }
+
+            imageNoteEt.apply {
+                setHorizontallyScrolling(true)
+                isSingleLine = true
+                ellipsize = TextUtils.TruncateAt.END
+                setUpOnKeyPreImePressedCallback {
+                    imageNoteEt.clearFocus()
+                    hideKeyboard()
+                }
+                clearFocus()
             }
 
         }
