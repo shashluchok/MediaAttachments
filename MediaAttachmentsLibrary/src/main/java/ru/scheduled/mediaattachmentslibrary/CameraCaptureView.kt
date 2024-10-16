@@ -26,11 +26,9 @@ import androidx.camera.core.Camera
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat.animate
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.camera_capture_view.view.*
 import kotlinx.coroutines.*
 import java.io.*
@@ -58,8 +56,6 @@ class CameraCaptureView : ConstraintLayout {
     private var isPointerOn = false
     private var initTimeInMillis = 0L
     private var isDraggingBlocked = true
-    private var currentOrientationIsPortrait = true
-    private var mOrientationListener: OrientationEventListener? = null
     private var initialIconX: Float = 0f
 
     private var animJob: Job? = null
@@ -342,7 +338,6 @@ class CameraCaptureView : ConstraintLayout {
         val radius = 10f
         blurView.setupWith(rootView)
             .setFrameClearDrawable(windowBackground)
-            .setBlurAlgorithm(RenderScriptBlur(context))
             .setBlurRadius(radius)
             .setBlurAutoUpdate(true)
 

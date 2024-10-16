@@ -3,10 +3,10 @@ package ru.leadfrog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.leadfrog.ui.media_attachments.media_sketch.IOnBackPressed
 import ru.leadfrog.ui.base.BaseActivity
+import ru.scheduled.mediaattachmentslibrary.utils.animate.please
 
 class MainActivity : BaseActivity() {
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.fragment_media_sketch.*
 import kotlinx.android.synthetic.main.layout_toolbar_default.view.*
 import org.koin.android.ext.android.inject
@@ -17,6 +16,7 @@ import ru.leadfrog.ui.base.BaseFragment
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.CURRENT_SHARD_ID
 import ru.leadfrog.ui.media_attachments.MediaConstants.Companion.EXISTING_DB_MEDIA_NOTE_ID
 import ru.leadfrog.ui.media_attachments.media_notes.MediaNotesStates
+import ru.scheduled.mediaattachmentslibrary.utils.animate.please
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException

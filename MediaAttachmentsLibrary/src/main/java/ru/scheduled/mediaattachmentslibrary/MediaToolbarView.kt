@@ -20,11 +20,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.doOnTextChanged
-import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.layout_media_toolbar_default.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlinx.android.synthetic.main.layout_media_toolbar_view.view.*
 import kotlinx.coroutines.*
+import ru.scheduled.mediaattachmentslibrary.utils.animate.please
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path

@@ -24,7 +24,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import eightbitlab.com.blurview.RenderScriptBlur
 import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_media_notes.*
 import kotlinx.android.synthetic.main.layout_toolbar_default.view.*
@@ -110,7 +109,6 @@ class MediaNotesFragment : BaseFragment(), IOnBackPressed {
         val radius = 5f
         blurView.setupWith(rootView)
             .setFrameClearDrawable(windowBackground)
-            .setBlurAlgorithm(RenderScriptBlur(requireContext()))
             .setBlurRadius(radius)
             .setBlurAutoUpdate(true)
 

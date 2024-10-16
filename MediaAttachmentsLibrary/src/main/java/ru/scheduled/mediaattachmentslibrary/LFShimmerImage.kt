@@ -20,7 +20,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.layout_lf_shimmer_image.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -87,7 +86,6 @@ class LFShimmerImage : ConstraintLayout {
                    val radius = 7f
                    lf_shimmer_blur_view.setupWith(rootView)
                        .setFrameClearDrawable(windowBackground)
-                       .setBlurAlgorithm(RenderScriptBlur(it))
                        .setBlurRadius(radius)
                        .setBlurAutoUpdate(true)
                    lf_shimmer_blur_view.setBlurEnabled(true)

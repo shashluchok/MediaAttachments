@@ -16,10 +16,8 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.github.florent37.kotlin.pleaseanimate.please
 import kotlinx.android.synthetic.main.item_pager_image_viewer.view.*
 import kotlinx.android.synthetic.main.layout_image_viewer_view.view.*
-import kotlinx.android.synthetic.main.layout_media_toolbar_note_edit.view.*
 import kotlin.math.abs
 
 class ImageViewerView : ConstraintLayout {

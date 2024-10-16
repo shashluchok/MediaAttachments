@@ -2,29 +2,18 @@ package ru.scheduled.mediaattachmentslibrary
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.widget.ImageViewCompat
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.image_editor_view.view.*
 import kotlinx.android.synthetic.main.layout_media_sketch.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
-import kotlin.math.abs
+import ru.scheduled.mediaattachmentslibrary.utils.cropper.CropImageView
 
 
 class ImageEditorView : ConstraintLayout {
