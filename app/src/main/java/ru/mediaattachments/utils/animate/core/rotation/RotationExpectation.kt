@@ -1,8 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.rotation
+package ru.mediaattachments.utils.animate.core.rotation
 
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.AnimExpectation
 
 abstract class RotationExpectation : AnimExpectation() {
     abstract fun getCalculatedRotation(viewToMove: View): Float?

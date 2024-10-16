@@ -1,6 +1,7 @@
-package com.github.florent37.kotlin.pleaseanimate
+package ru.mediaattachments.utils.animate
 
 import android.view.View
+import ru.mediaattachments.utils.animate.ViewExpectation
 
 import java.lang.Math.abs
 import java.lang.Math.cos

@@ -1,6 +1,7 @@
-package com.github.florent37.kotlin.pleaseanimate.core.anim3d
+package ru.mediaattachments.utils.animate.core.anim3d
 
 import android.view.View
+import ru.mediaattachments.utils.animate.core.anim3d.CameraDistanceExpectation
 
 /**
  * Created by Christian Ringshofer on 17/02/2017.

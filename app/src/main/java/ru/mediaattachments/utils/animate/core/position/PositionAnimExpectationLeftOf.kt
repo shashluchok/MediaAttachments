@@ -1,6 +1,7 @@
-package com.github.florent37.kotlin.pleaseanimate.core.position
+package ru.mediaattachments.utils.animate.core.position
 
 import android.view.View
+import ru.mediaattachments.utils.animate.core.position.PositionAnimationViewDependant
 
 class PositionAnimExpectationLeftOf(otherView: View) : PositionAnimationViewDependant(otherView) {
 

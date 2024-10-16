@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate.core.paddings
+package ru.mediaattachments.utils.animate.core.paddings
 
 enum class Padding {
     TOP,

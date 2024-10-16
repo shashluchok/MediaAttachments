@@ -27,7 +27,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.*
 import ru.mediaattachments.databinding.CameraCaptureViewBinding
 import ru.mediaattachments.utils.FileUtils
@@ -333,7 +332,6 @@ class CameraCaptureView : ConstraintLayout {
             val radius = 10f
             blurView.setupWith(rootView)
                 .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(RenderScriptBlur(context))
                 .setBlurRadius(radius)
                 .setBlurAutoUpdate(true)
 

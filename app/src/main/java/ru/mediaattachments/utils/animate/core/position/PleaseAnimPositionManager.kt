@@ -1,12 +1,12 @@
-package com.github.florent37.kotlin.pleaseanimate.core.position
+package ru.mediaattachments.utils.animate.core.position
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
-import com.github.florent37.kotlin.pleaseanimate.core.PleaseAnimManager
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.ViewCalculator
+import ru.mediaattachments.utils.animate.core.PleaseAnimManager
 
 class PleaseAnimPositionManager(animExpectations: List<AnimExpectation>, viewToMove: View, viewCalculator: ViewCalculator) : PleaseAnimManager(animExpectations, viewToMove, viewCalculator) {
 

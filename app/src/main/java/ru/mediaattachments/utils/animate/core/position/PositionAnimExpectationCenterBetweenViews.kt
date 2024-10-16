@@ -1,6 +1,7 @@
-package com.github.florent37.kotlin.pleaseanimate.core.position
+package ru.mediaattachments.utils.animate.core.position
 
 import android.view.View
+import ru.mediaattachments.utils.animate.core.position.PositionAnimExpectation
 
 class PositionAnimExpectationCenterBetweenViews(private val view1: View, private val view2: View, private val horizontal: Boolean, private val vertical: Boolean) : PositionAnimExpectation() {
 

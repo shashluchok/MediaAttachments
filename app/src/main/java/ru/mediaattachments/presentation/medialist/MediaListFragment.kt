@@ -19,7 +19,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import ru.mediaattachments.*
@@ -31,6 +30,7 @@ import ru.mediaattachments.presentation.base.BaseFragment
 import ru.mediaattachments.presentation.base.IOnBackPressed
 import ru.mediaattachments.utils.MediaConstants.NOTE_ID
 import ru.mediaattachments.utils.MediaConstants.PHOTO_PATH
+import ru.mediaattachments.utils.blur.RenderScriptBlur
 import ru.mediaattachments.utils.hideKeyboard
 import ru.mediaattachments.utils.toDbMediaAttachment
 import ru.mediaattachments.utils.toPx
@@ -324,7 +324,6 @@ class MediaListFragment : BaseFragment<FragmentMediaNotesBinding>(), IOnBackPres
             val radius = 5f
             blurView.setupWith(rootView)
                 .setFrameClearDrawable(windowBackground)
-                .setBlurAlgorithm(RenderScriptBlur(requireContext()))
                 .setBlurRadius(radius)
                 .setBlurAutoUpdate(true)
         }

@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate.core.margins
+package ru.mediaattachments.utils.animate.core.margins
 
 enum class Margin {
     TOP,

@@ -3,7 +3,7 @@ package ru.mediaattachments.presentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.github.florent37.kotlin.pleaseanimate.please
+import ru.mediaattachments.utils.animate.please
 import ru.mediaattachments.R
 import ru.mediaattachments.databinding.ActivityMainBinding
 import ru.mediaattachments.presentation.base.BaseActivity

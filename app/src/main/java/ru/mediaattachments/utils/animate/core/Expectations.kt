@@ -1,26 +1,26 @@
-package com.github.florent37.kotlin.pleaseanimate.core
+package ru.mediaattachments.utils.animate.core
 
 import android.view.View
-import com.github.florent37.kotlin.pleaseanimate.GravityIntDef
-import com.github.florent37.kotlin.pleaseanimate.GravityScaleHorizontalIntDef
-import com.github.florent37.kotlin.pleaseanimate.GravityScaleVerticalIntDef
-import com.github.florent37.kotlin.pleaseanimate.PleaseAnim
-import com.github.florent37.kotlin.pleaseanimate.core.alpha.AlphaAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.alpha.AlphaAnimExpectationValue
-import com.github.florent37.kotlin.pleaseanimate.core.custom.CustomAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.custom.TextColorAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.custom.TextSizeAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.custom.ViewBackgroundAlphaAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.margins.Margin
-import com.github.florent37.kotlin.pleaseanimate.core.margins.MarginSetAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.paddings.Padding
-import com.github.florent37.kotlin.pleaseanimate.core.paddings.PaddingSetAnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.position.*
-import com.github.florent37.kotlin.pleaseanimate.core.rotation.RotationExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.rotation.RotationExpectationOriginal
-import com.github.florent37.kotlin.pleaseanimate.core.rotation.RotationExpectationValue
-import com.github.florent37.kotlin.pleaseanimate.core.rotation.RotationFlipExpectationValue
-import com.github.florent37.kotlin.pleaseanimate.core.scale.*
+import ru.mediaattachments.utils.animate.GravityIntDef
+import ru.mediaattachments.utils.animate.GravityScaleHorizontalIntDef
+import ru.mediaattachments.utils.animate.GravityScaleVerticalIntDef
+import ru.mediaattachments.utils.animate.PleaseAnim
+import ru.mediaattachments.utils.animate.core.alpha.AlphaAnimExpectation
+import ru.mediaattachments.utils.animate.core.alpha.AlphaAnimExpectationValue
+import ru.mediaattachments.utils.animate.core.custom.CustomAnimExpectation
+import ru.mediaattachments.utils.animate.core.custom.TextColorAnimExpectation
+import ru.mediaattachments.utils.animate.core.custom.TextSizeAnimExpectation
+import ru.mediaattachments.utils.animate.core.custom.ViewBackgroundAlphaAnimExpectation
+import ru.mediaattachments.utils.animate.core.margins.Margin
+import ru.mediaattachments.utils.animate.core.margins.MarginSetAnimExpectation
+import ru.mediaattachments.utils.animate.core.paddings.Padding
+import ru.mediaattachments.utils.animate.core.paddings.PaddingSetAnimExpectation
+import ru.mediaattachments.utils.animate.core.rotation.RotationExpectation
+import ru.mediaattachments.utils.animate.core.rotation.RotationExpectationOriginal
+import ru.mediaattachments.utils.animate.core.rotation.RotationExpectationValue
+import ru.mediaattachments.utils.animate.core.position.*
+import ru.mediaattachments.utils.animate.core.rotation.RotationFlipExpectationValue
+import ru.mediaattachments.utils.animate.core.scale.*
 
 class Expectations(private val pleaseAnim: PleaseAnim) {
 

@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate.core.scale
+package ru.mediaattachments.utils.animate.core.scale
 
 import android.view.View
 

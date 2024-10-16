@@ -1,15 +1,15 @@
-package com.github.florent37.kotlin.pleaseanimate
+package ru.mediaattachments.utils.animate
 
 import android.animation.Animator
 import android.view.View
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.Expectations
-import com.github.florent37.kotlin.pleaseanimate.core.alpha.PleaseAnimAlphaManager
-import com.github.florent37.kotlin.pleaseanimate.core.anim3d.PleaseAnimCameraDistanceManager
-import com.github.florent37.kotlin.pleaseanimate.core.custom.PleaseAnimCustomManager
-import com.github.florent37.kotlin.pleaseanimate.core.position.PleaseAnimPositionManager
-import com.github.florent37.kotlin.pleaseanimate.core.rotation.PleaseAnimRotationManager
-import com.github.florent37.kotlin.pleaseanimate.core.scale.PleaseAnimScaleManager
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.Expectations
+import ru.mediaattachments.utils.animate.core.alpha.PleaseAnimAlphaManager
+import ru.mediaattachments.utils.animate.core.anim3d.PleaseAnimCameraDistanceManager
+import ru.mediaattachments.utils.animate.core.custom.PleaseAnimCustomManager
+import ru.mediaattachments.utils.animate.core.position.PleaseAnimPositionManager
+import ru.mediaattachments.utils.animate.core.rotation.PleaseAnimRotationManager
+import ru.mediaattachments.utils.animate.core.scale.PleaseAnimScaleManager
 
 class ViewExpectation internal constructor(private val expectAnim: PleaseAnim, internal val viewToMove: View) {
     private val dependencies: MutableList<View> = mutableListOf()

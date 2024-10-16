@@ -1,17 +1,18 @@
-package com.github.florent37.kotlin.pleaseanimate.core.anim3d
+package ru.mediaattachments.utils.animate.core.anim3d
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.os.Build
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.PleaseAnimManager
+import ru.mediaattachments.utils.animate.ViewCalculator
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.PleaseAnimManager
 
 class PleaseAnimCameraDistanceManager(
-        animExpectations: List<AnimExpectation>, viewToMove: View,
-        viewCalculator: ViewCalculator) : PleaseAnimManager(animExpectations, viewToMove, viewCalculator) {
+    animExpectations: List<AnimExpectation>, viewToMove: View,
+    viewCalculator: ViewCalculator
+) : PleaseAnimManager(animExpectations, viewToMove, viewCalculator) {
 
     private var mCurrentCameraDistance: Float? = null
     var cameraDistance: Float? = null

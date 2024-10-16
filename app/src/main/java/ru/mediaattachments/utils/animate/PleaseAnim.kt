@@ -1,11 +1,11 @@
-package com.github.florent37.kotlin.pleaseanimate
+package ru.mediaattachments.utils.animate
 
 import android.animation.*
 import android.view.View
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
-import com.github.florent37.kotlin.pleaseanimate.core.Expectations
-import com.github.florent37.kotlin.pleaseanimate.core.anim3d.CameraDistanceExpectationValue
+import ru.mediaattachments.utils.animate.core.Expectations
+import ru.mediaattachments.utils.animate.core.anim3d.CameraDistanceExpectationValue
 import java.util.concurrent.atomic.AtomicBoolean
 
 class PleaseAnim {

@@ -1,10 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.scale
+package ru.mediaattachments.utils.animate.core.scale
 
 import android.view.View
 
-/**
- * Created by florentchampigny on 20/02/2017.
- */
+
 class ScaleAnimExpectationWidth(private var width: Int, gravityHorizontal: Int?, gravityVertical: Int?) : ScaleAnimExpectation(gravityHorizontal, gravityVertical) {
 
     override fun getCalculatedValueScaleX(viewToMove: View): Float? {

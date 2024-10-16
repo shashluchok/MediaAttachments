@@ -1,10 +1,9 @@
-package com.github.florent37.kotlin.pleaseanimate.core.scale
+package ru.mediaattachments.utils.animate.core.scale
 
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.Utils
-import com.github.florent37.kotlin.pleaseanimate.core.position.PositionAnimExpectation
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.Utils
 
 abstract class ScaleAnimExpectation(gravityHorizontal: Int?, gravityVertical: Int?) : AnimExpectation() {
 

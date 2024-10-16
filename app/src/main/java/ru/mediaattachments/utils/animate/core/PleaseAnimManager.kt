@@ -1,14 +1,15 @@
-package com.github.florent37.kotlin.pleaseanimate.core
+package ru.mediaattachments.utils.animate.core
 
 import android.animation.Animator
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
+import ru.mediaattachments.utils.animate.ViewCalculator
 
 abstract class PleaseAnimManager(
-        protected val animExpectations: List<AnimExpectation>,
-        protected val viewToMove: View,
-        protected val viewCalculator: ViewCalculator) {
+    protected val animExpectations: List<AnimExpectation>,
+    protected val viewToMove: View,
+    protected val viewCalculator: ViewCalculator
+) {
 
     abstract fun getAnimators(): List<Animator>
 

@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate;
+package ru.mediaattachments.utils.animate;
 
 import androidx.annotation.IntDef;
 import android.view.Gravity;

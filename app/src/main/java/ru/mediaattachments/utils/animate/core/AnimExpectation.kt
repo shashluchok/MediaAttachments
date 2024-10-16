@@ -1,8 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core
+package ru.mediaattachments.utils.animate.core
 
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
+import ru.mediaattachments.utils.animate.ViewCalculator
 
 abstract class AnimExpectation {
     var viewCalculator: ViewCalculator? = null

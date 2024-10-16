@@ -1,8 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.position
+package ru.mediaattachments.utils.animate.core.position
 
 import android.view.View
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.Utils
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.Utils
 
 abstract class PositionAnimExpectation : AnimExpectation() {
 

@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate.core
+package ru.mediaattachments.utils.animate.core
 
 import android.content.Context
 import android.util.TypedValue

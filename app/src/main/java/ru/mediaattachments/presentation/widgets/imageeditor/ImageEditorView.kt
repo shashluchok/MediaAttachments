@@ -11,8 +11,8 @@ import android.view.LayoutInflater
 import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.theartofdev.edmodo.cropper.CropImageView
 import ru.mediaattachments.databinding.ImageEditorViewBinding
+import ru.mediaattachments.utils.cropper.CropImageView
 import ru.mediaattachments.utils.hideKeyboard
 import ru.mediaattachments.utils.showKeyboard
 

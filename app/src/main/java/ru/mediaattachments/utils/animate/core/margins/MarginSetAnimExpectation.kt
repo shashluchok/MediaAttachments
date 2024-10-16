@@ -1,16 +1,17 @@
-package com.github.florent37.kotlin.pleaseanimate.core.margins
+package ru.mediaattachments.utils.animate.core.margins
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewGroup
-import com.github.florent37.kotlin.pleaseanimate.core.Utils.dpToPx
-import com.github.florent37.kotlin.pleaseanimate.core.Utils.pxToDp
-import com.github.florent37.kotlin.pleaseanimate.core.custom.CustomAnimExpectation
+import ru.mediaattachments.utils.animate.core.Utils.dpToPx
+import ru.mediaattachments.utils.animate.core.Utils.pxToDp
+import ru.mediaattachments.utils.animate.core.custom.CustomAnimExpectation
 
 class MarginSetAnimExpectation(
         private val marginValue: Float,
-        private val margin: Margin) : CustomAnimExpectation() {
+        private val margin: Margin
+) : CustomAnimExpectation() {
 
     override fun getAnimator(viewToMove: View): Animator? {
         val params = viewToMove.layoutParams

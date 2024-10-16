@@ -1,8 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.alpha
+package ru.mediaattachments.utils.animate.core.alpha
 
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.AnimExpectation
 
 abstract class AlphaAnimExpectation : AnimExpectation() {
     abstract fun getCalculatedAlpha(viewToMove: View): Float?

@@ -1,4 +1,4 @@
-package com.github.florent37.kotlin.pleaseanimate.core.custom
+package ru.mediaattachments.utils.animate.core.custom
 
 import android.animation.Animator
 import android.animation.ArgbEvaluator

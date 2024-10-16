@@ -1,17 +1,18 @@
-package com.github.florent37.kotlin.pleaseanimate.core.alpha
+package ru.mediaattachments.utils.animate.core.alpha
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
-import com.github.florent37.kotlin.pleaseanimate.core.PleaseAnimManager
+import ru.mediaattachments.utils.animate.ViewCalculator
+import ru.mediaattachments.utils.animate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.PleaseAnimManager
 
 class PleaseAnimAlphaManager(
-        animExpectations: List<AnimExpectation>,
-        viewToMove: View, viewCalculator: ViewCalculator) : PleaseAnimManager(animExpectations, viewToMove, viewCalculator) {
+    animExpectations: List<AnimExpectation>,
+    viewToMove: View, viewCalculator: ViewCalculator
+) : PleaseAnimManager(animExpectations, viewToMove, viewCalculator) {
 
     private var alpha: Float? = null
 

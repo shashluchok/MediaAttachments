@@ -1,16 +1,17 @@
-package com.github.florent37.kotlin.pleaseanimate.core.scale
+package ru.mediaattachments.utils.animate.core.scale
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.view.Gravity
 import android.view.View
-import com.github.florent37.kotlin.pleaseanimate.ViewCalculator
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.ViewCalculator
+import ru.mediaattachments.utils.animate.core.AnimExpectation
 
 class PleaseAnimScaleManager(
-        private val animExpectations: List<AnimExpectation>,
-        private val viewToMove: View?,
-        private val viewCalculator: ViewCalculator) {
+    private val animExpectations: List<AnimExpectation>,
+    private val viewToMove: View?,
+    private val viewCalculator: ViewCalculator
+) {
 
     var scaleX: Float? = null
         private set

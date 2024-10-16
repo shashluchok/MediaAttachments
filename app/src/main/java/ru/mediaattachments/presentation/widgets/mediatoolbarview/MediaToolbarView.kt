@@ -18,7 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.doOnTextChanged
-import com.github.florent37.kotlin.pleaseanimate.please
+import ru.mediaattachments.utils.animate.please
 import kotlinx.coroutines.*
 import ru.mediaattachments.R
 import ru.mediaattachments.databinding.LayoutMediaToolbarViewBinding

@@ -1,15 +1,16 @@
-package com.github.florent37.kotlin.pleaseanimate.core.paddings
+package ru.mediaattachments.utils.animate.core.paddings
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.View
-import com.github.florent37.kotlin.pleaseanimate.core.Utils.dpToPx
-import com.github.florent37.kotlin.pleaseanimate.core.Utils.pxToDp
-import com.github.florent37.kotlin.pleaseanimate.core.custom.CustomAnimExpectation
+import ru.mediaattachments.utils.animate.core.Utils.dpToPx
+import ru.mediaattachments.utils.animate.core.Utils.pxToDp
+import ru.mediaattachments.utils.animate.core.custom.CustomAnimExpectation
 
 class PaddingSetAnimExpectation(
         private val paddingValue: Float,
-        private val padding: Padding) : CustomAnimExpectation() {
+        private val padding: Padding
+) : CustomAnimExpectation() {
 
     override fun getAnimator(viewToMove: View): Animator? {
         val end = dpToPx(viewToMove.context, paddingValue)

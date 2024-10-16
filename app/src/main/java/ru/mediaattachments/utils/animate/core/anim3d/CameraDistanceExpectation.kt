@@ -1,8 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.anim3d
+package ru.mediaattachments.utils.animate.core.anim3d
 
 import android.view.View
 
-import com.github.florent37.kotlin.pleaseanimate.core.AnimExpectation
+import ru.mediaattachments.utils.animate.core.AnimExpectation
 
 abstract class CameraDistanceExpectation : AnimExpectation() {
     abstract fun getCalculatedCameraDistance(viewToMove: View): Float?

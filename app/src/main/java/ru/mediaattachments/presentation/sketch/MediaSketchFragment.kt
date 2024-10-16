@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
-import com.github.florent37.kotlin.pleaseanimate.please
+import ru.mediaattachments.utils.animate.please
 import org.koin.android.ext.android.inject
 import ru.mediaattachments.R
 import ru.mediaattachments.data.db.mediaattachment.MediaAttachment

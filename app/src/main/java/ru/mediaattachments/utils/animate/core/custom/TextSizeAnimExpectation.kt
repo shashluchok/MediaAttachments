@@ -1,10 +1,10 @@
-package com.github.florent37.kotlin.pleaseanimate.core.custom
+package ru.mediaattachments.utils.animate.core.custom
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.View
 import android.widget.TextView
-import com.github.florent37.kotlin.pleaseanimate.core.Utils
+import ru.mediaattachments.utils.animate.core.Utils
 
 class TextSizeAnimExpectation(private val endSize: Float): CustomAnimExpectation() {
 

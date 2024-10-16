@@ -1,13 +1,8 @@
-package com.github.florent37.kotlin.pleaseanimate.core.rotation
+package ru.mediaattachments.utils.animate.core.rotation
 
 import android.view.View
+import ru.mediaattachments.utils.animate.core.rotation.RotationExpectation
 
-/**
- * Created by Christian Ringshofer on 17/02/2017.
- *
- *
- * A container for storing the rotation values for the flip animation
- */
 class RotationFlipExpectationValue(private val mRotationX: Float, private val mRotationY: Float) : RotationExpectation() {
 
     /**
