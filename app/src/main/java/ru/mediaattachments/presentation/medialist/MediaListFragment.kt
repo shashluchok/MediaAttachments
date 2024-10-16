@@ -284,7 +284,8 @@ class MediaListFragment : BaseFragment<FragmentMediaNotesBinding>(), IOnBackPres
             requestPermissions.launch(
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
                 )
             )
         }
