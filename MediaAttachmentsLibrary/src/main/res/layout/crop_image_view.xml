@@ -10,7 +10,7 @@
         android:scaleType="centerInside"
         tools:ignore="contentDescription"/>
 
-    <ru.mediaattachments.utils.cropper.CropOverlayView
+    <ru.scheduled.mediaattachmentslibrary.utils.cropper.CropOverlayView
         android:id="@+id/CropOverlayView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
